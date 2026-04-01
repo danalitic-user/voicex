@@ -6,13 +6,18 @@
   "scripts": {
     "dev": "NODE_ENV=development tsx server/index.ts",
     "build": "vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
-    "start": "NODE_ENV=production node dist/index.js",
+    "start": "npm run db:push && NODE_ENV=production node dist/index.js",
     "check": "tsc",
     "db:push": "drizzle-kit push",
     "db:generate": "drizzle-kit generate",
     "db:seed": "tsx server/seed-all.ts"
   },
   "dependencies": {
+    "vite": "^6.4.1",
+    "esbuild": "^0.25.0",
+    "tsx": "^4.21.0",
+    "drizzle-kit": "^0.31.4",
+    "typescript": "5.6.3",
     "@diploy/core": "file:packages/diploy-core",
     "@elevenlabs/elevenlabs-js": "^2.25.1",
     "@eslint/js": "^9.39.1",
@@ -149,12 +154,7 @@
     "@types/react-dom": "^18.3.1",
     "@types/ws": "^8.5.13",
     "@vitejs/plugin-react": "^4.7.0",
-    "drizzle-kit": "^0.31.4",
-    "esbuild": "^0.25.0",
-    "tailwindcss": "^3.4.17",
-    "tsx": "^4.21.0",
-    "typescript": "5.6.3",
-    "vite": "^6.4.1"
+    "tailwindcss": "^3.4.17"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.8"
