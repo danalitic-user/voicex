@@ -1,30 +1,16 @@
-/**
- * ============================================================
- * LoginPage - Full Page Login/Register with Informative Left Panel
- * Includes inline Forgot Password flow
- * ============================================================
- */
 import { useState, useEffect } from "react";
-import { useLocation } from "wouter";
-import { motion } from "framer-motion";
+import { useLocation, Link } from "wouter";
+import { motion, AnimatePresence } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { useBranding } from "@/components/BrandingProvider";
-import { apiRequest } from "@/lib/queryClient";
 import { AuthStorage } from "@/lib/auth-storage";
 import { AILoadingAnimation } from "@/components/landing/AILoadingAnimation";
-import { 
-  ArrowLeft, Eye, EyeOff, Check, 
-  Bot, Layers, Brain, Zap, Mail, KeyRound
+import {
+  Mail, Lock, Eye, EyeOff, ArrowRight,
+  Activity, PhoneForwarded, CheckCircle2, User, ArrowLeft, KeyRound
 } from "lucide-react";
-import { Link } from "wouter";
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email"),
@@ -61,36 +47,6 @@ type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
 
 type ViewType = "login" | "register" | "register-otp" | "forgot-password" | "reset-password";
 
-const features = [
-  {
-    icon: Bot,
-    title: "AI Agent Templates",
-    description: "Deploy your Agent in minutes!"
-  },
-  {
-    icon: Layers,
-    title: "Custom Agents",
-    description: "Design agents on Voice, SMS with no-code Agent Studio."
-  },
-  {
-    icon: Brain,
-    title: "Context-aware Agents",
-    description: "1-click integrations to your FAQs, product catalogs, policies."
-  },
-  {
-    icon: Zap,
-    title: "Instant Updates",
-    description: "Agents sync to your systems using powerful integrations."
-  }
-];
-
-const stats = [
-  { value: "100+", label: "Countries" },
-  { value: "30+", label: "Languages" },
-  { value: "99.9%", label: "Uptime" },
-  { value: "24/7", label: "Support" }
-];
-
 export default function LoginPage() {
   const [location, setLocation] = useLocation();
   const initialTab = location === "/register" ? "register" : "login";
@@ -105,9 +61,7 @@ export default function LoginPage() {
   const [registerOtpCode, setRegisterOtpCode] = useState<string>("");
   const [canResendOtp, setCanResendOtp] = useState(false);
   const { toast } = useToast();
-  const { branding, currentLogo } = useBranding();
 
-  // OTP timer countdown
   useEffect(() => {
     if (otpTimer > 0) {
       const timer = setTimeout(() => setOtpTimer(otpTimer - 1), 1000);
@@ -138,8 +92,6 @@ export default function LoginPage() {
   });
 
   const handleLoadingComplete = () => {
-    // Navigate using SPA routing - don't hide the loader first
-    // The component will unmount naturally when navigation completes
     if (pendingRedirect) {
       setLocation(pendingRedirect);
     }
@@ -153,19 +105,12 @@ export default function LoginPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-
       const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.error || "Login failed");
-      }
+      if (!response.ok) throw new Error(result.error || "Login failed");
 
       AuthStorage.setAuthData(result.token, result.user, result.refreshToken, result.expiresIn);
       setUserName(result.user.name || result.user.email.split('@')[0]);
-      
       toast({ title: "Welcome back!", description: "Login successful" });
-
-      // Show loading animation then redirect based on user role
       const redirectPath = (result.user.role === 'admin' || result.user.role === 'super_admin') ? "/admin" : "/app";
       setPendingRedirect(redirectPath);
       setShowLoadingAnimation(true);
@@ -176,46 +121,29 @@ export default function LoginPage() {
     }
   };
 
-  // Step 1: Send OTP for registration
   const handleSendRegistrationOTP = async (data: RegisterFormData) => {
     setIsLoading(true);
     try {
       const response = await fetch("/api/auth/send-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: data.email,
-          name: data.name,
-        }),
+        body: JSON.stringify({ email: data.email, name: data.name }),
       });
-
       const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "Failed to send verification code");
 
-      if (!response.ok) {
-        throw new Error(result.error || "Failed to send verification code");
-      }
-
-      toast({
-        title: "Code sent!",
-        description: `Check your email at ${data.email}`,
-      });
-
+      toast({ title: "Code sent!", description: `Check your email at ${data.email}` });
       setActiveView('register-otp');
-      setOtpTimer(300); // 5 minutes countdown
+      setOtpTimer(300);
       setCanResendOtp(false);
       setRegisterOtpCode("");
     } catch (error: any) {
-      toast({
-        title: "Failed to send code",
-        description: error.message,
-        variant: "destructive",
-      });
+      toast({ title: "Failed to send code", description: error.message, variant: "destructive" });
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Resend OTP for registration
   const handleResendRegistrationOTP = async () => {
     const data = registerForm.getValues();
     setIsLoading(true);
@@ -223,109 +151,58 @@ export default function LoginPage() {
       const response = await fetch("/api/auth/send-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: data.email,
-          name: data.name,
-        }),
+        body: JSON.stringify({ email: data.email, name: data.name }),
       });
-
       const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "Failed to resend verification code");
 
-      if (!response.ok) {
-        throw new Error(result.error || "Failed to resend verification code");
-      }
-
-      toast({
-        title: "Code resent!",
-        description: "A new verification code has been sent to your email",
-      });
-
+      toast({ title: "Code resent!", description: "A new verification code has been sent" });
       setOtpTimer(300);
       setCanResendOtp(false);
       setRegisterOtpCode("");
     } catch (error: any) {
-      toast({
-        title: "Failed to resend code",
-        description: error.message,
-        variant: "destructive",
-      });
+      toast({ title: "Failed to resend code", description: error.message, variant: "destructive" });
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Step 2: Verify OTP and complete registration
   const handleVerifyAndRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     if (registerOtpCode.length !== 6) {
       toast({ title: "Invalid code", description: "Please enter a 6-digit code", variant: "destructive" });
       return;
     }
-
     setIsLoading(true);
     try {
-      // First verify the OTP
       const verifyResponse = await fetch("/api/auth/verify-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: registerForm.getValues().email,
-          otpCode: registerOtpCode,
-        }),
+        body: JSON.stringify({ email: registerForm.getValues().email, otpCode: registerOtpCode }),
       });
-
       const verifyResult = await verifyResponse.json();
+      if (!verifyResponse.ok) throw new Error(verifyResult.error || "Invalid verification code");
 
-      if (!verifyResponse.ok) {
-        throw new Error(verifyResult.error || "Invalid verification code");
-      }
-
-      // OTP verified successfully, now complete registration
       const registerData = registerForm.getValues();
       const registerResponse = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: registerData.email,
-          password: registerData.password,
-          name: registerData.name,
-        }),
+        body: JSON.stringify({ email: registerData.email, password: registerData.password, name: registerData.name }),
       });
-
       const result = await registerResponse.json();
-
-      if (!registerResponse.ok) {
-        throw new Error(result.error || "Registration failed");
-      }
+      if (!registerResponse.ok) throw new Error(result.error || "Registration failed");
 
       AuthStorage.setAuthData(result.token, result.user, result.refreshToken, result.expiresIn);
       setUserName(result.user.name || result.user.email.split('@')[0]);
-      
-      toast({
-        title: "Account created!",
-        description: `Welcome, ${result.user.name}`,
-      });
-
-      // Show loading animation then redirect based on user role
+      toast({ title: "Account created!", description: `Welcome, ${result.user.name}` });
       const redirectPath = result.user.role === 'admin' ? "/admin" : "/app";
       setPendingRedirect(redirectPath);
       setShowLoadingAnimation(true);
     } catch (error: any) {
-      toast({
-        title: "Verification failed",
-        description: error.message,
-        variant: "destructive",
-      });
+      toast({ title: "Verification failed", description: error.message, variant: "destructive" });
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleBackToRegisterDetails = () => {
-    setActiveView('register');
-    setRegisterOtpCode("");
-    setOtpTimer(0);
-    setCanResendOtp(false);
   };
 
   const handleForgotPasswordSubmit = async (data: ForgotPasswordFormData) => {
@@ -337,7 +214,6 @@ export default function LoginPage() {
         body: JSON.stringify({ email: data.email }),
       });
       const result = await response.json();
-      
       if (response.ok) {
         setForgotPasswordEmail(data.email);
         setOtpTimer(300);
@@ -348,7 +224,7 @@ export default function LoginPage() {
         toast({ title: "Failed to send code", description: result.error || "Something went wrong", variant: "destructive" });
       }
     } catch (error: any) {
-      toast({ title: "Failed to send code", description: error.message || "Something went wrong", variant: "destructive" });
+      toast({ title: "Failed to send code", description: error.message, variant: "destructive" });
     } finally {
       setIsLoading(false);
     }
@@ -364,7 +240,6 @@ export default function LoginPage() {
         body: JSON.stringify({ email: forgotPasswordEmail }),
       });
       const result = await response.json();
-      
       if (response.ok) {
         setOtpTimer(300);
         setCanResendOtp(false);
@@ -373,7 +248,7 @@ export default function LoginPage() {
         toast({ title: "Failed to resend", description: result.error || "Something went wrong", variant: "destructive" });
       }
     } catch (error: any) {
-      toast({ title: "Failed to resend", description: error.message || "Something went wrong", variant: "destructive" });
+      toast({ title: "Failed to resend", description: error.message, variant: "destructive" });
     } finally {
       setIsLoading(false);
     }
@@ -382,31 +257,23 @@ export default function LoginPage() {
   const handleResetPassword = async (data: ResetPasswordFormData) => {
     setIsLoading(true);
     try {
-      // First verify OTP
       const verifyResponse = await fetch("/api/auth/forgot-password/verify-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: forgotPasswordEmail, otpCode: data.otp }),
       });
       const verifyResult = await verifyResponse.json();
-      
       if (!verifyResponse.ok) {
-        toast({ title: "Invalid code", description: verifyResult.error || "Please check the code and try again", variant: "destructive" });
+        toast({ title: "Invalid code", description: verifyResult.error || "Please check the code", variant: "destructive" });
         setIsLoading(false);
         return;
       }
-
-      // Then reset password
       const resetResponse = await fetch("/api/auth/forgot-password/reset", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          email: forgotPasswordEmail, 
-          newPassword: data.newPassword 
-        }),
+        body: JSON.stringify({ email: forgotPasswordEmail, newPassword: data.newPassword }),
       });
       const resetResult = await resetResponse.json();
-      
       if (resetResponse.ok) {
         toast({ title: "Password reset!", description: "You can now login with your new password" });
         resetPasswordForm.reset();
@@ -416,587 +283,291 @@ export default function LoginPage() {
         toast({ title: "Failed to reset password", description: resetResult.error || "Something went wrong", variant: "destructive" });
       }
     } catch (error: any) {
-      toast({ title: "Failed to reset password", description: error.message || "Something went wrong", variant: "destructive" });
+      toast({ title: "Failed to reset password", description: error.message, variant: "destructive" });
     } finally {
       setIsLoading(false);
     }
   };
 
-  const getCardTitle = () => {
-    switch (activeView) {
-      case "login": return "Welcome back";
-      case "register": return "Create account";
-      case "register-otp": return "Verify email";
-      case "forgot-password": return "Forgot password?";
-      case "reset-password": return "Reset password";
-    }
-  };
-
-  const getCardDescription = () => {
-    switch (activeView) {
-      case "login": return "Sign in to continue to your dashboard";
-      case "register": return "Get started with your free account";
-      case "register-otp": return `Enter the code sent to ${registerForm.getValues().email}`;
-      case "forgot-password": return "Enter your email to receive a reset code";
-      case "reset-password": return `Enter the code sent to ${forgotPasswordEmail}`;
-    }
-  };
+  const inputClasses = "w-full pl-11 pr-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-900 font-medium focus:outline-none focus:ring-2 focus:ring-[#FF0066]/20 focus:border-[#FF0066] transition-all shadow-sm";
+  const buttonClasses = "w-full flex items-center justify-center gap-2 py-4 mt-2 rounded-xl font-bold text-white bg-gradient-to-r from-[#FF0066] via-[#FF6633] to-[#FFBB33] bg-[length:200%_auto] hover:bg-right shadow-md hover:shadow-lg hover:shadow-[#FF0066]/20 transition-all duration-500 active:scale-95 disabled:opacity-70";
+  const labelClasses = "text-sm font-bold text-gray-900";
+  const iconContainerClasses = "absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none";
 
   return (
     <>
-      <AILoadingAnimation 
-        isVisible={showLoadingAnimation} 
+      <AILoadingAnimation
+        isVisible={showLoadingAnimation}
         onComplete={handleLoadingComplete}
         userName={userName}
       />
-      
-      <div className="min-h-screen flex" data-testid="login-page">
-        {/* Left side - Informative Panel */}
-        <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-[#050B1A] via-[#0a1628] to-[#050B1A] relative overflow-hidden">
-          {/* Animated background elements */}
-          <div className="absolute inset-0">
-            <div className="absolute top-20 left-10 w-72 h-72 bg-teal-500/10 rounded-full blur-3xl" />
-            <div className="absolute bottom-20 right-10 w-96 h-96 bg-teal-400/5 rounded-full blur-3xl" />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-r from-teal-500/5 to-cyan-500/5 rounded-full blur-3xl" />
-          </div>
-          
-          <div className="relative z-10 flex flex-col justify-between p-12 w-full">
-            {/* Logo - Use white logo (logo_url_dark) for dark background */}
-            <Link href="/">
-              <div className="flex items-center gap-3 cursor-pointer" data-testid="link-logo">
-                {branding.logo_url_dark && (
-                  <img src={branding.logo_url_dark} alt={branding.app_name} className="h-10" />
-                )}
-              </div>
+
+      <div className="min-h-screen flex font-jakarta bg-gradient-to-br from-[#FF0066]/[0.03] via-white to-[#FFBB33]/[0.04]">
+        <div className="w-full lg:w-1/2 flex flex-col justify-center px-8 sm:px-16 md:px-24 xl:px-32 relative z-10 overflow-y-auto py-12">
+          <div className="lg:hidden mb-8">
+            <Link href="/" className="flex items-center gap-2">
+              <span className="text-2xl font-black tracking-tight">
+                <span className="text-black">Voice</span>
+                <span className="bg-gradient-to-r from-[#FF0066] via-[#FF6633] to-[#FFBB33] bg-clip-text text-transparent pr-1">X</span>
+              </span>
             </Link>
-            
-            {/* Main Content */}
-            <div className="space-y-10">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-              >
-                <h1 className="text-4xl xl:text-5xl font-bold leading-tight text-white mb-4">
-                  Launch AI agents & automate your customer interactions
-                </h1>
-              </motion.div>
-              
-              {/* Features List */}
-              <motion.div 
-                className="space-y-6"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-              >
-                {features.map((feature, index) => (
-                  <motion.div 
-                    key={index}
-                    className="flex items-start gap-4"
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
-                    data-testid={`feature-item-${index}`}
-                  >
-                    <div className="w-10 h-10 rounded-lg bg-teal-500/20 border border-teal-500/30 flex items-center justify-center shrink-0">
-                      <feature.icon className="w-5 h-5 text-teal-400" />
-                    </div>
-                    <div>
-                      <p className="text-white">
-                        Access pre-built <span className="font-semibold">{feature.title}</span>.{" "}
-                        <span className="text-gray-400">{feature.description}</span>
-                      </p>
-                    </div>
-                  </motion.div>
-                ))}
-              </motion.div>
-
-              {/* Stats Row */}
-              <motion.div
-                className="pt-8 border-t border-white/10"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.6 }}
-              >
-                <div className="grid grid-cols-4 gap-6">
-                  {stats.map((stat, index) => (
-                    <div key={index} className="text-center" data-testid={`stat-${index}`}>
-                      <div className="text-2xl font-bold text-teal-400">{stat.value}</div>
-                      <div className="text-sm text-gray-400">{stat.label}</div>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-            </div>
-            
-            {/* Footer */}
-            <p className="text-sm text-gray-500">
-              &copy; {new Date().getFullYear()} {branding.app_name}. All rights reserved.
-            </p>
           </div>
-        </div>
 
-        {/* Right side - Login Form */}
-        <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-gray-50 dark:bg-[#0a1628]">
-          <div className="w-full max-w-md space-y-6">
-            {/* Mobile back button */}
-            <div className="lg:hidden">
-              <Link href="/">
-                <Button variant="ghost" size="sm" className="mb-4" data-testid="button-back-home">
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Back to home
-                </Button>
-              </Link>
-            </div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              key={activeView}
-            >
-              <Card className="border border-gray-200 dark:border-teal-900/50 shadow-2xl shadow-gray-200/50 dark:shadow-teal-900/20 bg-white dark:bg-[#0f1d32]">
-                <CardHeader className="text-center pb-2">
-                  {/* Mobile logo */}
-                  <div className="lg:hidden flex justify-center mb-4">
-                    {currentLogo && (
-                      <img src={currentLogo} alt={branding.app_name} className="h-10" />
-                    )}
-                  </div>
-                  
-                  {/* Icon for forgot/reset password views */}
-                  {(activeView === "forgot-password" || activeView === "reset-password") && (
-                    <div className="flex justify-center mb-4">
-                      <div className="w-16 h-16 rounded-full bg-teal-500/10 border border-teal-500/30 flex items-center justify-center">
-                        {activeView === "forgot-password" ? (
-                          <Mail className="w-8 h-8 text-teal-400" />
-                        ) : (
-                          <KeyRound className="w-8 h-8 text-teal-400" />
-                        )}
-                      </div>
-                    </div>
-                  )}
-                  
-                  <CardTitle className="text-2xl font-bold text-gray-900 dark:text-white">
-                    {getCardTitle()}
-                  </CardTitle>
-                  <CardDescription className="text-gray-600 dark:text-gray-400">
-                    {getCardDescription()}
-                  </CardDescription>
-                </CardHeader>
-                
-                <CardContent className="pt-4">
-                  {/* Login/Register Tabs */}
-                  {(activeView === "login" || activeView === "register") && (
-                    <Tabs value={activeView} onValueChange={(v) => setActiveView(v as ViewType)}>
-                      <TabsList className="grid w-full grid-cols-2 mb-6 bg-gray-100 dark:bg-[#0a1628]">
-                        <TabsTrigger 
-                          value="login" 
-                          data-testid="tab-login"
-                          className="data-[state=active]:bg-white dark:data-[state=active]:bg-teal-600 data-[state=active]:text-gray-900 dark:data-[state=active]:text-white"
-                        >
-                          Sign In
-                        </TabsTrigger>
-                        <TabsTrigger 
-                          value="register" 
-                          data-testid="tab-register"
-                          className="data-[state=active]:bg-white dark:data-[state=active]:bg-teal-600 data-[state=active]:text-gray-900 dark:data-[state=active]:text-white"
-                        >
-                          Sign Up
-                        </TabsTrigger>
-                      </TabsList>
-
-                      <TabsContent value="login">
-                        <form onSubmit={loginForm.handleSubmit(handleLogin)} className="space-y-4">
-                          <div className="space-y-2">
-                            <Label htmlFor="login-email" className="text-gray-700 dark:text-gray-300">Email</Label>
-                            <Input
-                              id="login-email"
-                              type="email"
-                              placeholder="you@example.com"
-                              className="h-12 bg-gray-50 dark:bg-[#0a1628] border-gray-200 dark:border-teal-900/50 focus:border-teal-500 dark:focus:border-teal-500"
-                              {...loginForm.register("email")}
-                              data-testid="input-login-email"
-                            />
-                            {loginForm.formState.errors.email && (
-                              <p className="text-sm text-destructive">{loginForm.formState.errors.email.message}</p>
-                            )}
-                          </div>
-                          
-                          <div className="space-y-2">
-                            <Label htmlFor="login-password" className="text-gray-700 dark:text-gray-300">Password</Label>
-                            <div className="relative">
-                              <Input
-                                id="login-password"
-                                type={showPassword ? "text" : "password"}
-                                placeholder="Enter your password"
-                                className="h-12 bg-gray-50 dark:bg-[#0a1628] border-gray-200 dark:border-teal-900/50 focus:border-teal-500 dark:focus:border-teal-500 pr-12"
-                                {...loginForm.register("password")}
-                                data-testid="input-login-password"
-                              />
-                              <Button
-                                type="button"
-                                variant="ghost"
-                                size="icon"
-                                className="absolute right-0 top-0 h-full text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-                                onClick={() => setShowPassword(!showPassword)}
-                                data-testid="button-toggle-password"
-                              >
-                                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                              </Button>
-                            </div>
-                            {loginForm.formState.errors.password && (
-                              <p className="text-sm text-destructive">{loginForm.formState.errors.password.message}</p>
-                            )}
-                            <div className="flex justify-end">
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  forgotPasswordForm.setValue("email", loginForm.getValues("email"));
-                                  setActiveView("forgot-password");
-                                }}
-                                className="text-sm text-teal-600 dark:text-teal-400 hover:underline cursor-pointer"
-                                data-testid="link-forgot-password"
-                              >
-                                Forgot password?
-                              </button>
-                            </div>
-                          </div>
-
-                          <Button
-                            type="submit"
-                            className="w-full h-12 bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white font-medium border-0 shadow-lg shadow-teal-500/25"
-                            disabled={isLoading}
-                            data-testid="button-login-submit"
-                          >
-                            {isLoading ? "Signing in..." : "Sign In"}
-                          </Button>
-                        </form>
-                      </TabsContent>
-
-                      <TabsContent value="register">
-                        <form onSubmit={registerForm.handleSubmit(handleSendRegistrationOTP)} className="space-y-4">
-                          <div className="space-y-2">
-                            <Label htmlFor="register-name" className="text-gray-700 dark:text-gray-300">Full Name</Label>
-                            <Input
-                              id="register-name"
-                              type="text"
-                              placeholder="John Doe"
-                              className="h-12 bg-gray-50 dark:bg-[#0a1628] border-gray-200 dark:border-teal-900/50 focus:border-teal-500 dark:focus:border-teal-500"
-                              {...registerForm.register("name")}
-                              data-testid="input-register-name"
-                            />
-                            {registerForm.formState.errors.name && (
-                              <p className="text-sm text-destructive">{registerForm.formState.errors.name.message}</p>
-                            )}
-                          </div>
-
-                          <div className="space-y-2">
-                            <Label htmlFor="register-email" className="text-gray-700 dark:text-gray-300">Email</Label>
-                            <Input
-                              id="register-email"
-                              type="email"
-                              placeholder="you@example.com"
-                              className="h-12 bg-gray-50 dark:bg-[#0a1628] border-gray-200 dark:border-teal-900/50 focus:border-teal-500 dark:focus:border-teal-500"
-                              {...registerForm.register("email")}
-                              data-testid="input-register-email"
-                            />
-                            {registerForm.formState.errors.email && (
-                              <p className="text-sm text-destructive">{registerForm.formState.errors.email.message}</p>
-                            )}
-                          </div>
-                          
-                          <div className="space-y-2">
-                            <Label htmlFor="register-password" className="text-gray-700 dark:text-gray-300">Password</Label>
-                            <div className="relative">
-                              <Input
-                                id="register-password"
-                                type={showPassword ? "text" : "password"}
-                                placeholder="Create a password"
-                                className="h-12 bg-gray-50 dark:bg-[#0a1628] border-gray-200 dark:border-teal-900/50 focus:border-teal-500 dark:focus:border-teal-500 pr-12"
-                                {...registerForm.register("password")}
-                                data-testid="input-register-password"
-                              />
-                              <Button
-                                type="button"
-                                variant="ghost"
-                                size="icon"
-                                className="absolute right-0 top-0 h-full text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-                                onClick={() => setShowPassword(!showPassword)}
-                              >
-                                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                              </Button>
-                            </div>
-                            {registerForm.formState.errors.password && (
-                              <p className="text-sm text-destructive">{registerForm.formState.errors.password.message}</p>
-                            )}
-                          </div>
-
-                          <div className="space-y-2">
-                            <Label htmlFor="register-confirm" className="text-gray-700 dark:text-gray-300">Confirm Password</Label>
-                            <Input
-                              id="register-confirm"
-                              type="password"
-                              placeholder="Confirm your password"
-                              className="h-12 bg-gray-50 dark:bg-[#0a1628] border-gray-200 dark:border-teal-900/50 focus:border-teal-500 dark:focus:border-teal-500"
-                              {...registerForm.register("confirmPassword")}
-                              data-testid="input-register-confirm"
-                            />
-                            {registerForm.formState.errors.confirmPassword && (
-                              <p className="text-sm text-destructive">{registerForm.formState.errors.confirmPassword.message}</p>
-                            )}
-                          </div>
-
-                          <Button
-                            type="submit"
-                            className="w-full h-12 bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white font-medium border-0 shadow-lg shadow-teal-500/25"
-                            disabled={isLoading}
-                            data-testid="button-register-submit"
-                          >
-                            {isLoading ? "Sending code..." : "Send Verification Code"}
-                          </Button>
-                        </form>
-                      </TabsContent>
-                    </Tabs>
-                  )}
-
-                  {/* Registration OTP Verification */}
-                  {activeView === "register-otp" && (
-                    <form onSubmit={handleVerifyAndRegister} className="space-y-4">
-                      <div className="text-center space-y-2 mb-4">
-                        <div className="flex justify-center mb-4">
-                          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-teal-500/10">
-                            <Mail className="h-6 w-6 text-teal-500" />
-                          </div>
+          <div className="max-w-md w-full mx-auto">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeView}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                transition={{ duration: 0.3 }}
+              >
+                {activeView === "login" && (
+                  <>
+                    <h1 className="text-3xl md:text-4xl font-black text-gray-900 mb-2 tracking-tight">Welcome back</h1>
+                    <p className="text-gray-500 mb-8 text-base font-medium">Enter your credentials to access your agent dashboard.</p>
+                    <form className="space-y-5" onSubmit={loginForm.handleSubmit(handleLogin)}>
+                      <div className="space-y-2">
+                        <label className={labelClasses}>Email Address</label>
+                        <div className="relative">
+                          <div className={iconContainerClasses}><Mail className="h-5 w-5 text-gray-400" /></div>
+                          <input type="email" placeholder="you@company.com" className={inputClasses} {...loginForm.register("email")} />
                         </div>
-                        <h3 className="font-semibold text-lg text-gray-900 dark:text-white">Check your email</h3>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                          We sent a verification code to<br />
-                          <strong className="text-gray-700 dark:text-gray-200">{registerForm.getValues().email}</strong>
-                        </p>
+                        {loginForm.formState.errors.email && <p className="text-xs text-red-500">{loginForm.formState.errors.email.message}</p>}
                       </div>
-
                       <div className="space-y-2">
-                        <Label htmlFor="register-otp" className="text-gray-700 dark:text-gray-300">Verification Code</Label>
-                        <Input
-                          id="register-otp"
-                          type="text"
-                          placeholder="Enter 6-digit code"
-                          maxLength={6}
-                          value={registerOtpCode}
-                          onChange={(e) => setRegisterOtpCode(e.target.value.replace(/\D/g, ''))}
-                          className="h-12 bg-gray-50 dark:bg-[#0a1628] border-gray-200 dark:border-teal-900/50 focus:border-teal-500 dark:focus:border-teal-500 text-center text-lg tracking-widest"
-                          data-testid="input-register-otp"
-                        />
-                        {otpTimer > 0 && (
-                          <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
-                            <span>Code expires in {Math.floor(otpTimer / 60)}:{String(otpTimer % 60).padStart(2, '0')}</span>
-                          </div>
-                        )}
+                        <div className="flex items-center justify-between">
+                          <label className={labelClasses}>Password</label>
+                          <button type="button" onClick={() => { forgotPasswordForm.setValue("email", loginForm.getValues("email")); setActiveView("forgot-password"); }} className="text-sm font-bold text-[#FF6633] hover:text-[#FF0066] transition-colors">Forgot password?</button>
+                        </div>
+                        <div className="relative">
+                          <div className={iconContainerClasses}><Lock className="h-5 w-5 text-gray-400" /></div>
+                          <input type={showPassword ? "text" : "password"} placeholder="••••••••" className={`${inputClasses} pr-12`} {...loginForm.register("password")} />
+                          <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600 transition-colors">
+                            {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                          </button>
+                        </div>
+                        {loginForm.formState.errors.password && <p className="text-xs text-red-500">{loginForm.formState.errors.password.message}</p>}
                       </div>
+                      <button type="submit" disabled={isLoading} className={buttonClasses}>
+                        {isLoading ? "Signing In..." : "Sign In to Dashboard"} <ArrowRight className="h-5 w-5" />
+                      </button>
+                    </form>
+                    <p className="mt-10 text-center text-sm font-medium text-gray-500">
+                      Don't have an account? <button onClick={() => setActiveView("register")} className="font-bold text-[#FF0066] hover:underline">Sign up for free</button>
+                    </p>
+                  </>
+                )}
 
-                      <Button
-                        type="submit"
-                        className="w-full h-12 bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white font-medium border-0 shadow-lg shadow-teal-500/25"
-                        disabled={isLoading || registerOtpCode.length !== 6}
-                        data-testid="button-verify-register"
-                      >
+                {activeView === "register" && (
+                  <>
+                    <h1 className="text-3xl md:text-4xl font-black text-gray-900 mb-2 tracking-tight">Create an account</h1>
+                    <p className="text-gray-500 mb-8 text-base font-medium">Get started with your free agent dashboard.</p>
+                    <form className="space-y-5" onSubmit={registerForm.handleSubmit(handleSendRegistrationOTP)}>
+                      <div className="space-y-2">
+                        <label className={labelClasses}>Full Name</label>
+                        <div className="relative">
+                          <div className={iconContainerClasses}><User className="h-5 w-5 text-gray-400" /></div>
+                          <input type="text" placeholder="Full Name" className={inputClasses} {...registerForm.register("name")} />
+                        </div>
+                        {registerForm.formState.errors.name && <p className="text-xs text-red-500">{registerForm.formState.errors.name.message}</p>}
+                      </div>
+                      <div className="space-y-2">
+                        <label className={labelClasses}>Email Address</label>
+                        <div className="relative">
+                          <div className={iconContainerClasses}><Mail className="h-5 w-5 text-gray-400" /></div>
+                          <input type="email" placeholder="you@company.com" className={inputClasses} {...registerForm.register("email")} />
+                        </div>
+                        {registerForm.formState.errors.email && <p className="text-xs text-red-500">{registerForm.formState.errors.email.message}</p>}
+                      </div>
+                      <div className="space-y-2">
+                        <label className={labelClasses}>Password</label>
+                        <div className="relative">
+                          <div className={iconContainerClasses}><Lock className="h-5 w-5 text-gray-400" /></div>
+                          <input type={showPassword ? "text" : "password"} placeholder="••••••••" className={`${inputClasses} pr-12`} {...registerForm.register("password")} />
+                          <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600 transition-colors">
+                            {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                          </button>
+                        </div>
+                        {registerForm.formState.errors.password && <p className="text-xs text-red-500">{registerForm.formState.errors.password.message}</p>}
+                      </div>
+                      <div className="space-y-2">
+                        <label className={labelClasses}>Confirm Password</label>
+                        <div className="relative">
+                          <div className={iconContainerClasses}><Lock className="h-5 w-5 text-gray-400" /></div>
+                          <input type="password" placeholder="••••••••" className={inputClasses} {...registerForm.register("confirmPassword")} />
+                        </div>
+                        {registerForm.formState.errors.confirmPassword && <p className="text-xs text-red-500">{registerForm.formState.errors.confirmPassword.message}</p>}
+                      </div>
+                      <button type="submit" disabled={isLoading} className={buttonClasses}>
+                        {isLoading ? "Sending Code..." : "Send Verification Code"} <ArrowRight className="h-5 w-5" />
+                      </button>
+                    </form>
+                    <p className="mt-10 text-center text-sm font-medium text-gray-500">
+                      Already have an account? <button onClick={() => setActiveView("login")} className="font-bold text-[#FF0066] hover:underline">Sign in</button>
+                    </p>
+                  </>
+                )}
+
+                {activeView === "register-otp" && (
+                  <>
+                    <h1 className="text-3xl md:text-4xl font-black text-gray-900 mb-2 tracking-tight">Check your email</h1>
+                    <p className="text-gray-500 mb-8 text-base font-medium">We sent a verification code to <strong className="text-gray-900">{registerForm.getValues().email}</strong></p>
+                    <form className="space-y-5" onSubmit={handleVerifyAndRegister}>
+                      <div className="space-y-2">
+                        <label className={labelClasses}>Verification Code</label>
+                        <input type="text" maxLength={6} value={registerOtpCode} onChange={(e) => setRegisterOtpCode(e.target.value.replace(/\D/g, ''))} className={`${inputClasses} text-center text-2xl tracking-[0.5em]`} placeholder="000000" />
+                      </div>
+                      {otpTimer > 0 && <p className="text-sm font-bold text-gray-500 text-center">Code expires in {Math.floor(otpTimer / 60)}:{String(otpTimer % 60).padStart(2, '0')}</p>}
+                      <button type="submit" disabled={isLoading || registerOtpCode.length !== 6} className={buttonClasses}>
                         {isLoading ? "Verifying..." : "Verify & Create Account"}
-                      </Button>
-
-                      <div className="flex gap-2">
-                        <Button
-                          type="button"
-                          variant="outline"
-                          className="flex-1"
-                          onClick={handleBackToRegisterDetails}
-                          disabled={isLoading}
-                          data-testid="button-back-register"
-                        >
-                          <ArrowLeft className="w-4 h-4 mr-2" />
-                          Back
-                        </Button>
-                        <Button
-                          type="button"
-                          variant="outline"
-                          className="flex-1"
-                          onClick={handleResendRegistrationOTP}
-                          disabled={isLoading || !canResendOtp}
-                          data-testid="button-resend-register-otp"
-                        >
-                          {canResendOtp ? "Resend Code" : `Resend in ${Math.floor(otpTimer / 60)}:${String(otpTimer % 60).padStart(2, '0')}`}
-                        </Button>
+                      </button>
+                      <div className="flex gap-4 mt-4">
+                        <button type="button" onClick={() => { setActiveView('register'); setRegisterOtpCode(""); }} className="flex-1 py-3 bg-white border border-gray-200 text-gray-700 rounded-xl font-bold hover:bg-gray-50 transition-all shadow-sm">Back</button>
+                        <button type="button" onClick={handleResendRegistrationOTP} disabled={isLoading || !canResendOtp} className="flex-1 py-3 bg-white border border-gray-200 text-gray-700 rounded-xl font-bold hover:bg-gray-50 transition-all shadow-sm disabled:opacity-50">
+                          {canResendOtp ? "Resend Code" : `Resend in ${Math.floor(otpTimer / 60)}s`}
+                        </button>
                       </div>
                     </form>
-                  )}
+                  </>
+                )}
 
-                  {/* Forgot Password Form */}
-                  {activeView === "forgot-password" && (
-                    <form onSubmit={forgotPasswordForm.handleSubmit(handleForgotPasswordSubmit)} className="space-y-4">
+                {activeView === "forgot-password" && (
+                  <>
+                    <div className="mb-6 w-16 h-16 rounded-2xl bg-[#FF0066]/10 flex items-center justify-center">
+                      <KeyRound className="w-8 h-8 text-[#FF0066]" />
+                    </div>
+                    <h1 className="text-3xl md:text-4xl font-black text-gray-900 mb-2 tracking-tight">Forgot password?</h1>
+                    <p className="text-gray-500 mb-8 text-base font-medium">Enter your email to receive a reset code.</p>
+                    <form className="space-y-5" onSubmit={forgotPasswordForm.handleSubmit(handleForgotPasswordSubmit)}>
                       <div className="space-y-2">
-                        <Label htmlFor="forgot-email" className="text-gray-700 dark:text-gray-300">Email</Label>
-                        <Input
-                          id="forgot-email"
-                          type="email"
-                          placeholder="you@example.com"
-                          className="h-12 bg-gray-50 dark:bg-[#0a1628] border-gray-200 dark:border-teal-900/50 focus:border-teal-500 dark:focus:border-teal-500"
-                          {...forgotPasswordForm.register("email")}
-                          data-testid="input-forgot-email"
-                        />
-                        {forgotPasswordForm.formState.errors.email && (
-                          <p className="text-sm text-destructive">{forgotPasswordForm.formState.errors.email.message}</p>
-                        )}
+                        <label className={labelClasses}>Email Address</label>
+                        <div className="relative">
+                          <div className={iconContainerClasses}><Mail className="h-5 w-5 text-gray-400" /></div>
+                          <input type="email" placeholder="you@company.com" className={inputClasses} {...forgotPasswordForm.register("email")} />
+                        </div>
+                        {forgotPasswordForm.formState.errors.email && <p className="text-xs text-red-500">{forgotPasswordForm.formState.errors.email.message}</p>}
                       </div>
-
-                      <Button
-                        type="submit"
-                        className="w-full h-12 bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white font-medium border-0 shadow-lg shadow-teal-500/25"
-                        disabled={isLoading}
-                        data-testid="button-send-code"
-                      >
-                        {isLoading ? "Sending..." : "Send Reset Code"}
-                      </Button>
-
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        className="w-full"
-                        onClick={() => setActiveView("login")}
-                        data-testid="button-back-to-login"
-                      >
-                        <ArrowLeft className="w-4 h-4 mr-2" />
-                        Back to login
-                      </Button>
+                      <button type="submit" disabled={isLoading} className={buttonClasses}>
+                        {isLoading ? "Sending..." : "Send Reset Code"} <ArrowRight className="h-5 w-5" />
+                      </button>
+                      <button type="button" onClick={() => setActiveView("login")} className="w-full mt-4 flex items-center justify-center gap-2 py-3 text-gray-600 font-bold hover:text-gray-900 transition-colors">
+                        <ArrowLeft className="w-4 h-4" /> Back to login
+                      </button>
                     </form>
-                  )}
+                  </>
+                )}
 
-                  {/* Reset Password Form */}
-                  {activeView === "reset-password" && (
-                    <form onSubmit={resetPasswordForm.handleSubmit(handleResetPassword)} className="space-y-4">
+                {activeView === "reset-password" && (
+                  <>
+                    <h1 className="text-3xl md:text-4xl font-black text-gray-900 mb-2 tracking-tight">Reset password</h1>
+                    <p className="text-gray-500 mb-8 text-base font-medium">Enter the code sent to <strong className="text-gray-900">{forgotPasswordEmail}</strong></p>
+                    <form className="space-y-5" onSubmit={resetPasswordForm.handleSubmit(handleResetPassword)}>
                       <div className="space-y-2">
-                        <Label htmlFor="reset-otp" className="text-gray-700 dark:text-gray-300">Verification Code</Label>
-                        <Input
-                          id="reset-otp"
-                          type="text"
-                          placeholder="Enter 6-digit code"
-                          maxLength={6}
-                          className="h-12 bg-gray-50 dark:bg-[#0a1628] border-gray-200 dark:border-teal-900/50 focus:border-teal-500 dark:focus:border-teal-500 text-center text-lg tracking-widest"
-                          {...resetPasswordForm.register("otp")}
-                          data-testid="input-reset-otp"
-                        />
-                        {resetPasswordForm.formState.errors.otp && (
-                          <p className="text-sm text-destructive">{resetPasswordForm.formState.errors.otp.message}</p>
-                        )}
-                        <div className="flex justify-center">
+                        <label className={labelClasses}>Verification Code</label>
+                        <input type="text" maxLength={6} className={`${inputClasses} text-center text-2xl tracking-[0.5em]`} {...resetPasswordForm.register("otp")} />
+                        <div className="flex justify-center mt-2">
                           {otpTimer > 0 ? (
-                            <span className="text-sm text-gray-500">Resend code in {Math.floor(otpTimer / 60)}:{String(otpTimer % 60).padStart(2, '0')}</span>
+                            <span className="text-sm font-bold text-gray-500">Resend in {Math.floor(otpTimer / 60)}:{String(otpTimer % 60).padStart(2, '0')}</span>
                           ) : (
-                            <button
-                              type="button"
-                              onClick={handleResendForgotPasswordOTP}
-                              className="text-sm text-teal-600 dark:text-teal-400 hover:underline"
-                              disabled={isLoading}
-                              data-testid="button-resend-otp"
-                            >
-                              Resend code
-                            </button>
+                            <button type="button" onClick={handleResendForgotPasswordOTP} className="text-sm font-bold text-[#FF6633] hover:text-[#FF0066]">Resend code</button>
                           )}
                         </div>
                       </div>
-
                       <div className="space-y-2">
-                        <Label htmlFor="reset-password" className="text-gray-700 dark:text-gray-300">New Password</Label>
+                        <label className={labelClasses}>New Password</label>
                         <div className="relative">
-                          <Input
-                            id="reset-password"
-                            type={showPassword ? "text" : "password"}
-                            placeholder="Create a new password"
-                            className="h-12 bg-gray-50 dark:bg-[#0a1628] border-gray-200 dark:border-teal-900/50 focus:border-teal-500 dark:focus:border-teal-500 pr-12"
-                            {...resetPasswordForm.register("newPassword")}
-                            data-testid="input-reset-password"
-                          />
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="icon"
-                            className="absolute right-0 top-0 h-full text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-                            onClick={() => setShowPassword(!showPassword)}
-                          >
-                            {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                          </Button>
+                          <div className={iconContainerClasses}><Lock className="h-5 w-5 text-gray-400" /></div>
+                          <input type={showPassword ? "text" : "password"} className={`${inputClasses} pr-12`} {...resetPasswordForm.register("newPassword")} />
+                          <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600 transition-colors">
+                            {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                          </button>
                         </div>
-                        {resetPasswordForm.formState.errors.newPassword && (
-                          <p className="text-sm text-destructive">{resetPasswordForm.formState.errors.newPassword.message}</p>
-                        )}
                       </div>
-
                       <div className="space-y-2">
-                        <Label htmlFor="reset-confirm" className="text-gray-700 dark:text-gray-300">Confirm New Password</Label>
-                        <Input
-                          id="reset-confirm"
-                          type="password"
-                          placeholder="Confirm your new password"
-                          className="h-12 bg-gray-50 dark:bg-[#0a1628] border-gray-200 dark:border-teal-900/50 focus:border-teal-500 dark:focus:border-teal-500"
-                          {...resetPasswordForm.register("confirmPassword")}
-                          data-testid="input-reset-confirm"
-                        />
-                        {resetPasswordForm.formState.errors.confirmPassword && (
-                          <p className="text-sm text-destructive">{resetPasswordForm.formState.errors.confirmPassword.message}</p>
-                        )}
+                        <label className={labelClasses}>Confirm New Password</label>
+                        <div className="relative">
+                          <div className={iconContainerClasses}><Lock className="h-5 w-5 text-gray-400" /></div>
+                          <input type="password" className={inputClasses} {...resetPasswordForm.register("confirmPassword")} />
+                        </div>
                       </div>
-
-                      <Button
-                        type="submit"
-                        className="w-full h-12 bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white font-medium border-0 shadow-lg shadow-teal-500/25"
-                        disabled={isLoading}
-                        data-testid="button-reset-password"
-                      >
+                      <button type="submit" disabled={isLoading} className={buttonClasses}>
                         {isLoading ? "Resetting..." : "Reset Password"}
-                      </Button>
-
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        className="w-full"
-                        onClick={() => {
-                          setActiveView("forgot-password");
-                          resetPasswordForm.reset();
-                        }}
-                        data-testid="button-back-to-email"
-                      >
-                        <ArrowLeft className="w-4 h-4 mr-2" />
-                        Change email
-                      </Button>
+                      </button>
+                      <button type="button" onClick={() => { setActiveView("forgot-password"); resetPasswordForm.reset(); }} className="w-full mt-4 flex items-center justify-center gap-2 py-3 text-gray-600 font-bold hover:text-gray-900 transition-colors">
+                        <ArrowLeft className="w-4 h-4" /> Change email
+                      </button>
                     </form>
-                  )}
-                </CardContent>
-              </Card>
-            </motion.div>
+                  </>
+                )}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </div>
 
-            {/* Terms */}
-            <p className="text-center text-sm text-gray-500 dark:text-gray-400">
-              By continuing, you agree to our{" "}
-              <Link href="/terms" className="text-teal-600 dark:text-teal-400 hover:underline">Terms of Service</Link>
-              {" "}and{" "}
-              <Link href="/privacy" className="text-teal-600 dark:text-teal-400 hover:underline">Privacy Policy</Link>
-            </p>
+        <div className="hidden lg:flex lg:w-1/2 relative items-center justify-center overflow-hidden p-12">
+          <div className="absolute top-[10%] left-[20%] w-96 h-96 bg-[#FF0066]/[0.05] rounded-full blur-[100px] pointer-events-none"></div>
+          <div className="absolute bottom-[10%] right-[20%] w-96 h-96 bg-[#FFBB33]/[0.07] rounded-full blur-[100px] pointer-events-none"></div>
+          <div className="relative z-10 w-full max-w-lg flex flex-col h-full justify-between py-10">
+            <div className="flex justify-start">
+              <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+                <h1 className="text-5xl font-black tracking-tighter flex items-center justify-center drop-shadow-sm">
+                  <span className="text-gray-900">Voice</span>
+                  <span className="bg-gradient-to-r from-[#FF0066] via-[#FF6633] to-[#FFBB33] bg-clip-text text-transparent pr-1">X</span>
+                </h1>
+              </Link>
+            </div>
 
-            {/* Trust indicators */}
-            <motion.div
-              className="flex items-center justify-center gap-6 pt-4"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-            >
-              <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-                <Check className="w-4 h-4 text-teal-500" />
-                <span>14-day free trial</span>
+            <div className="space-y-6 my-12 relative">
+              <div className="absolute left-6 top-8 bottom-8 w-px bg-gradient-to-b from-gray-200 via-gray-200 to-transparent -z-10"></div>
+              <div className="bg-white/80 backdrop-blur-md border border-gray-100 rounded-2xl p-5 flex items-center gap-4 shadow-xl shadow-[#FF0066]/5 transform transition-transform hover:-translate-y-1 ml-0 relative">
+                <div className="absolute -left-[5px] top-1/2 w-2.5 h-2.5 rounded-full bg-[#FF0066] shadow-[0_0_10px_#FF0066]"></div>
+                <div className="w-12 h-12 rounded-xl bg-[#FF0066]/10 flex items-center justify-center flex-shrink-0">
+                  <Activity className="w-6 h-6 text-[#FF0066]" />
+                </div>
+                <div>
+                  <h3 className="text-gray-900 font-bold text-sm">Real-time Intent Analysis</h3>
+                  <p className="text-gray-500 text-xs mt-0.5">Processing 10,000+ interactions/sec</p>
+                </div>
               </div>
-              <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-                <Check className="w-4 h-4 text-teal-500" />
-                <span>No credit card</span>
+              <div className="bg-white/80 backdrop-blur-md border border-gray-100 rounded-2xl p-5 flex items-center gap-4 shadow-xl shadow-[#FF6633]/5 transform transition-transform hover:-translate-y-1 ml-8 relative">
+                <div className="w-12 h-12 rounded-xl bg-[#FF6633]/10 flex items-center justify-center flex-shrink-0">
+                  <PhoneForwarded className="w-6 h-6 text-[#FF6633]" />
+                </div>
+                <div>
+                  <h3 className="text-gray-900 font-bold text-sm">Automated Outbound Calling</h3>
+                  <p className="text-gray-500 text-xs mt-0.5">Connecting to global carrier networks</p>
+                </div>
               </div>
-            </motion.div>
+              <div className="bg-white/80 backdrop-blur-md border border-gray-100 rounded-2xl p-5 flex items-center gap-4 shadow-xl shadow-emerald-500/5 transform transition-transform hover:-translate-y-1 ml-16 relative">
+                <div className="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center flex-shrink-0">
+                  <CheckCircle2 className="w-6 h-6 text-emerald-500" />
+                </div>
+                <div>
+                  <h3 className="text-gray-900 font-bold text-sm">CRM Handoff Successful</h3>
+                  <p className="text-gray-500 text-xs mt-0.5">Ticket created in Salesforce & Zendesk</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-white/60 backdrop-blur-md border border-gray-100 rounded-2xl p-5 shadow-lg shadow-gray-200/20 text-center transform transition-transform hover:-translate-y-1">
+                <p className="text-3xl font-black tracking-tight text-[#FF0066]">100+</p>
+                <p className="text-gray-500 font-bold text-[10px] uppercase tracking-widest mt-1">Countries</p>
+              </div>
+              <div className="bg-white/60 backdrop-blur-md border border-gray-100 rounded-2xl p-5 shadow-lg shadow-gray-200/20 text-center transform transition-transform hover:-translate-y-1">
+                <p className="text-3xl font-black tracking-tight text-[#FF6633]">30+</p>
+                <p className="text-gray-500 font-bold text-[10px] uppercase tracking-widest mt-1">Languages</p>
+              </div>
+              <div className="bg-white/60 backdrop-blur-md border border-gray-100 rounded-2xl p-5 shadow-lg shadow-gray-200/20 text-center transform transition-transform hover:-translate-y-1">
+                <p className="text-3xl font-black tracking-tight text-emerald-500">99.9%</p>
+                <p className="text-gray-500 font-bold text-[10px] uppercase tracking-widest mt-1">Uptime</p>
+              </div>
+              <div className="bg-white/60 backdrop-blur-md border border-gray-100 rounded-2xl p-5 shadow-lg shadow-gray-200/20 text-center transform transition-transform hover:-translate-y-1">
+                <p className="text-3xl font-black tracking-tight text-[#FFBB33]">24/7</p>
+                <p className="text-gray-500 font-bold text-[10px] uppercase tracking-widest mt-1">Support</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

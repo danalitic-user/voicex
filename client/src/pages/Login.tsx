@@ -83,7 +83,7 @@ export default function Login() {
       }
 
       AuthStorage.setAuthData(data.token, data.user, data.refreshToken, data.expiresIn);
-      
+
       toast({
         title: t('auth.welcomeBack'),
         description: t('auth.loggedInAs', { name: data.user.name }),
@@ -218,7 +218,7 @@ export default function Login() {
       }
 
       AuthStorage.setAuthData(registerData.token, registerData.user, registerData.refreshToken, registerData.expiresIn);
-      
+
       toast({
         title: "Account created!",
         description: `Welcome, ${registerData.user.name}`,

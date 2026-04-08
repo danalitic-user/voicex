@@ -3462,7 +3462,7 @@
       "scriptCodeHint": "Paste the complete tracking code provided by your analytics service. Include all script tags.",
       "placement": "Placement",
       "placementHead": "Head Section",
-      "placementBody": "Body Section", 
+      "placementBody": "Body Section",
       "headDesc": "Loads before page content - best for tracking scripts that need to run early",
       "bodyDesc": "Loads after page content - better for scripts that don't need to run immediately",
       "placementRequired": "Please select at least one placement location",

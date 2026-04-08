@@ -94,13 +94,13 @@ import { DynamicLanguagesProvider } from "@/contexts/dynamic-languages";
 
 function SessionTimeoutWrapper({ children }: { children: React.ReactNode }) {
   const [, setLocation] = useLocation();
-  
+
   const handleTimeout = useCallback(() => {
     // Logout request sends HttpOnly cookie automatically via credentials: 'include'
     fetch('/api/auth/logout', {
       method: 'POST',
       credentials: 'include',
-    }).catch(() => {});
+    }).catch(() => { });
     AuthStorage.clearAuth();
     queryClient.clear();
     setLocation('/login');
@@ -169,9 +169,9 @@ function AdminRouter() {
               <SidebarTrigger className="md:hidden" data-testid="button-mobile-menu" />
               <div className="md:hidden">
                 {currentLogo ? (
-                  <img 
-                    src={currentLogo} 
-                    alt={branding.app_name} 
+                  <img
+                    src={currentLogo}
+                    alt={branding.app_name}
                     className="h-7 w-auto max-w-[120px] object-contain"
                   />
                 ) : (
@@ -223,9 +223,9 @@ function UserRouter() {
               <SidebarTrigger className="md:hidden" data-testid="button-mobile-menu" />
               <div className="md:hidden">
                 {currentLogo ? (
-                  <img 
-                    src={currentLogo} 
-                    alt={branding.app_name} 
+                  <img
+                    src={currentLogo}
+                    alt={branding.app_name}
                     className="h-7 w-auto max-w-[120px] object-contain"
                   />
                 ) : (
@@ -310,9 +310,9 @@ function TeamMemberRouter() {
               <SidebarTrigger className="md:hidden" data-testid="button-mobile-menu" />
               <div className="md:hidden">
                 {currentLogo ? (
-                  <img 
-                    src={currentLogo} 
-                    alt={branding.app_name} 
+                  <img
+                    src={currentLogo}
+                    alt={branding.app_name}
                     className="h-7 w-auto max-w-[120px] object-contain"
                   />
                 ) : (
@@ -391,9 +391,9 @@ function AdminTeamMemberRouter() {
               <SidebarTrigger className="md:hidden" data-testid="button-mobile-menu" />
               <div className="md:hidden">
                 {currentLogo ? (
-                  <img 
-                    src={currentLogo} 
-                    alt={branding.app_name} 
+                  <img
+                    src={currentLogo}
+                    alt={branding.app_name}
                     className="h-7 w-auto max-w-[120px] object-contain"
                   />
                 ) : (
@@ -465,7 +465,7 @@ function AdminGuard({ children }: { children: React.ReactNode }) {
   }
 
   const hasAdminAccess = user.role === 'admin';
-  
+
   // If user doesn't have admin access, redirect to user panel
   if (!hasAdminAccess) {
     console.log("AdminGuard - User is not authorized for admin panel, redirecting to /app");
@@ -488,10 +488,10 @@ interface AdminTeamMemberInfo {
 
 function AdminTeamGuard({ children }: { children: React.ReactNode }) {
   // Validate admin team member JWT token via server
-  const { data: authData, isLoading, isError } = useQuery<{ 
-    member: AdminTeamMemberInfo; 
-    team: { id: string; name: string }; 
-    permissions: Record<string, Record<string, any>> 
+  const { data: authData, isLoading, isError } = useQuery<{
+    member: AdminTeamMemberInfo;
+    team: { id: string; name: string };
+    permissions: Record<string, Record<string, any>>
   }>({
     queryKey: ["/api/admin/team/auth/me"],
     queryFn: async () => {
@@ -605,7 +605,7 @@ function Router() {
   const [location] = useLocation();
   // Initialize auth state synchronously from localStorage to prevent flash
   // Check both regular user auth AND team member auth
-  const [isAuthenticated, setIsAuthenticated] = useState(() => 
+  const [isAuthenticated, setIsAuthenticated] = useState(() =>
     AuthStorage.isAuthenticated() || TeamAuth.isAuthenticated()
   );
   const [isTeamMember, setIsTeamMember] = useState(() => TeamAuth.isAuthenticated());

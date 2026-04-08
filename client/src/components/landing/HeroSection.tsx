@@ -1,187 +1,32 @@
 /**
  * ============================================================
- * HeroSection - awaz.ai Exact Design Match
- * Features: Dark solid background, phone mockups, sound wave icon,
- * coral badge, green CTA button, company logos strip
+ * HeroSection - VoiceX Design Match
+ * Features: White background, animated soundwave overlay,
+ * Pink-to-Orange gradients, and centered typography.
  * ============================================================
  */
-import { motion, useReducedMotion, useInView, AnimatePresence } from "framer-motion";
-import { Check, ChevronDown, Phone, Sparkles } from "lucide-react";
+import { motion, useInView } from "framer-motion";
+import { Phone, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRef, useState, useEffect } from "react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { AuthStorage } from "@/lib/auth-storage";
 import { useTranslation } from 'react-i18next';
-import { useQuery } from "@tanstack/react-query";
 
-// Typing effect component
-const TypingWord = ({ words }: { words: string[] }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [displayText, setDisplayText] = useState("");
-  const [isDeleting, setIsDeleting] = useState(false);
-
-  useEffect(() => {
-    const currentWord = words[currentIndex];
-    const typingSpeed = isDeleting ? 50 : 100;
-    const pauseDuration = 2000;
-
-    if (!isDeleting && displayText === currentWord) {
-      const timeout = setTimeout(() => setIsDeleting(true), pauseDuration);
-      return () => clearTimeout(timeout);
-    }
-
-    if (isDeleting && displayText === "") {
-      setIsDeleting(false);
-      setCurrentIndex((prev) => (prev + 1) % words.length);
-      return;
-    }
-
-    const timeout = setTimeout(() => {
-      if (isDeleting) {
-        setDisplayText(currentWord.slice(0, displayText.length - 1));
-      } else {
-        setDisplayText(currentWord.slice(0, displayText.length + 1));
-      }
-    }, typingSpeed);
-
-    return () => clearTimeout(timeout);
-  }, [displayText, isDeleting, currentIndex, words]);
-
-  return (
-    <span className="inline-block min-w-[200px] text-left">
-      <span className="bg-gradient-to-r from-teal-300 to-teal-400 bg-clip-text text-transparent">
-        {displayText}
-      </span>
-      <motion.span
-        animate={{ opacity: [1, 0] }}
-        transition={{ duration: 0.5, repeat: Infinity, repeatType: "reverse" }}
-        className="inline-block w-[3px] h-[0.9em] bg-teal-400 ml-1 align-middle"
-      />
-    </span>
-  );
-};
-
-// Sound wave animation component
-const SoundWaveIcon = () => (
-  <div className="flex items-center justify-center gap-[2px] h-8">
-    {[...Array(12)].map((_, i) => (
-      <motion.div
-        key={i}
-        className="w-[3px] bg-gradient-to-t from-teal-500 to-teal-300 rounded-full"
-        animate={{
-          height: [8, 20 + Math.random() * 12, 8],
-        }}
-        transition={{
-          duration: 0.8 + Math.random() * 0.4,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: i * 0.05,
-        }}
-      />
-    ))}
-  </div>
-);
-
-// Stats badge matching awaz.ai style
-const StatsBadge = ({ value, label }: { value: string; label: string }) => (
-  <div 
-    className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10"
-    data-testid={`stats-badge-${label.toLowerCase()}`}
-  >
-    <span className="text-lg font-bold text-white">{value}</span>
-    <span className="text-xs font-medium text-gray-400 uppercase tracking-wider">{label}</span>
-  </div>
-);
-
-// Trust badge with green checkmark
-const TrustBadge = ({ text }: { text: string }) => (
-  <div className="flex items-center gap-2 text-sm text-gray-400">
-    <div className="w-5 h-5 rounded-full bg-teal-500/20 flex items-center justify-center">
-      <Check className="h-3 w-3 text-teal-500" />
-    </div>
-    <span>{text}</span>
-  </div>
-);
-
-// Phone mockup component
-const PhoneMockup = ({ side }: { side: "left" | "right" }) => {
-  const shouldReduceMotion = useReducedMotion();
-  
-  return (
-    <motion.div
-      className={`absolute top-1/2 -translate-y-1/2 hidden lg:block ${
-        side === "left" ? "-left-16 xl:left-0" : "-right-16 xl:right-0"
-      }`}
-      initial={{ opacity: 0, x: side === "left" ? -50 : 50 }}
-      animate={{ opacity: 0.6, x: 0 }}
-      transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
-    >
-      <div className="relative w-48 xl:w-56 h-96 xl:h-[28rem]">
-        {/* Phone frame */}
-        <div className="absolute inset-0 bg-gradient-to-b from-gray-800 to-gray-900 rounded-[2.5rem] border border-gray-700 shadow-2xl">
-          {/* Screen */}
-          <div className="absolute inset-3 bg-gray-950 rounded-[2rem] overflow-hidden">
-            {/* Status bar */}
-            <div className="h-6 bg-gray-900 flex items-center justify-center">
-              <div className="w-16 h-1 bg-gray-700 rounded-full" />
-            </div>
-            {/* Content */}
-            <div className="p-4 space-y-3">
-              <div className="w-full h-3 bg-gray-800 rounded" />
-              <div className="w-3/4 h-3 bg-gray-800 rounded" />
-              <div className="w-1/2 h-3 bg-gray-800 rounded" />
-              <div className="mt-6 w-full h-20 bg-gradient-to-r from-indigo-900/50 to-purple-900/50 rounded-lg" />
-            </div>
-          </div>
-        </div>
-        {/* Side button */}
-        <div className={`absolute top-24 ${side === "left" ? "-left-1" : "-right-1"} w-1 h-12 bg-gray-700 rounded-full`} />
-      </div>
-    </motion.div>
-  );
-};
-
-// Company logos
-const companyLogos = [
-  { name: "RE MAX", className: "text-lg font-bold tracking-tight" },
-  { name: "Claro", className: "text-xl font-semibold text-blue-400" },
-  { name: "TOMORROWLAND", className: "text-sm font-light tracking-widest" },
-  { name: "LIMITLESS", className: "text-base font-medium tracking-wide" },
-  { name: "segware", className: "text-lg font-semibold" },
-  { name: "wakefit", className: "text-lg font-medium italic" },
-  { name: "AVENTIS", className: "text-base font-semibold tracking-wide" },
-];
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.2,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.6,
-      ease: [0.25, 0.4, 0.25, 1],
-    },
-  },
-};
+const NUM_BARS = 60;
 
 export function HeroSection() {
   const { t } = useTranslation();
-  const shouldReduceMotion = useReducedMotion();
+  const [, setLocation] = useLocation();
   const isAuthenticated = AuthStorage.isAuthenticated();
   const isAdmin = AuthStorage.isAdmin();
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true });
+
+  // State for the rotating text
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [fade, setFade] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
   const rotatingWords = [
     t('landing.hero.rotatingWords.sales'),
@@ -190,168 +35,124 @@ export function HeroSection() {
     t('landing.hero.rotatingWords.appointments'),
   ];
 
-  const handleScrollDown = () => {
-    window.scrollTo({
-      top: window.innerHeight - 80,
-      behavior: "smooth",
-    });
-  };
+  useEffect(() => {
+    setMounted(true);
+    const interval = setInterval(() => {
+      setFade(false);
+      setTimeout(() => {
+        setCurrentIndex((prev) => (prev + 1) % rotatingWords.length);
+        setFade(true);
+      }, 300);
+    }, 2500);
+    return () => clearInterval(interval);
+  }, [rotatingWords.length]);
 
   const getDashboardLink = () => {
-    if (isAuthenticated) {
-      return isAdmin ? "/admin" : "/app";
-    }
+    if (isAuthenticated) return isAdmin ? "/admin" : "/app";
     return "/login";
+  };
+
+  const handleScroll = () => {
+    const nextSection = document.getElementById("features");
+    if (nextSection) nextSection.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-navy-900"
+      className="relative min-h-screen mt-[-70px] flex flex-col justify-center items-center overflow-hidden bg-white"
       data-testid="hero-section"
     >
-      {/* Subtle gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-navy-800/50 to-navy-900" />
-      
-      {/* Vignette effect */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,#050B1A_70%)]" />
-      
-      {/* Subtle teal glow accent */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-teal-500/5 rounded-full blur-3xl" />
+      <style>{`
+        @keyframes soundwave {
+          0%, 100% { transform: scaleY(0.3); opacity: 0.3; }
+          50% { transform: scaleY(1); opacity: 1; }
+        }
+        .animate-soundwave {
+          animation: soundwave 1.5s ease-in-out infinite;
+        }
+      `}</style>
 
-      {/* Phone mockups */}
-      <PhoneMockup side="left" />
-      <PhoneMockup side="right" />
+      {/* Background Soundwave Animation */}
+      <div className="absolute inset-0 z-0 pointer-events-none flex items-center justify-center gap-1 md:gap-2 px-4 opacity-10">
+        {mounted && Array.from({ length: NUM_BARS }).map((_, i) => {
+          const baseHeight = 20 + Math.abs(Math.sin(i * 0.2) * 60);
+          const delay = Math.sin(i * 0.5) * 0.5;
+          const duration = 1.2 + Math.abs(Math.cos(i) * 0.5);
+          return (
+            <div
+              key={i}
+              className="w-1 md:w-3 bg-gradient-to-t from-[#FF0066] via-[#FF6633] to-[#FFBB33] rounded-full animate-soundwave"
+              style={{
+                height: `${baseHeight}%`,
+                animationDelay: `${delay}s`,
+                animationDuration: `${duration}s`
+              }}
+            />
+          );
+        })}
+      </div>
 
-      {/* Main content */}
-      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-20 text-center">
+      {/* Main Content */}
+      <div className="relative z-10 w-full max-w-5xl mx-auto px-4 py-20 flex flex-col items-center text-center">
         <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-          className="space-y-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8 }}
+          className="space-y-6 md:space-y-8 flex flex-col items-center"
         >
-          {/* Sound wave icon */}
-          <motion.div variants={itemVariants} className="flex justify-center">
-            <SoundWaveIcon />
-          </motion.div>
-
-          {/* Badge - teal color */}
-          <motion.div variants={itemVariants} className="flex justify-center">
-            <span className="text-sm font-medium text-teal-400 tracking-wide">
-              {t('landing.hero.badge')}
+          {/* Main Logo Branding */}
+          <h1 className="text-7xl md:text-8xl font-black tracking-tighter flex items-center justify-center">
+            <span className="text-black">Voice</span>
+            <span className="bg-gradient-to-r from-[#FF0066] via-[#FF6633] to-[#FFBB33] bg-clip-text text-transparent pr-1">
+              X
             </span>
-          </motion.div>
+          </h1>
 
-          {/* Main headline */}
-          <motion.h1
-            variants={itemVariants}
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1] text-white"
-            data-testid="hero-headline"
-          >
-            {t('landing.hero.headline')}
-            <br />
-            <TypingWord words={rotatingWords} />
-          </motion.h1>
+          {/* Headline with Rotating Words */}
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight max-w-4xl leading-tight flex flex-col items-center min-h-[7rem] md:min-h-[8rem]">
+            <span>{t("Human-like AI Voice Agents for")}</span>
+            <span
+              className={`block mt-2 font-black text-transparent bg-clip-text bg-gradient-to-r from-[#FF0066] via-[#FF6633] to-[#FFBB33] transition-opacity duration-300 ease-in-out ${fade ? "opacity-100" : "opacity-0"}`}
+            >
+              {rotatingWords[currentIndex]}
+            </span>
+          </h2>
 
-          {/* Subheadline */}
-          <motion.p
-            variants={itemVariants}
-            className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed"
-            data-testid="hero-subheadline"
-          >
-            {t('landing.hero.subheadline', { humanLike: '' }).split('{{humanLike}}')[0]}
-            <span className="font-semibold text-white">{t('landing.hero.humanLike')}</span>
-            {t('landing.hero.subheadline', { humanLike: '' }).split('{{humanLike}}')[1] || ' AI voice agents to handle outbound and inbound calls, book meetings, and take actions 24/7.'}
-          </motion.p>
-
-          {/* Stats badges */}
-          <motion.div 
-            variants={itemVariants}
-            className="flex flex-wrap justify-center gap-3 pt-2"
-          >
-            <StatsBadge value="5X" label={t('landing.hero.statsProductivity')} />
-            <StatsBadge value="100X" label={t('landing.hero.statsScalability')} />
-          </motion.div>
+          {/* Description */}
+          <p className="max-w-2xl text-gray-800 text-lg md:text-xl leading-relaxed font-medium">
+            {t('landing.hero.subheadline') || "Empower your business with AI-driven intelligence. Reach thousands of customers simultaneously with voices that sound, feel, and convert like real people."}
+          </p>
 
           {/* CTA Buttons */}
-          <motion.div
-            variants={itemVariants}
-            className="flex flex-col sm:flex-row justify-center items-center gap-4 pt-4"
-          >
+          <div className="pt-4 flex flex-wrap gap-4 justify-center items-center">
             <Link href={getDashboardLink()}>
               <Button
-                size="lg"
-                className="h-14 px-10 text-base font-semibold bg-teal-500 hover:bg-teal-600 text-white border-0 rounded-full shadow-lg shadow-teal-500/25 transition-all duration-300 hover:shadow-teal-500/40 hover:scale-[1.02]"
-                data-testid="button-hero-get-started"
+                className="h-14 px-10 rounded-full font-bold text-white bg-gradient-to-r from-[#FF0066] via-[#FF6633] to-[#FFBB33] bg-[length:200%_auto] bg-[0%_0%] hover:bg-[100%_0%] shadow-lg hover:shadow-[#FF0073]/40 transition-all duration-500 active:scale-95 border-0"
               >
-                {t('landing.hero.getStarted')}
+                {t('landing.hero.getStarted')} <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
+
             <Button
-              size="lg"
               variant="outline"
               onClick={() => {
+                // If you have a demo call trigger
                 window.dispatchEvent(new CustomEvent('trigger-demo-call'));
+                // Or simply scroll
+                handleScroll();
               }}
-              className="h-14 px-8 text-base font-semibold rounded-full border-2 border-white/20 text-white hover:bg-white/10 hover:border-white/30 transition-all duration-300"
-              data-testid="button-hero-demo-call"
+              className="h-14 px-10 bg-white/80 border-2 border-slate-200 text-slate-900 rounded-full font-bold hover:bg-slate-50 hover:border-slate-300 active:scale-95 transition-all shadow-sm"
             >
-              <Phone className="h-5 w-5 mr-2" />
-              Try Demo Call
+              <Phone className="mr-2 h-5 w-5" />
+              {t('Learn More')}
             </Button>
-          </motion.div>
-
-          {/* Trust badges */}
-          <motion.div
-            variants={itemVariants}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 pt-2"
-            data-testid="hero-trust-badges"
-          >
-            <TrustBadge text={t('landing.hero.freeTrial')} />
-            <TrustBadge text={t('landing.hero.freeCredit')} />
-          </motion.div>
-        </motion.div>
-
-        {/* Scroll indicator */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.5, duration: 0.6 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
-        >
-          <button
-            onClick={handleScrollDown}
-            className="group focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 rounded-full p-2"
-            aria-label="Scroll down"
-            data-testid="button-scroll-indicator"
-          >
-            <ChevronDown className="h-6 w-6 text-gray-500 animate-bounce group-hover:text-white transition-colors" />
-          </button>
+          </div>
         </motion.div>
       </div>
 
-      {/* Company logos strip */}
-      <div className="relative z-10 border-t border-teal-900/30 bg-navy-900/80 backdrop-blur-sm mt-auto">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1, duration: 0.6 }}
-            className="flex flex-wrap items-center justify-center gap-8 md:gap-12 lg:gap-16"
-          >
-            {companyLogos.map((logo, index) => (
-              <div 
-                key={logo.name}
-                className={`text-gray-500 hover:text-gray-300 transition-colors cursor-default ${logo.className}`}
-                data-testid={`logo-${logo.name.toLowerCase().replace(/\s+/g, "-")}`}
-              >
-                {logo.name}
-              </div>
-            ))}
-          </motion.div>
-        </div>
-      </div>
+      {/* Spacer for bottom layout */}
+      <div className="invisible h-[80px] hidden md:block"></div>
     </section>
   );
 }

@@ -174,14 +174,14 @@ app.use((req, res, next) => {
   } catch (error) {
     console.error('⚠️ [Email] Failed to initialize from database:', error);
   }
-  
+
   // Run startup health checks before serving traffic
   try {
     await runStartupHealthCheck();
   } catch (error) {
     console.error('❌ [Startup] Health check failed:', error);
   }
-  
+
   // Run database seeding on startup (safe - skips if data already exists)
   try {
     await runAllSeeds();
@@ -189,23 +189,23 @@ app.use((req, res, next) => {
   } catch (error) {
     console.error('⚠️ [Startup] Database seeding failed (non-fatal):', error);
   }
-  
+
   // Preload JWT expiry settings from database
   await preloadJwtExpiry(storage);
-  
+
   const server = await registerRoutes(app);
 
   // Global error handler - ALWAYS returns JSON for API routes
   app.use((err: any, req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
     const message = err.message || "Internal Server Error";
-    
+
     // Include correlation ID in error response for debugging
     const correlationId = req.correlationId;
-    const errorResponse: any = { 
+    const errorResponse: any = {
       success: false,
-      error: message, 
-      message 
+      error: message,
+      message
     };
     if (correlationId) {
       errorResponse.correlationId = correlationId;
@@ -213,7 +213,7 @@ app.use((req, res, next) => {
 
     // Log the error for debugging (don't re-throw as that crashes the server)
     console.error(`[Error Handler] ${req.method} ${req.path}:`, err.message || err);
-    
+
     // Always return JSON response for API routes, never crash the server
     if (!res.headersSent) {
       // Explicitly set Content-Type to prevent HTML responses
@@ -238,7 +238,7 @@ app.use((req, res, next) => {
   // setting up all the other routes so the catch-all route
   // doesn't interfere with the other routes
   const isProduction = app.get("env") === "production" || process.env.NODE_ENV === "production";
-  
+
   // SEO meta tag injection middleware for social sharing (Facebook, WhatsApp, Twitter, etc.)
   // This injects og:image and other meta tags server-side since crawlers don't execute JavaScript
   const injectSeoMetaTags = async (html: string, baseUrl: string): Promise<string> => {
@@ -261,17 +261,17 @@ app.use((req, res, next) => {
       const siteName: string = String(appNameSetting?.value || 'AI Platform');
       const title: string = String(seoSettings?.defaultTitle || siteName);
       const description: string = String(seoSettings?.defaultDescription || appTaglineSetting?.value || 'AI-powered voice agents for automated calling');
-      
+
       let ogImageUrl: string = String(seoSettings?.defaultOgImage || '/og-image.png');
       if (!ogImageUrl.startsWith('http')) {
         ogImageUrl = `${baseUrl}${ogImageUrl}`;
       }
 
       const ogImageExt = ogImageUrl.toLowerCase().split('.').pop()?.split('?')[0] || 'png';
-      const ogImageType = ['jpg', 'jpeg'].includes(ogImageExt) ? 'image/jpeg' 
-        : ogImageExt === 'gif' ? 'image/gif' 
-        : ogImageExt === 'webp' ? 'image/webp' 
-        : 'image/png';
+      const ogImageType = ['jpg', 'jpeg'].includes(ogImageExt) ? 'image/jpeg'
+        : ogImageExt === 'gif' ? 'image/gif'
+          : ogImageExt === 'webp' ? 'image/webp'
+            : 'image/png';
 
       const seoMetaTags = `
     <!-- Server-side SEO meta tags for social sharing -->
@@ -296,7 +296,7 @@ app.use((req, res, next) => {
       return html;
     }
   };
-  
+
   // Crawler user agents that need server-rendered OG meta tags
   const crawlerUserAgents = [
     'facebookexternalhit',
@@ -311,29 +311,29 @@ app.use((req, res, next) => {
     'Googlebot',
     'bingbot'
   ];
-  
+
   const isCrawler = (userAgent: string | undefined): boolean => {
     if (!userAgent) return false;
     return crawlerUserAgents.some(crawler => userAgent.toLowerCase().includes(crawler.toLowerCase()));
   };
-  
+
   // Middleware to serve SEO-optimized HTML for social media crawlers
   // This runs BEFORE Vite/static file serving to catch crawler requests
   app.use(async (req: Request, res: Response, next: NextFunction) => {
     const userAgent = req.headers['user-agent'];
-    
+
     // Only intercept non-API HTML page requests from crawlers
     if (!req.path.startsWith('/api') && !req.path.includes('.') && isCrawler(userAgent)) {
       try {
         const protocol = req.headers['x-forwarded-proto'] || req.protocol || 'https';
         const host = req.headers['x-forwarded-host'] || req.headers.host || 'localhost';
         const baseUrl = `${protocol}://${host}`;
-        
+
         // Read the appropriate HTML template based on environment
         const fs = await import('fs').then(m => m.promises);
         const prodPath = path.resolve(import.meta.dirname, 'public', 'index.html');
         const devPath = path.join(process.cwd(), 'client', 'index.html');
-        
+
         // Use production build in production, dev template in development
         let indexPath = devPath;
         try {
@@ -344,12 +344,12 @@ app.use((req, res, next) => {
         } catch {
           // Production build doesn't exist, use dev path
         }
-        
+
         let html = await fs.readFile(indexPath, 'utf-8');
-        
+
         // Inject SEO meta tags
         html = await injectSeoMetaTags(html, baseUrl);
-        
+
         res.setHeader('Content-Type', 'text/html');
         res.send(html);
         return;
@@ -360,7 +360,7 @@ app.use((req, res, next) => {
     }
     next();
   });
-  
+
   if (!isProduction) {
     await setupVite(app, server);
   } else {
@@ -368,29 +368,29 @@ app.use((req, res, next) => {
     process.env.NODE_ENV = "production";
     app.set("env", "production");
     log("Running in PRODUCTION mode");
-    
+
     // In production, serve static files with SEO injection
     const fs = await import('fs');
     const distPath = path.resolve(import.meta.dirname, "public");
-    
+
     if (!fs.existsSync(distPath)) {
       throw new Error(
         `Could not find the build directory: ${distPath}, make sure to build the client first`,
       );
     }
-    
+
     app.use(express.static(distPath));
-    
+
     // Serve index.html with SEO meta tags for all non-file routes
     app.use("*", async (req, res) => {
       try {
         const indexPath = path.resolve(distPath, "index.html");
         let html = await fs.promises.readFile(indexPath, 'utf-8');
-        
+
         const protocol = req.headers['x-forwarded-proto'] || req.protocol || 'https';
         const host = req.headers['x-forwarded-host'] || req.headers.host || 'localhost';
         const baseUrl = `${protocol}://${host}`;
-        
+
         html = await injectSeoMetaTags(html, baseUrl);
         res.setHeader('Content-Type', 'text/html');
         res.send(html);
@@ -406,10 +406,10 @@ app.use((req, res, next) => {
   // this serves both the API and the client.
   // It is the only port that is not firewalled.
   const port = parseInt(process.env.PORT || '5000', 10);
-  
+
   // Register the server for graceful shutdown
   registerServer(server);
-  
+
   // In production ESM mode, Node.js can exit if the event loop appears empty
   // Set up keepalive BEFORE server.listen to ensure event loop stays active
   if (process.env.NODE_ENV === 'production') {
@@ -421,7 +421,7 @@ app.use((req, res, next) => {
     (global as any).__keepalive = keepalive;
     console.log('🔄 [Production] Keepalive interval started before server.listen');
   }
-  
+
   // Wrap server.listen in a Promise to ensure IIFE awaits server startup
   // This prevents premature exit in ESM mode on Cloud Run/containerized deployments
   await new Promise<void>((resolve) => {
@@ -431,27 +431,27 @@ app.use((req, res, next) => {
       reusePort: true,
     }, () => {
       log(`serving on port ${port}`);
-      
+
       // Start phone number billing cron job
       startPhoneBillingCron();
-      
+
       // Start resource watchdog for auto-restart monitoring
       startWatchdog();
-      
+
       // Start webhook retry service for failed payment webhooks
       webhookRetryService.start();
-      
+
       // Start ElevenLabs migration engine (handles retry queue for capacity errors)
       initializeMigrationEngine();
-      
+
       // Signal PM2 that the process is ready to receive connections
       signalReady();
-      
+
       console.log('✅ [Production] Server fully initialized and listening');
       resolve();
     });
   });
-  
+
   // Keep the IIFE alive - this line is never reached because server runs indefinitely
   // but having an unresolved promise after await ensures the event loop stays active
   console.log('🔄 [Server] Main initialization complete, server running...');

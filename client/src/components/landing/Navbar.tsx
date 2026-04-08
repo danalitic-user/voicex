@@ -1,346 +1,180 @@
-/**
- * ============================================================
- * © 2025 Diploy — a brand of Bisht Technologies Private Limited
- * Original Author: BTPL Engineering Team
- * Website: https://diploy.in
- * Contact: cs@diploy.in
- *
- * Distributed under the Envato / CodeCanyon License Agreement.
- * Licensed to the purchaser for use as defined by the
- * Envato Market (CodeCanyon) Regular or Extended License.
- *
- * You are NOT permitted to redistribute, resell, sublicense,
- * or share this source code, in whole or in part.
- * Respect the author's rights and Envato licensing terms.
- * ============================================================
- */
-import { useState, useEffect, useRef, useCallback } from "react";
-import { useLocation } from "wouter";
+"use client";
+
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "wouter";
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useBranding } from "@/components/BrandingProvider";
 import { AuthStorage } from "@/lib/auth-storage";
-import { LandingLanguageSelector } from "@/components/LandingLanguageSelector";
-
-// Route theme map: determines if page hero is dark or light background
-const routeThemeMap: Record<string, "dark" | "light"> = {
-  "/": "dark",
-  "/features": "light",
-  "/use-cases": "light", 
-  "/pricing": "light",
-  "/integrations": "light",
-  "/blog": "light",
-  "/contact": "light",
-};
+// import { LandingLanguageSelector } from "@/components/LandingLanguageSelector"; // Commented out import
 
 export function Navbar() {
   const [location, setLocation] = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const mobileMenuRef = useRef<HTMLDivElement>(null);
-  const previousOverflow = useRef<string>("");
   const { branding } = useBranding();
   const { t } = useTranslation();
 
-  const navLinks = [
-    { href: "/features", label: t('landing.navbar.features') },
-    { href: "/use-cases", label: t('landing.navbar.useCases') },
-    { href: "/pricing", label: t('landing.navbar.pricing') },
-    { href: "/integrations", label: t('landing.navbar.integrations') },
-    { href: "/blog", label: t('landing.navbar.blog') },
-    { href: "/contact", label: t('landing.navbar.contact') },
-  ];
-  
-  // Determine page theme based on route
-  const pageTheme = routeThemeMap[location] || "light";
-  
-  // Resolve logo based on background:
-  // logo_url_dark = logo FOR dark backgrounds (white/light colored logo)
-  // logo_url_light = logo FOR light backgrounds (dark/black colored logo)
-  const resolveLogo = () => {
-    const logoForDarkBg = branding.logo_url_dark || branding.logo_url;  // Use on dark backgrounds
-    const logoForLightBg = branding.logo_url_light || branding.logo_url; // Use on light backgrounds
-    
-    if (isScrolled) {
-      // Scrolled = dark navy background
-      return logoForDarkBg || logoForLightBg;
-    }
-    
-    // Not scrolled - check page hero theme
-    if (pageTheme === "dark") {
-      // Dark hero background
-      return logoForDarkBg || logoForLightBg;
-    } else {
-      // Light hero background
-      return logoForLightBg || logoForDarkBg;
-    }
-  };
-  
-  const currentLogo = resolveLogo();
-  const needsLightText = isScrolled || pageTheme === "dark";
   const isAuthenticated = AuthStorage.isAuthenticated();
   const isAdmin = AuthStorage.isAdmin();
 
-  const restoreBodyOverflow = useCallback(() => {
-    document.body.style.overflow = previousOverflow.current || "unset";
-  }, []);
-
-  const lockBodyOverflow = useCallback(() => {
-    previousOverflow.current = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-  }, []);
+  const navLinks = [
+    { href: "/features", label: t('landing.navbar.features', 'Features') },
+    { href: "/use-cases", label: t('landing.navbar.useCases', 'Use Cases') },
+    { href: "/pricing", label: t('landing.navbar.pricing', 'Pricing') },
+    { href: "/integrations", label: t('landing.navbar.integrations', 'Integrations') },
+    { href: "/blog", label: t('landing.navbar.blog', 'Blog') },
+    { href: "/contact", label: t('landing.navbar.contact', 'Contact') },
+  ];
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Preload logo images to avoid flicker
-  useEffect(() => {
-    if (currentLogo) {
-      const img = new Image();
-      img.src = currentLogo;
-    }
-    // Also preload alternate logos
-    if (branding.logo_url_dark) {
-      const img = new Image();
-      img.src = branding.logo_url_dark;
-    }
-    if (branding.logo_url_light) {
-      const img = new Image();
-      img.src = branding.logo_url_light;
-    }
-  }, [currentLogo, branding.logo_url_dark, branding.logo_url_light]);
-
-  useEffect(() => {
-    if (isMobileMenuOpen) {
-      setIsMobileMenuOpen(false);
-    }
-  }, [location]);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        mobileMenuRef.current &&
-        !mobileMenuRef.current.contains(event.target as Node)
-      ) {
-        setIsMobileMenuOpen(false);
-      }
-    };
-
-    if (isMobileMenuOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-      lockBodyOverflow();
-    } else {
-      restoreBodyOverflow();
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      restoreBodyOverflow();
-    };
-  }, [isMobileMenuOpen, lockBodyOverflow, restoreBodyOverflow]);
-
-  useEffect(() => {
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setIsMobileMenuOpen(false);
-      }
-    };
-
-    document.addEventListener("keydown", handleEscape);
-    return () => document.removeEventListener("keydown", handleEscape);
-  }, []);
-
-  const handleNavClick = (href: string) => {
-    setIsMobileMenuOpen(false);
-    setLocation(href);
-  };
-
-  const handleSignIn = () => {
-    setIsMobileMenuOpen(false);
+  const handleAuthRedirect = () => {
     if (isAuthenticated) {
       window.location.href = isAdmin ? "/admin" : "/app";
     } else {
-      setLocation("/login");
-    }
-  };
-
-  const handleGetStarted = () => {
-    setIsMobileMenuOpen(false);
-    if (isAuthenticated) {
-      window.location.href = isAdmin ? "/admin" : "/app";
-    } else {
-      setLocation("/login");
+      // CHANGED: This now routes to /register instead of /login
+      setLocation("/register");
     }
   };
 
   return (
-    <nav
-      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        isScrolled 
-          ? "bg-navy-900/90 backdrop-blur-xl shadow-lg border-b border-teal-900/30" 
-          : "bg-transparent"
-      }`}
-      data-testid="navbar"
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <motion.a
-            href="/"
-            className="flex items-center gap-2.5"
-            whileHover={{ scale: 1.02 }}
-            transition={{ type: "spring", stiffness: 400 }}
-            data-testid="link-logo"
-            onClick={(e) => {
-              e.preventDefault();
-              setLocation("/");
-            }}
-          >
-            {currentLogo && (
-              <motion.img
-                src={currentLogo}
-                alt={branding.app_name || "Logo"}
-                className="h-9 w-auto max-w-[180px] object-contain"
-                whileHover={{ scale: 1.05 }}
-                transition={{ type: "spring", stiffness: 400 }}
-                data-testid="img-logo"
-              />
-            )}
-          </motion.a>
+    <nav className="sticky top-0 w-full z-50 bg-transparent backdrop-blur-lg">
+      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-16 relative">
 
-          <div className="hidden lg:flex items-center gap-1">
-            {navLinks.map((link) => (
-              <motion.a
+        {/* LOGO - Left */}
+        <div className="flex justify-start z-10">
+          <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+            {branding.logo_url ? (
+              <img src={branding.logo_url} alt="Logo" className="h-8 w-auto object-contain" />
+            ) : (
+              <h1 className="text-2xl md:text-3xl font-black tracking-tighter flex items-center">
+                <span className="text-black">Voice</span>
+                <span className="bg-gradient-to-r from-[#FF0066] via-[#FF6633] to-[#FFBB33] bg-clip-text text-transparent pr-1">
+                  X
+                </span>
+              </h1>
+            )}
+          </Link>
+        </div>
+
+        {/* NAV LINKS - Absolute Centered & Forced One Line */}
+        <div className="hidden lg:flex absolute left-1/2 -translate-x-1/2 gap-8 text-gray-700 font-medium whitespace-nowrap">
+          {navLinks.map((link) => {
+            const isActive = location === link.href;
+            return (
+              <Link
                 key={link.href}
                 href={link.href}
-                className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${
-                  needsLightText 
-                    ? "text-gray-400 hover:text-white hover:bg-white/5" 
-                    : "text-gray-600 hover:text-gray-900 hover:bg-black/5"
-                }`}
-                whileHover={{ y: -1 }}
-                transition={{ type: "spring", stiffness: 400 }}
-                data-testid={`link-nav-${link.label.toLowerCase().replace(/\s+/g, "-")}`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleNavClick(link.href);
-                }}
+                className={`relative group transition-colors py-1 ${isActive ? "text-black font-bold" : "text-gray-500 hover:text-black font-semibold"
+                  }`}
               >
                 {link.label}
-              </motion.a>
-            ))}
-          </div>
+                <span className={`absolute left-0 -bottom-1 h-[3px] bg-gradient-to-r from-[#FF0066] via-[#FF6633] to-[#FFBB33] transition-all duration-300 ease-out rounded-full
+                  ${isActive ? "w-full" : "w-0 group-hover:w-full"}`}>
+                </span>
+              </Link>
+            );
+          })}
+        </div>
 
-          <div className="hidden lg:flex items-center gap-2">
-            <LandingLanguageSelector needsLightText={needsLightText} />
-            <Button
-              onClick={handleSignIn}
-              data-testid="button-nav-signin"
-              className="bg-teal-500 hover:bg-teal-600 text-white font-medium rounded-full px-6"
-            >
-              {t('landing.navbar.login')}
-            </Button>
-          </div>
+        {/* ACTIONS & LANG - Right Group */}
+        <div className="flex items-center gap-4 md:gap-6 z-10">
+          {/* DESKTOP LANGUAGE SELECTOR - COMMENTED OUT 
+          <div className="hidden md:flex items-center">
+            <LandingLanguageSelector needsLightText={false} />
+          </div> 
+          */}
 
+          <button
+            onClick={() => setLocation("/login")}
+            className="hidden sm:block text-sm font-bold text-gray-700 hover:text-black transition-colors"
+          >
+            {t('landing.navbar.login', 'Login')}
+          </button>
+
+          <button
+            onClick={handleAuthRedirect}
+            className="px-5 py-2.5 rounded-lg text-sm font-bold text-white bg-gradient-to-r from-[#FF0066] via-[#FF6633] to-[#FFBB33] bg-[length:200%_auto] hover:bg-right shadow-none hover:shadow-lg hover:shadow-[#FF0073]/30 transition-all duration-500 active:scale-95 border-0"
+          >
+            {isAuthenticated
+              ? (isAdmin ? 'Admin' : 'Dashboard')
+              : t('landing.navbar.signup', 'Sign Up')
+            }
+          </button>
+
+          {/* Mobile Toggle */}
           <Button
             variant="ghost"
             size="icon"
-            className={`lg:hidden ${needsLightText ? 'text-white' : 'text-gray-900'}`}
+            className="lg:hidden text-black ml-2"
             onClick={() => setIsMobileMenuOpen(true)}
-            data-testid="button-mobile-menu-open"
-            aria-label="Open menu"
           >
             <Menu className="h-6 w-6" />
           </Button>
         </div>
       </div>
 
+      {/* MOBILE MENU */}
       <AnimatePresence>
         {isMobileMenuOpen && (
-          <>
-            <motion.div
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              data-testid="mobile-menu-overlay"
-            />
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 20 }}
+            className="fixed inset-0 z-[100] bg-white p-6 flex flex-col lg:hidden"
+          >
+            <div className="flex items-center justify-between mb-10">
+              <h1 className="text-2xl font-black">Voice<span className="text-[#FF6633]">X</span></h1>
+              <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(false)}>
+                <X className="h-8 w-8 text-black" />
+              </Button>
+            </div>
 
-            <motion.div
-              ref={mobileMenuRef}
-              className="fixed top-0 right-0 bottom-0 w-full max-w-sm h-screen min-h-screen bg-navy-900 z-50 lg:hidden shadow-2xl border-l border-gray-800"
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              data-testid="mobile-menu"
-            >
-              <div className="flex flex-col h-screen min-h-screen bg-navy-900">
-                <div className="shrink-0 flex items-center justify-between h-16 px-4 border-b border-gray-800 bg-navy-900">
-                  <div className="flex items-center gap-2.5">
-                    {currentLogo && (
-                      <img
-                        src={currentLogo}
-                        alt={branding.app_name || "Logo"}
-                        className="h-9 w-auto max-w-[160px] object-contain"
-                        data-testid="img-mobile-logo"
-                      />
-                    )}
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-white"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    data-testid="button-mobile-menu-close"
-                    aria-label="Close menu"
-                  >
-                    <X className="h-6 w-6" />
-                  </Button>
-                </div>
+            <nav className="flex flex-col gap-6 flex-1 overflow-y-auto">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="text-2xl font-bold text-gray-900"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
 
-                <nav className="flex-1 overflow-y-auto px-4 py-4 bg-navy-900">
-                  <div className="flex flex-col gap-1">
-                    {navLinks.map((link) => (
-                      <a
-                        key={link.href}
-                        href={link.href}
-                        className="block text-base font-medium py-3 px-4 rounded-xl text-gray-300 hover:text-white hover:bg-gray-800 transition-all"
-                        data-testid={`link-mobile-${link.label.toLowerCase().replace(/\s+/g, "-")}`}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleNavClick(link.href);
-                        }}
-                      >
-                        {link.label}
-                      </a>
-                    ))}
-                  </div>
-                </nav>
+            <div className="pt-8 border-t border-slate-100 space-y-4">
+              {/* MOBILE LANGUAGE SELECTOR - COMMENTED OUT
+              <div className="flex items-center justify-between py-2">
+                <span className="font-bold text-gray-500">Language</span>
+                <LandingLanguageSelector needsLightText={false} />
+              </div> 
+              */}
 
-                <div className="shrink-0 p-3 border-t border-gray-800 space-y-3 bg-navy-900">
-                  <div className="flex items-center justify-between px-1">
-                    <span className="text-sm text-gray-400">{t('common.language')}</span>
-                    <LandingLanguageSelector needsLightText={true} />
-                  </div>
-                  <Button
-                    className="w-full justify-center h-10 bg-teal-500 hover:bg-teal-600 text-white font-medium rounded-full"
-                    onClick={handleSignIn}
-                    data-testid="button-mobile-signin"
-                  >
-                    {t('landing.navbar.login')}
-                  </Button>
-                </div>
+              <div className="flex flex-col gap-3">
+                <Button
+                  variant="outline"
+                  className="w-full h-14 rounded-xl font-bold border-2"
+                  onClick={() => { setLocation("/login"); setIsMobileMenuOpen(false); }}
+                >
+                  {t('landing.navbar.login', 'Login')}
+                </Button>
+                <Button
+                  className="w-full h-14 rounded-xl font-bold text-white bg-gradient-to-r from-[#FF0066] via-[#FF6633] to-[#FFBB33] border-0"
+                  onClick={() => { handleAuthRedirect(); setIsMobileMenuOpen(false); }}
+                >
+                  {isAuthenticated ? 'Dashboard' : 'Sign Up Free'}
+                </Button>
               </div>
-            </motion.div>
-          </>
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
     </nav>
