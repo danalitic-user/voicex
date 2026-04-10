@@ -68,7 +68,7 @@ export default function ContactPage() {
                   id="name"
                   name="name"
                   required
-                  placeholder="John Doe"
+                  placeholder="Enter your full name"
                   className="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-[#FF0066] focus:border-[#FF0066] block p-3.5 transition-colors outline-none"
                 />
               </div>
@@ -81,7 +81,7 @@ export default function ContactPage() {
                   id="email"
                   name="email"
                   required
-                  placeholder="name@company.com"
+                  placeholder="Enter your email address"
                   className="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-[#FF0066] focus:border-[#FF0066] block p-3.5 transition-colors outline-none"
                 />
               </div>
