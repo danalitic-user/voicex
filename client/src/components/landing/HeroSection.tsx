@@ -1,6 +1,6 @@
 /**
  * ============================================================
- * HeroSection - VoiceX Design Match
+ * HeroSection - VoiceX Design
  * Features: White background, animated soundwave overlay,
  * Pink-to-Orange gradients, and centered typography.
  * ============================================================
@@ -23,7 +23,6 @@ export function HeroSection() {
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true });
 
-  // State for the rotating text
   const [currentIndex, setCurrentIndex] = useState(0);
   const [fade, setFade] = useState(true);
   const [mounted, setMounted] = useState(false);
@@ -130,7 +129,7 @@ export function HeroSection() {
               <Button
                 className="h-14 px-10 rounded-full font-bold text-white bg-gradient-to-r from-[#FF0066] via-[#FF6633] to-[#FFBB33] bg-[length:200%_auto] bg-[0%_0%] hover:bg-[100%_0%] shadow-lg hover:shadow-[#FF0073]/40 transition-all duration-500 active:scale-95 border-0"
               >
-                {t('landing.hero.getStarted')} <ArrowRight className="ml-2 h-5 w-5" />
+                {t('landing.hero.getStarted')}
               </Button>
             </Link>
 
@@ -144,7 +143,7 @@ export function HeroSection() {
               }}
               className="h-14 px-10 bg-white/80 border-2 border-slate-200 text-slate-900 rounded-full font-bold hover:bg-slate-50 hover:border-slate-300 active:scale-95 transition-all shadow-sm"
             >
-              <Phone className="mr-2 h-5 w-5" />
+
               {t('Learn More')}
             </Button>
           </div>

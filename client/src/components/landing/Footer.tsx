@@ -67,7 +67,7 @@ export function Footer() {
             {branding.app_tagline || "AI Voice Calling Agents with 24/7 Automation Support"}
           </p>
 
-          {/* Social Icons (Optional but recommended to keep) */}
+          {/* Social Icons */}
           <div className="flex gap-4 pt-2">
             {socialLinks.map((link) => (
               <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-black transition-colors">
@@ -114,7 +114,7 @@ export function Footer() {
               className="flex items-center gap-2 text-gray-600 hover:text-black transition-colors text-sm"
             >
               <Mail className="h-4 w-4" />
-              support@{branding.app_name?.toLowerCase().replace(/\s+/g, '') || 'voicex'}.com
+              contact@voicexai.app
             </a>
             {/*<div className="flex items-start gap-2 text-gray-600 text-sm">
               <MapPin className="h-4 w-4 mt-0.5 shrink-0" />

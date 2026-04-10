@@ -10,11 +10,11 @@ export default function ContactPage() {
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsSubmitting(true);
-    setResult("Sending....");
+    setResult("");
 
     const formData = new FormData(event.currentTarget);
-    // Replace this with your actual Web3Forms Access Key
-    formData.append("access_key", "b527db4a-4371-4e04-8d86-fcbfcc05e6b4");
+
+    formData.append("access_key", "9c7fc5cd-f463-4996-9cfd-fadd22968209");
 
     try {
       const response = await fetch("https://api.web3forms.com/submit", {
@@ -28,10 +28,10 @@ export default function ContactPage() {
         setResult("Form Submitted Successfully!");
         (event.target as HTMLFormElement).reset();
       } else {
-        setResult(data.message);
+        setResult(data.message || "Something went wrong.");
       }
     } catch (error) {
-      setResult("Something went wrong. Please try again.");
+      setResult("Network error. Please try again later.");
     } finally {
       setIsSubmitting(false);
     }
@@ -55,7 +55,7 @@ export default function ContactPage() {
           </p>
         </div>
 
-        {/* Centered Form Container */}
+        {/* Form Container */}
         <div className="max-w-3xl mx-auto bg-white rounded-[2rem] border border-gray-100 shadow-xl p-8 md:p-12 lg:p-16">
           <form className="space-y-6" onSubmit={onSubmit}>
 
@@ -68,7 +68,7 @@ export default function ContactPage() {
                   id="name"
                   name="name"
                   required
-                  placeholder="Full Name"
+                  placeholder="John Doe"
                   className="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-[#FF0066] focus:border-[#FF0066] block p-3.5 transition-colors outline-none"
                 />
               </div>
@@ -119,14 +119,14 @@ export default function ContactPage() {
               )}
             </button>
 
-            {/* Result Message Display */}
+            {/* Success/Error Message Display */}
             {result && (
-              <p className={`text-center mt-6 font-bold px-4 py-3 rounded-lg ${result.includes("Successfully")
+              <div className={`text-center mt-6 font-bold px-4 py-3 rounded-lg animate-in fade-in slide-in-from-top-2 ${result.includes("Successfully")
                 ? "bg-green-50 text-green-700 border border-green-200"
                 : "bg-red-50 text-red-700 border border-red-200"
                 }`}>
                 {result}
-              </p>
+              </div>
             )}
           </form>
         </div>
