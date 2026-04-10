@@ -45,7 +45,7 @@ export function Navbar() {
 
   return (
     <>
-      <nav className="sticky top-0 w-full z-50 bg-transparent backdrop-blur-lg">
+      <nav className={`sticky top-0 w-full z-50 transition-all duration-300 ${isScrolled ? "bg-white/80 backdrop-blur-lg border-b border-gray-100" : "bg-transparent"}`}>
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-16 relative">
 
           {/* LOGO - Left */}
@@ -64,7 +64,7 @@ export function Navbar() {
             </Link>
           </div>
 
-          {/* NAV LINKS */}
+          {/* NAV LINKS - Desktop */}
           <div className="hidden lg:flex absolute left-1/2 -translate-x-1/2 gap-8 text-gray-700 font-medium whitespace-nowrap">
             {navLinks.map((link) => {
               const isActive = location === link.href;
@@ -86,10 +86,10 @@ export function Navbar() {
 
           {/* ACTIONS & LANG - Right Group */}
           <div className="flex items-center gap-4 md:gap-6 z-10">
-            {/* DESKTOP LANGUAGE SELECTOR - COMMENTED OUT 
+            {/* DESKTOP LANGUAGE SELECTOR - COMMENTED OUT
           <div className="hidden md:flex items-center">
             <LandingLanguageSelector needsLightText={false} />
-          </div> 
+          </div>
           */}
 
             <button
@@ -125,13 +125,16 @@ export function Navbar() {
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 20 }}
-              className="fixed inset-0 z-[100] bg-white p-6 flex flex-col lg:hidden"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="fixed inset-0 z-[100] bg-white/90 backdrop-blur-xl p-6 flex flex-col lg:hidden"
             >
               <div className="flex items-center justify-between mb-10">
-                <h1 className="text-2xl font-black">Voice<span className="text-[#FF6633]">X</span></h1>
+                <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
+                  <h1 className="text-2xl font-black">Voice<span className="text-[#FF6633]">X</span></h1>
+                </Link>
                 <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(false)}>
                   <X className="h-8 w-8 text-black" />
                 </Button>
@@ -143,25 +146,25 @@ export function Navbar() {
                     key={link.href}
                     href={link.href}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="text-2xl font-bold text-gray-900"
+                    className={`text-2xl font-bold transition-colors ${location === link.href ? "text-black" : "text-gray-500"}`}
                   >
                     {link.label}
                   </Link>
                 ))}
               </nav>
 
-              <div className="pt-8 border-t border-slate-100 space-y-4">
+              <div className="pt-8 border-t border-gray-200/50 space-y-4">
                 {/* MOBILE LANGUAGE SELECTOR - COMMENTED OUT
               <div className="flex items-center justify-between py-2">
                 <span className="font-bold text-gray-500">Language</span>
                 <LandingLanguageSelector needsLightText={false} />
-              </div> 
+              </div>
               */}
 
                 <div className="flex flex-col gap-3">
                   <Button
                     variant="outline"
-                    className="w-full h-14 rounded-xl font-bold border-2"
+                    className="w-full h-14 rounded-xl font-bold border-2 bg-white"
                     onClick={() => { setLocation("/login"); setIsMobileMenuOpen(false); }}
                   >
                     {t('landing.navbar.login', 'Login')}
@@ -170,7 +173,7 @@ export function Navbar() {
                     className="w-full h-14 rounded-xl font-bold text-white bg-gradient-to-r from-[#FF0066] via-[#FF6633] to-[#FFBB33] border-0"
                     onClick={() => { handleAuthRedirect(); setIsMobileMenuOpen(false); }}
                   >
-                    {isAuthenticated ? 'Dashboard' : 'Sign Up Free'}
+                    {isAuthenticated ? (isAdmin ? 'Admin' : 'Dashboard') : t('landing.navbar.signup', 'Sign Up Free')}
                   </Button>
                 </div>
               </div>
