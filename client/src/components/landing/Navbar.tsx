@@ -45,7 +45,7 @@ export function Navbar() {
 
   return (
     <>
-      <nav className={`sticky top-0 w-full z-50 transition-all duration-300 ${isScrolled ? "bg-white/80 backdrop-blur-lg border-b border-gray-100" : "bg-transparent"}`}>
+      <nav className={`sticky top-0 w-full z-50 transition-all duration-300 ${isScrolled ? "backdrop-blur-lg border-b border-gray-100" : "!bg-transparent"}`}>
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-16 relative">
 
           {/* LOGO - Left */}

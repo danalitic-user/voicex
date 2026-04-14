@@ -1,6 +1,6 @@
 /**
  * ============================================================
- * © 2026 VoiceX - A Danaltiv Product. All rights reserved.
+ * © 2026 VoiceX - A Danaltic Product. All rights reserved.
  * Original Author: Danalitic Engineering Team
  * Website: https://danalitic.in
  * ============================================================
