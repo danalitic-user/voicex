@@ -1,13 +1,9 @@
 /**
  * ============================================================
- * © 2025 Diploy — a brand of Bisht Technologies Private Limited
- * Original Author: BTPL Engineering Team
- * Website: https://diploy.in
- * Contact: cs@diploy.in
+ * © 2026 VoiceX - A Danaltic Product. All rights reserved.
+ * Original Author: Danalitic Engineering Team
+ * Website: https://danalitic.in
  *
- * Distributed under the Envato / CodeCanyon License Agreement.
- * Licensed to the purchaser for use as defined by the
- * Envato Market (CodeCanyon) Regular or Extended License.
  *
  * You are NOT permitted to redistribute, resell, sublicense,
  * or share this source code, in whole or in part.
@@ -209,7 +205,7 @@ export default function FormsPage() {
 
   const handleDownloadCSV = () => {
     if (!selectedForm || submissions.length === 0) return;
-    
+
     // Build CSV headers from all unique questions
     const headers = ["Submission ID", "Contact Name", "Contact Phone", "Submitted At"];
     const allQuestions = new Set<string>();
@@ -218,7 +214,7 @@ export default function FormsPage() {
     });
     const questionHeaders = Array.from(allQuestions);
     headers.push(...questionHeaders);
-    
+
     // Build CSV rows
     const rows = submissions.map(sub => {
       const row: string[] = [
@@ -227,16 +223,16 @@ export default function FormsPage() {
         sub.contactPhone || "N/A",
         format(new Date(sub.submittedAt), "yyyy-MM-dd HH:mm:ss"),
       ];
-      
+
       // Add answers in the same order as question headers
       questionHeaders.forEach(question => {
         const response = (sub.responses || []).find(r => r.question === question);
         row.push(response ? response.answer : "");
       });
-      
+
       return row;
     });
-    
+
     // Escape CSV values
     const escapeCSV = (val: string) => {
       if (val.includes(",") || val.includes('"') || val.includes("\n")) {
@@ -244,12 +240,12 @@ export default function FormsPage() {
       }
       return val;
     };
-    
+
     const csvContent = [
       headers.map(escapeCSV).join(","),
       ...rows.map(row => row.map(escapeCSV).join(","))
     ].join("\n");
-    
+
     // Download
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const link = document.createElement("a");
@@ -257,7 +253,7 @@ export default function FormsPage() {
     link.download = `${selectedForm.name.replace(/[^a-z0-9]/gi, "_")}_submissions_${format(new Date(), "yyyyMMdd")}.csv`;
     link.click();
     URL.revokeObjectURL(link.href);
-    
+
     toast({ title: t("forms.toast.downloadSuccess") });
   };
 
@@ -291,8 +287,8 @@ export default function FormsPage() {
               <p className="text-muted-foreground mt-0.5">{t("forms.subtitle")}</p>
             </div>
           </div>
-          <Button 
-            onClick={() => setCreateDialogOpen(true)} 
+          <Button
+            onClick={() => setCreateDialogOpen(true)}
             className="bg-cyan-600 hover:bg-cyan-700 text-white"
             data-testid="button-create-form"
           >

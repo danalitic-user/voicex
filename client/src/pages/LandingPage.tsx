@@ -1,8 +1,17 @@
 /**
  * ============================================================
- * LandingPage - awaz.ai Inspired Design
- * Main landing page with all sections
+ * © 2026 VoiceX - A Danaltic Product. All rights reserved.
+ * Original Author: Danalitic Engineering Team
+ * Website: https://danalitic.in
+ *
+ *
+ * You are NOT permitted to redistribute, resell, sublicense,
+ * or share this source code, in whole or in part.
+ * Respect the author's rights and Envato licensing terms.
  * ============================================================
+ * 
+ * Landing Page - Desgined with Danalitic Theme 
+ * White background, pink to orange gradient accents, clean layout
  */
 import { SEOHead } from "@/components/landing/SEOHead";
 import { Navbar } from "@/components/landing/Navbar";

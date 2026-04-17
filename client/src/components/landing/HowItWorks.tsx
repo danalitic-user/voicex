@@ -1,13 +1,9 @@
 /**
  * ============================================================
- * © 2025 Diploy — a brand of Bisht Technologies Private Limited
- * Original Author: BTPL Engineering Team
- * Website: https://diploy.in
- * Contact: cs@diploy.in
+ * © 2026 VoiceX - A Danaltic Product. All rights reserved.
+ * Original Author: Danalitic Engineering Team
+ * Website: https://danalitic.in
  *
- * Distributed under the Envato / CodeCanyon License Agreement.
- * Licensed to the purchaser for use as defined by the
- * Envato Market (CodeCanyon) Regular or Extended License.
  *
  * You are NOT permitted to redistribute, resell, sublicense,
  * or share this source code, in whole or in part.
@@ -44,7 +40,7 @@ const steps = [
 
 export function HowItWorks() {
   return (
-    <section 
+    <section
       className="py-12 sm:py-16 md:py-24 lg:py-32 bg-muted/30"
       data-testid="section-how-it-works"
     >
@@ -55,7 +51,7 @@ export function HowItWorks() {
           viewport={{ once: true }}
           className="text-center space-y-3 sm:space-y-4 mb-8 sm:mb-12 md:mb-16"
         >
-          <h2 
+          <h2
             className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold"
             data-testid="heading-how-it-works"
           >
@@ -79,20 +75,20 @@ export function HowItWorks() {
               <Card className="p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl h-full hover-elevate transition-all group relative overflow-hidden">
                 <div className={`absolute inset-0 bg-gradient-to-br ${step.color} opacity-0 group-hover:opacity-5 transition-opacity`} />
                 <div className="flex items-start gap-4 sm:gap-6 mb-4 sm:mb-6">
-                  <div 
+                  <div
                     className={`h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 rounded-xl sm:rounded-2xl bg-gradient-to-br ${step.color} flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}
                     data-testid={`icon-step-${index}`}
                   >
                     <step.icon className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8 text-white dark:text-slate-900" />
                   </div>
-                  <div 
+                  <div
                     className="text-5xl sm:text-6xl md:text-7xl font-bold text-primary/10 group-hover:text-primary/20 transition-colors"
                     data-testid={`number-step-${index}`}
                   >
                     {step.number}
                   </div>
                 </div>
-                <h3 
+                <h3
                   className="text-lg sm:text-xl md:text-2xl font-bold mb-2 sm:mb-3"
                   data-testid={`title-step-${index}`}
                 >

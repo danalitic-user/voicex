@@ -1,13 +1,9 @@
 /**
  * ============================================================
- * © 2025 Diploy — a brand of Bisht Technologies Private Limited
- * Original Author: BTPL Engineering Team
- * Website: https://diploy.in
- * Contact: cs@diploy.in
+ * © 2026 VoiceX - A Danaltic Product. All rights reserved.
+ * Original Author: Danalitic Engineering Team
+ * Website: https://danalitic.in
  *
- * Distributed under the Envato / CodeCanyon License Agreement.
- * Licensed to the purchaser for use as defined by the
- * Envato Market (CodeCanyon) Regular or Extended License.
  *
  * You are NOT permitted to redistribute, resell, sublicense,
  * or share this source code, in whole or in part.
@@ -65,8 +61,8 @@ const features = [
 
 export function FeaturesGrid() {
   return (
-    <section 
-      id="features" 
+    <section
+      id="features"
       className="py-12 sm:py-16 md:py-24 lg:py-32 relative overflow-hidden"
       data-testid="section-features"
     >
@@ -78,7 +74,7 @@ export function FeaturesGrid() {
           viewport={{ once: true }}
           className="text-center space-y-4 mb-8 md:mb-16"
         >
-          <h2 
+          <h2
             className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold px-2"
             data-testid="heading-features"
           >
@@ -100,20 +96,20 @@ export function FeaturesGrid() {
               data-testid={`card-feature-${index}`}
             >
               <Card className="p-4 sm:p-6 md:p-8 rounded-2xl md:rounded-3xl hover-elevate transition-all h-full group border-amber-200/20 dark:border-amber-800/20">
-                <motion.div 
+                <motion.div
                   className={`h-12 w-12 sm:h-14 sm:w-14 rounded-xl bg-gradient-to-br ${feature.iconColor} flex items-center justify-center mb-4 sm:mb-6 shadow-lg ${feature.shadowColor}`}
                   initial={{ scale: 1, rotate: 0 }}
-                  whileInView={{ 
+                  whileInView={{
                     scale: [1, 1.1, 1],
                     rotate: [0, 5, -5, 0]
                   }}
                   viewport={{ once: true }}
-                  transition={{ 
+                  transition={{
                     delay: index * 0.15,
                     duration: 0.6,
                     ease: "easeOut"
                   }}
-                  whileHover={{ 
+                  whileHover={{
                     scale: 1.1,
                     rotate: 5
                   }}
@@ -121,7 +117,7 @@ export function FeaturesGrid() {
                 >
                   <feature.icon className="h-6 w-6 sm:h-7 sm:w-7 text-white" />
                 </motion.div>
-                <h3 
+                <h3
                   className="text-lg sm:text-xl font-bold mb-2 sm:mb-4"
                   data-testid={`title-feature-${index}`}
                 >

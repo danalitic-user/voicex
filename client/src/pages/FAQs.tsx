@@ -74,7 +74,7 @@ export default function FAQs() {
                     ))}
                 </div>
 
-                {/* Bottom CTA (Optional) */}
+                {/* Bottom CTA */}
                 <div className="mt-12 text-center">
                     <p className="text-gray-500 font-medium">
                         Still have questions? Reach out to our team above.

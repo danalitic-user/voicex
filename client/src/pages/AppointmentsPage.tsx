@@ -1,13 +1,9 @@
 /**
  * ============================================================
- * © 2025 Diploy — a brand of Bisht Technologies Private Limited
- * Original Author: BTPL Engineering Team
- * Website: https://diploy.in
- * Contact: cs@diploy.in
+ * © 2026 VoiceX - A Danaltic Product. All rights reserved.
+ * Original Author: Danalitic Engineering Team
+ * Website: https://danalitic.in
  *
- * Distributed under the Envato / CodeCanyon License Agreement.
- * Licensed to the purchaser for use as defined by the
- * Envato Market (CodeCanyon) Regular or Extended License.
  *
  * You are NOT permitted to redistribute, resell, sublicense,
  * or share this source code, in whole or in part.
@@ -111,7 +107,7 @@ export default function AppointmentsPage() {
         workingHoursEnd: settingsData.workingHoursEnd || "17:00",
         workingDays: settingsData.workingDays || ["monday", "tuesday", "wednesday", "thursday", "friday"],
       };
-      
+
       const res = await apiRequest("PUT", "/api/flow-automation/appointment-settings", payload);
       return res.json();
     },
@@ -203,9 +199,9 @@ export default function AppointmentsPage() {
               <p className="text-muted-foreground mt-0.5">{t("appointments.subtitle")}</p>
             </div>
           </div>
-          <Button 
-            onClick={() => setSettingsOpen(true)} 
-            variant="outline" 
+          <Button
+            onClick={() => setSettingsOpen(true)}
+            variant="outline"
             className="border-rose-200 dark:border-rose-800"
             data-testid="button-settings"
           >
@@ -292,9 +288,8 @@ export default function AppointmentsPage() {
                   return (
                     <div
                       key={index}
-                      className={`min-h-24 p-2 border rounded-md ${
-                        !isCurrentMonth ? "bg-muted/30 text-muted-foreground" : ""
-                      } ${isToday ? "border-primary bg-primary/5" : ""} hover-elevate`}
+                      className={`min-h-24 p-2 border rounded-md ${!isCurrentMonth ? "bg-muted/30 text-muted-foreground" : ""
+                        } ${isToday ? "border-primary bg-primary/5" : ""} hover-elevate`}
                       data-testid={`calendar-day-${format(day, "yyyy-MM-dd")}`}
                     >
                       <div className="text-sm font-medium mb-1">{format(day, "d")}</div>
@@ -351,7 +346,7 @@ export default function AppointmentsPage() {
             const upcomingAppointments = appointments
               .filter((apt) => new Date(apt.scheduledFor) >= now)
               .sort((a, b) => new Date(a.scheduledFor).getTime() - new Date(b.scheduledFor).getTime());
-            
+
             if (upcomingAppointments.length === 0) {
               return (
                 <div className="flex flex-col items-center justify-center py-12">
@@ -363,7 +358,7 @@ export default function AppointmentsPage() {
                 </div>
               );
             }
-            
+
             return (
               <ScrollArea className="h-96">
                 <div className="space-y-3 pr-4">
@@ -524,19 +519,17 @@ export default function AppointmentsPage() {
                   {workingDayOptions.map((day) => (
                     <div
                       key={day}
-                      className={`p-3 border rounded-md cursor-pointer hover-elevate ${
-                        settingsData.workingDays?.includes(day) ? "border-primary bg-primary/5" : ""
-                      }`}
+                      className={`p-3 border rounded-md cursor-pointer hover-elevate ${settingsData.workingDays?.includes(day) ? "border-primary bg-primary/5" : ""
+                        }`}
                       onClick={() => toggleWorkingDay(day)}
                       data-testid={`day-option-${day}`}
                     >
                       <div className="flex items-center gap-2">
                         <div
-                          className={`h-4 w-4 rounded border ${
-                            settingsData.workingDays?.includes(day)
+                          className={`h-4 w-4 rounded border ${settingsData.workingDays?.includes(day)
                               ? "bg-primary border-primary"
                               : "border-muted-foreground"
-                          }`}
+                            }`}
                         />
                         <span className="text-sm font-medium capitalize">{t(`appointments.settings.days.${day}`)}</span>
                       </div>

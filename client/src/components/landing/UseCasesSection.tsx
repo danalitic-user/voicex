@@ -1,8 +1,16 @@
 /**
  * ============================================================
- * UseCasesSection - awaz.ai Exact Design Match
- * Dark theme industry use case cards
+ * © 2026 VoiceX - A Danaltic Product. All rights reserved.
+ * Original Author: Danalitic Engineering Team
+ * Website: https://danalitic.in
+ *
+ *
+ * You are NOT permitted to redistribute, resell, sublicense,
+ * or share this source code, in whole or in part.
+ * Respect the author's rights and Envato licensing terms.
  * ============================================================
+ * Use Cases Section
+ * 
  */
 import { motion, useInView } from "framer-motion";
 import { Building2, GraduationCap, Car, Headphones, ShoppingCart, Heart } from "lucide-react";
@@ -26,13 +34,13 @@ interface UseCaseCardProps {
   functionLabelText: string;
 }
 
-const UseCaseCard = ({ 
-  icon, 
-  flag, 
-  title, 
-  description, 
-  industry, 
-  language, 
+const UseCaseCard = ({
+  icon,
+  flag,
+  title,
+  description,
+  industry,
+  language,
   functionLabel,
   isActive,
   onClick,
@@ -49,23 +57,22 @@ const UseCaseCard = ({
     transition={{ duration: 0.5, delay: index * 0.1 }}
     whileHover={{ y: -5 }}
     onClick={onClick}
-    className={`bg-gray-900/50 rounded-2xl border p-6 cursor-pointer transition-all duration-300 ${
-      isActive 
-        ? 'border-teal-500 shadow-lg shadow-teal-500/20' 
+    className={`bg-gray-900/50 rounded-2xl border p-6 cursor-pointer transition-all duration-300 ${isActive
+        ? 'border-teal-500 shadow-lg shadow-teal-500/20'
         : 'border-gray-800 hover:border-gray-700'
-    }`}
+      }`}
     data-testid={`use-case-card-${title.toLowerCase().replace(/\s+/g, "-").slice(0, 20)}`}
   >
     <div className="flex items-center gap-2 mb-4">
       <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">{useCaseLabel}</span>
     </div>
-    
+
     <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
       {title} <span>{flag}</span>
     </h3>
-    
+
     <p className="text-sm text-gray-400 mb-6">{description}</p>
-    
+
     <div className="grid grid-cols-3 gap-4 text-xs">
       <div>
         <div className="text-gray-500 mb-1">{industryLabel}</div>
@@ -123,9 +130,9 @@ export function UseCasesSection() {
   ];
 
   return (
-    <section 
+    <section
       ref={ref}
-      className="py-20 md:py-32 bg-navy-900" 
+      className="py-20 md:py-32 bg-navy-900"
       data-testid="use-cases-section"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

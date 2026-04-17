@@ -1,13 +1,9 @@
 /**
  * ============================================================
- * © 2025 Diploy — a brand of Bisht Technologies Private Limited
- * Original Author: BTPL Engineering Team
- * Website: https://diploy.in
- * Contact: cs@diploy.in
+ * © 2026 VoiceX - A Danaltic Product. All rights reserved.
+ * Original Author: Danalitic Engineering Team
+ * Website: https://danalitic.in
  *
- * Distributed under the Envato / CodeCanyon License Agreement.
- * Licensed to the purchaser for use as defined by the
- * Envato Market (CodeCanyon) Regular or Extended License.
  *
  * You are NOT permitted to redistribute, resell, sublicense,
  * or share this source code, in whole or in part.
@@ -164,7 +160,7 @@ export default function AllContacts() {
               <p className="text-muted-foreground mt-0.5">{t('contacts.description')}</p>
             </div>
           </div>
-          <Button 
+          <Button
             onClick={exportToCSV}
             disabled={contacts.length === 0}
             className="bg-teal-600 hover:bg-teal-700 text-white"
@@ -174,7 +170,7 @@ export default function AllContacts() {
             {t('contacts.exportContacts')}
           </Button>
         </div>
-        
+
         {/* Stats Row */}
         <div className="relative mt-6 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
           <div className="bg-white/80 dark:bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-teal-100/50 dark:border-teal-800/30">
@@ -295,20 +291,19 @@ export default function AllContacts() {
                     </TableCell>
                     <TableCell>
                       <span
-                        className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ${
-                          contact.status === "completed"
+                        className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ${contact.status === "completed"
                             ? "bg-green-50 text-green-700 dark:bg-green-500/10 dark:text-green-400"
                             : contact.status === "pending"
-                            ? "bg-yellow-50 text-yellow-700 dark:bg-yellow-500/10 dark:text-yellow-400"
-                            : contact.status === "incoming_call"
-                            ? "bg-violet-50 text-violet-700 dark:bg-violet-500/10 dark:text-violet-400"
-                            : contact.status === "outgoing_call"
-                            ? "bg-blue-50 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400"
-                            : "bg-gray-50 text-gray-700 dark:bg-gray-500/10 dark:text-gray-400"
-                        }`}
+                              ? "bg-yellow-50 text-yellow-700 dark:bg-yellow-500/10 dark:text-yellow-400"
+                              : contact.status === "incoming_call"
+                                ? "bg-violet-50 text-violet-700 dark:bg-violet-500/10 dark:text-violet-400"
+                                : contact.status === "outgoing_call"
+                                  ? "bg-blue-50 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400"
+                                  : "bg-gray-50 text-gray-700 dark:bg-gray-500/10 dark:text-gray-400"
+                          }`}
                       >
-                        {contact.status === 'incoming_call' ? t('calls.filters.incoming') : 
-                         contact.status === 'outgoing_call' ? t('calls.filters.outgoing') : contact.status}
+                        {contact.status === 'incoming_call' ? t('calls.filters.incoming') :
+                          contact.status === 'outgoing_call' ? t('calls.filters.outgoing') : contact.status}
                       </span>
                     </TableCell>
                     <TableCell>

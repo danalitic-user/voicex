@@ -1,13 +1,9 @@
 /**
  * ============================================================
- * © 2025 Diploy — a brand of Bisht Technologies Private Limited
- * Original Author: BTPL Engineering Team
- * Website: https://diploy.in
- * Contact: cs@diploy.in
+ * © 2026 VoiceX - A Danaltic Product. All rights reserved.
+ * Original Author: Danalitic Engineering Team
+ * Website: https://danalitic.in
  *
- * Distributed under the Envato / CodeCanyon License Agreement.
- * Licensed to the purchaser for use as defined by the
- * Envato Market (CodeCanyon) Regular or Extended License.
  *
  * You are NOT permitted to redistribute, resell, sublicense,
  * or share this source code, in whole or in part.
@@ -102,7 +98,7 @@ export default function CallDetail() {
   useEffect(() => {
     const abortController = new AbortController();
     let fetchedBlobUrl: string | null = null;
-    
+
     // Fetch recording if we have either a recordingUrl OR an elevenLabsConversationId
     // Skip OpenAI widget calls - they use WebRTC and don't have server-side recordings
     if (call?.engine !== 'openai' && (call?.recordingUrl || call?.elevenLabsConversationId) && id) {
@@ -112,26 +108,26 @@ export default function CallDetail() {
             console.error('No authentication token found');
             return;
           }
-          
+
           const headers: Record<string, string> = {};
           const authHeader = AuthStorage.getAuthHeader();
           if (authHeader) {
             headers['Authorization'] = authHeader;
           }
-          
+
           const response = await fetch(`/api/calls/${id}/recording`, {
             headers,
             credentials: 'include',
             signal: abortController.signal
           });
-          
+
           if (response.ok) {
             const blob = await response.blob();
-            
+
             // Check if this fetch was aborted before creating blob URL
             if (!abortController.signal.aborted) {
               fetchedBlobUrl = URL.createObjectURL(blob);
-              
+
               // Revoke old blob URL before setting new one
               setRecordingBlobUrl((prevUrl) => {
                 if (prevUrl) {
@@ -150,19 +146,19 @@ export default function CallDetail() {
           }
         }
       };
-      
+
       fetchRecording();
     }
-    
+
     // Cleanup: abort in-flight request and revoke any blob URLs
     return () => {
       abortController.abort();
-      
+
       // Revoke the blob URL created by this effect instance
       if (fetchedBlobUrl) {
         URL.revokeObjectURL(fetchedBlobUrl);
       }
-      
+
       // Clear state on unmount
       setRecordingBlobUrl((prevUrl) => {
         if (prevUrl) {
@@ -256,15 +252,15 @@ export default function CallDetail() {
   };
 
   const isIncoming = call.callDirection === 'incoming';
-  const primaryNumber = isIncoming 
+  const primaryNumber = isIncoming
     ? formatSipEndpoint(call.fromNumber, call.engine) || contact?.phone || call.phoneNumber || "Unknown"
     : formatSipEndpoint(call.toNumber, call.engine) || contact?.phone || call.phoneNumber || "Unknown";
-  const secondaryNumber = isIncoming 
+  const secondaryNumber = isIncoming
     ? formatSipEndpoint(call.toNumber, call.engine) || "Your number"
     : formatSipEndpoint(call.fromNumber, call.engine) || "Your number";
-  
+
   // For widget calls, show widget name instead of Unknown
-  const contactName = call.widgetId 
+  const contactName = call.widgetId
     ? (call.widget?.name || (call.metadata as any)?.widgetName || 'Website Widget')
     : (contact && contact.firstName && contact.firstName.toLowerCase() !== 'unknown'
       ? `${contact.firstName} ${contact.lastName || ""}`.trim()
@@ -275,19 +271,19 @@ export default function CallDetail() {
       {/* Page Header with Blue/Indigo Gradient */}
       <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-50 via-indigo-100/50 to-sky-50 dark:from-blue-950/40 dark:via-indigo-900/30 dark:to-sky-950/40 border border-blue-100 dark:border-blue-900/50 p-6 md:p-8">
         <div className="absolute inset-0 bg-grid-slate-200/50 dark:bg-grid-slate-700/20 [mask-image:linear-gradient(0deg,transparent,rgba(255,255,255,0.5))]" />
-        
+
         {/* Navigation row */}
         <div className="relative mb-4 flex items-center justify-between">
-          <Button 
-            variant="ghost" 
-            onClick={() => setLocation("/app/calls")} 
+          <Button
+            variant="ghost"
+            onClick={() => setLocation("/app/calls")}
             className="-ml-2"
             data-testid="button-back"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Calls
           </Button>
-          
+
           <div className="flex items-center gap-2">
             <Button
               variant="outline"
@@ -351,7 +347,7 @@ export default function CallDetail() {
             </div>
           </div>
           {hasRecording && recordingBlobUrl && (
-            <Button 
+            <Button
               data-testid="button-download"
               onClick={() => {
                 if (recordingBlobUrl) {
@@ -414,13 +410,13 @@ export default function CallDetail() {
       {hasRecording && (
         <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 border border-slate-700/50 p-6">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-500/10 via-transparent to-transparent" />
-          
+
           <div className="relative">
             <div className="flex items-center gap-2 mb-4">
               <Volume2 className="h-5 w-5 text-blue-400" />
               <h3 className="text-sm font-medium text-slate-300">Audio Recording</h3>
             </div>
-            
+
             {recordingBlobUrl ? (
               <div className="flex items-center gap-4">
                 <Button
@@ -443,21 +439,20 @@ export default function CallDetail() {
                     <Play className="h-4 w-4 ml-0.5" />
                   )}
                 </Button>
-                
+
                 <div className="flex-1">
                   <div className="h-16 bg-slate-800/50 rounded-xl flex items-center justify-center px-4 border border-slate-700/30">
                     <div className="flex items-end gap-[3px] h-12 w-full">
                       {Array.from({ length: 60 }).map((_, i) => {
                         const height = 25 + Math.abs(Math.sin(i * 0.35) * 45 + Math.cos(i * 0.2) * 25);
-                        const isActive = call.duration && currentTime > 0 
-                          ? i < (currentTime / call.duration) * 60 
+                        const isActive = call.duration && currentTime > 0
+                          ? i < (currentTime / call.duration) * 60
                           : false;
                         return (
                           <div
                             key={i}
-                            className={`flex-1 rounded-full transition-all duration-150 ${
-                              isActive ? 'bg-blue-500' : 'bg-slate-600/60'
-                            }`}
+                            className={`flex-1 rounded-full transition-all duration-150 ${isActive ? 'bg-blue-500' : 'bg-slate-600/60'
+                              }`}
                             style={{
                               height: `${height}%`,
                             }}
@@ -466,7 +461,7 @@ export default function CallDetail() {
                       })}
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center justify-between mt-2 px-1">
                     <span className="text-sm font-mono text-blue-400">
                       {formatDuration(Math.floor(currentTime))}
@@ -476,7 +471,7 @@ export default function CallDetail() {
                     </span>
                   </div>
                 </div>
-                
+
                 <audio
                   ref={audioRef}
                   src={recordingBlobUrl}
@@ -681,30 +676,29 @@ export default function CallDetail() {
               </div>
               <h3 className="text-lg font-semibold">Call Transcript</h3>
             </div>
-            
+
             {call.transcript ? (
               <div className="max-h-[600px] overflow-y-auto space-y-4 pr-2">
                 {call.transcript.split('\n').filter(line => line.trim()).map((line, index) => {
                   const timestampMatch = line.match(/^\[(\d{2}:\d{2})\]\s*(.+)/);
                   const speakerMatch = timestampMatch ? timestampMatch[2].match(/^(Agent|User|AI|Customer):\s*(.+)/) : null;
-                  
+
                   if (timestampMatch && speakerMatch) {
                     const timestamp = timestampMatch[1];
                     const speaker = speakerMatch[1];
                     const message = speakerMatch[2];
                     const isAgent = speaker === 'Agent' || speaker === 'AI';
-                    
+
                     return (
-                      <div 
-                        key={index} 
+                      <div
+                        key={index}
                         className={`flex gap-3 ${isAgent ? 'flex-row' : 'flex-row-reverse'}`}
                         data-testid={`transcript-entry-${index}`}
                       >
-                        <div className={`flex-shrink-0 h-8 w-8 rounded-full flex items-center justify-center ${
-                          isAgent 
-                            ? 'bg-blue-500/10 dark:bg-blue-500/20' 
+                        <div className={`flex-shrink-0 h-8 w-8 rounded-full flex items-center justify-center ${isAgent
+                            ? 'bg-blue-500/10 dark:bg-blue-500/20'
                             : 'bg-emerald-500/10 dark:bg-emerald-500/20'
-                        }`}>
+                          }`}>
                           {isAgent ? (
                             <Bot className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                           ) : (
@@ -712,15 +706,13 @@ export default function CallDetail() {
                           )}
                         </div>
                         <div className={`flex-1 max-w-[80%] ${isAgent ? '' : 'flex flex-col items-end'}`}>
-                          <div className={`rounded-2xl px-4 py-3 ${
-                            isAgent 
-                              ? 'bg-slate-100 dark:bg-slate-800/80 rounded-tl-md' 
+                          <div className={`rounded-2xl px-4 py-3 ${isAgent
+                              ? 'bg-slate-100 dark:bg-slate-800/80 rounded-tl-md'
                               : 'bg-blue-500/10 dark:bg-blue-600/20 rounded-tr-md'
-                          }`}>
+                            }`}>
                             <div className="flex items-center gap-2 mb-1">
-                              <span className={`text-xs font-medium ${
-                                isAgent ? 'text-blue-600 dark:text-blue-400' : 'text-emerald-600 dark:text-emerald-400'
-                              }`} data-testid={`transcript-speaker-${index}`}>
+                              <span className={`text-xs font-medium ${isAgent ? 'text-blue-600 dark:text-blue-400' : 'text-emerald-600 dark:text-emerald-400'
+                                }`} data-testid={`transcript-speaker-${index}`}>
                                 {speaker}
                               </span>
                               <span className="text-[10px] text-muted-foreground font-mono" data-testid={`transcript-timestamp-${index}`}>
@@ -733,7 +725,7 @@ export default function CallDetail() {
                       </div>
                     );
                   }
-                  
+
                   return (
                     <div key={index} className="px-4 py-2">
                       <p className="text-sm leading-relaxed text-muted-foreground">{line}</p>

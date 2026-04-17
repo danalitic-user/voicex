@@ -1,13 +1,9 @@
 /**
  * ============================================================
- * © 2025 Diploy — a brand of Bisht Technologies Private Limited
- * Original Author: BTPL Engineering Team
- * Website: https://diploy.in
- * Contact: cs@diploy.in
+ * © 2026 VoiceX - A Danaltic Product. All rights reserved.
+ * Original Author: Danalitic Engineering Team
+ * Website: https://danalitic.in
  *
- * Distributed under the Envato / CodeCanyon License Agreement.
- * Licensed to the purchaser for use as defined by the
- * Envato Market (CodeCanyon) Regular or Extended License.
  *
  * You are NOT permitted to redistribute, resell, sublicense,
  * or share this source code, in whole or in part.
@@ -197,7 +193,7 @@ export default function PhoneNumbers() {
   const { data: publicSettings } = useQuery<PublicSettings>({
     queryKey: ["/api/settings/public"],
   });
-  
+
   // Use dynamic monthly credits from settings, fallback to default
   const MONTHLY_CREDITS = publicSettings?.phone_number_monthly_credits || DEFAULT_MONTHLY_CREDITS;
 
@@ -216,7 +212,7 @@ export default function PhoneNumbers() {
   const plivoEnabled = voiceEngineSettings?.plivo_openai_engine_enabled || false;
   const twilioKycRequired = voiceEngineSettings?.twilio_kyc_required ?? true;
   const plivoKycRequired = voiceEngineSettings?.plivo_kyc_required ?? true;
-  
+
   // SIP access - requires plugin enabled AND user's plan has SIP access
   const { isSipPluginEnabled } = usePluginStatus();
   const pluginRegistry = usePluginRegistry();
@@ -496,7 +492,7 @@ export default function PhoneNumbers() {
 
   const handleBuyNumber = () => {
     if (!selectedNumber) return;
-    
+
     // Check if country requires address verification
     const countryCode = searchCountry?.toUpperCase();
     if (countryCode && ADDRESS_REQUIRED_COUNTRIES.includes(countryCode)) {
@@ -504,7 +500,7 @@ export default function PhoneNumbers() {
       const hasVerifiedAddress = userAddresses.some(
         addr => addr.isoCountry === countryCode && addr.status === 'verified'
       );
-      
+
       if (!hasVerifiedAddress) {
         // Show address required dialog instead of proceeding
         const countryObj = countries.find(c => c.code === countryCode);
@@ -513,7 +509,7 @@ export default function PhoneNumbers() {
         return;
       }
     }
-    
+
     // Server handles address auto-selection for regulatory compliance
     buyMutation.mutate({
       phoneNumber: selectedNumber.phoneNumber,
@@ -565,8 +561,8 @@ export default function PhoneNumbers() {
             </div>
           </div>
           <div className="flex gap-2">
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               onClick={() => setLocation("/app/incoming-connections")}
               className="bg-white/80 dark:bg-white/10 border-emerald-200 dark:border-emerald-800"
               data-testid="button-manage-connections"
@@ -574,8 +570,8 @@ export default function PhoneNumbers() {
               <LinkIcon className="h-4 w-4 mr-2" />
               {t('phoneNumbers.manageConnections')}
             </Button>
-            <Button 
-              onClick={() => plivoEnabled ? handleBuyClick('select') : handleBuyClick('twilio')} 
+            <Button
+              onClick={() => plivoEnabled ? handleBuyClick('select') : handleBuyClick('twilio')}
               className="bg-emerald-600 hover:bg-emerald-700 text-white"
               data-testid="button-buy-number"
             >
@@ -681,13 +677,12 @@ export default function PhoneNumbers() {
                           {number.status === "active" ? t('common.active') : number.status}
                         </Badge>
                         {twilioKycRequired && (
-                          <Badge 
+                          <Badge
                             variant="outline"
-                            className={`cursor-pointer transition-colors ${
-                              currentUser?.kycStatus === 'approved'
+                            className={`cursor-pointer transition-colors ${currentUser?.kycStatus === 'approved'
                                 ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/20'
                                 : 'bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/30 hover:bg-red-500/20'
-                            }`}
+                              }`}
                             onClick={() => setLocation('/app/settings')}
                             data-testid={`badge-kyc-status-twilio-${number.id}`}
                           >
@@ -712,8 +707,8 @@ export default function PhoneNumbers() {
                       {(() => {
                         const connection = getConnection(number.id);
                         return connection ? (
-                          <div 
-                            className="flex flex-wrap items-center gap-1 sm:gap-2 pt-3 text-sm" 
+                          <div
+                            className="flex flex-wrap items-center gap-1 sm:gap-2 pt-3 text-sm"
                             data-testid={`connection-status-connected-${number.id}`}
                           >
                             <LinkIcon className="h-3.5 w-3.5 text-green-600 dark:text-green-400 flex-shrink-0" />
@@ -723,7 +718,7 @@ export default function PhoneNumbers() {
                             </span>
                           </div>
                         ) : (
-                          <div 
+                          <div
                             className="flex items-center gap-2 pt-3 text-sm text-muted-foreground"
                             data-testid={`connection-status-not-connected-${number.id}`}
                           >
@@ -815,7 +810,7 @@ export default function PhoneNumbers() {
                     const pricing = getPlivoPricing(number.country);
                     // Show KYC button if admin has enabled KYC for Plivo AND user's KYC is not approved
                     const needsKyc = plivoKycRequired && !isKycApproved;
-                    
+
                     return (
                       <Card
                         key={number.id}
@@ -836,13 +831,12 @@ export default function PhoneNumbers() {
                               {number.status === "active" ? t('common.active') : number.status}
                             </Badge>
                             {plivoKycRequired && (
-                              <Badge 
+                              <Badge
                                 variant="outline"
-                                className={`cursor-pointer transition-colors ${
-                                  currentUser?.kycStatus === 'approved'
+                                className={`cursor-pointer transition-colors ${currentUser?.kycStatus === 'approved'
                                     ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/20'
                                     : 'bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/30 hover:bg-red-500/20'
-                                }`}
+                                  }`}
                                 onClick={() => setLocation('/app/settings')}
                                 data-testid={`badge-kyc-status-plivo-${number.id}`}
                               >
@@ -1061,9 +1055,8 @@ export default function PhoneNumbers() {
                   {availableNumbers.map((number) => (
                     <div
                       key={number.phoneNumber}
-                      className={`p-4 hover-elevate cursor-pointer ${
-                        selectedNumber?.phoneNumber === number.phoneNumber ? "bg-accent" : ""
-                      }`}
+                      className={`p-4 hover-elevate cursor-pointer ${selectedNumber?.phoneNumber === number.phoneNumber ? "bg-accent" : ""
+                        }`}
                       onClick={() => setSelectedNumber(number)}
                       data-testid={`available-number-${number.phoneNumber}`}
                     >
@@ -1203,12 +1196,12 @@ export default function PhoneNumbers() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label>Country</Label>
-                <Select 
-                  value={plivoSearchCountry} 
+                <Select
+                  value={plivoSearchCountry}
                   onValueChange={(value) => {
                     setPlivoSearchCountry(value);
                     setSelectedPlivoNumber(null);
-                  }} 
+                  }}
                   disabled={plivoCountriesLoading}
                 >
                   <SelectTrigger data-testid="select-plivo-country">
@@ -1217,8 +1210,8 @@ export default function PhoneNumbers() {
                   </SelectTrigger>
                   <SelectContent className="max-h-[300px]">
                     {activePlivoCountries.map((country) => (
-                      <SelectItem 
-                        key={country.countryCode} 
+                      <SelectItem
+                        key={country.countryCode}
                         value={country.countryCode}
                         data-testid={`option-country-${country.countryCode}`}
                       >
@@ -1298,11 +1291,10 @@ export default function PhoneNumbers() {
                   {plivoAvailableNumbers.map((number) => (
                     <div
                       key={number.phoneNumber}
-                      className={`p-3 rounded-lg border-2 cursor-pointer transition-all ${
-                        selectedPlivoNumber?.phoneNumber === number.phoneNumber 
-                          ? "border-primary bg-primary/5" 
+                      className={`p-3 rounded-lg border-2 cursor-pointer transition-all ${selectedPlivoNumber?.phoneNumber === number.phoneNumber
+                          ? "border-primary bg-primary/5"
                           : "border-border hover:border-primary/50 hover:bg-muted/50"
-                      }`}
+                        }`}
                       onClick={() => setSelectedPlivoNumber(number)}
                       data-testid={`plivo-number-${number.phoneNumber.replace(/\+/g, '')}`}
                     >
@@ -1361,7 +1353,7 @@ export default function PhoneNumbers() {
           <AlertDialogHeader>
             <AlertDialogTitle>Release Plivo Number</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to release {plivoNumberToRelease ? formatPhoneNumber(plivoNumberToRelease.phoneNumber) : ''}? 
+              Are you sure you want to release {plivoNumberToRelease ? formatPhoneNumber(plivoNumberToRelease.phoneNumber) : ''}?
               This action cannot be undone and the number will be returned to Plivo's pool.
             </AlertDialogDescription>
           </AlertDialogHeader>
@@ -1483,7 +1475,7 @@ export default function PhoneNumbers() {
             </DialogDescription>
           </DialogHeader>
           <div className="grid grid-cols-1 gap-4 py-4">
-            <div 
+            <div
               className="border rounded-lg p-4 cursor-pointer hover-elevate transition-all"
               onClick={() => {
                 setProviderSelectDialogOpen(false);
@@ -1505,7 +1497,7 @@ export default function PhoneNumbers() {
               </div>
             </div>
             {plivoEnabled ? (
-              <div 
+              <div
                 className="border rounded-lg p-4 cursor-pointer hover-elevate transition-all"
                 onClick={() => {
                   setProviderSelectDialogOpen(false);
@@ -1527,7 +1519,7 @@ export default function PhoneNumbers() {
                 </div>
               </div>
             ) : (
-              <div 
+              <div
                 className="border rounded-lg p-4 opacity-50 cursor-not-allowed"
                 data-testid="provider-option-plivo-disabled"
               >

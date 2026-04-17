@@ -1,3 +1,16 @@
+/**
+ * ============================================================
+ * © 2026 VoiceX - A Danaltic Product. All rights reserved.
+ * Original Author: Danalitic Engineering Team
+ * Website: https://danalitic.in
+ *
+ *
+ * You are NOT permitted to redistribute, resell, sublicense,
+ * or share this source code, in whole or in part.
+ * Respect the author's rights and Envato licensing terms.
+ * ============================================================
+ */
+
 "use client";
 
 import React from 'react';
@@ -66,7 +79,7 @@ export default function WhyVoiceX() {
 
         <div className="flex flex-col lg:flex-row gap-16 lg:gap-24 items-start">
 
-          {/* LEFT COLUMN: Sticky Header */}
+          {/* LEFT COLUMN */}
           <div className="w-full lg:w-5/12 lg:sticky lg:top-32 pt-4">
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-black tracking-tight mb-6 leading-tight">
               Why Choose <br className="hidden lg:block" />
@@ -81,7 +94,7 @@ export default function WhyVoiceX() {
             </p>
           </div>
 
-          {/* RIGHT COLUMN: Vertical Scrolling List */}
+          {/* RIGHT COLUMN */}
           <div className="w-full lg:w-7/12 flex flex-col space-y-12 md:space-y-16">
             {advantages.map((adv, index) => {
               const Icon = adv.icon;

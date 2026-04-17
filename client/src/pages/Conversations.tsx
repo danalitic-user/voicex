@@ -1,13 +1,9 @@
 /**
  * ============================================================
- * © 2025 Diploy — a brand of Bisht Technologies Private Limited
- * Original Author: BTPL Engineering Team
- * Website: https://diploy.in
- * Contact: cs@diploy.in
+ * © 2026 VoiceX - A Danaltic Product. All rights reserved.
+ * Original Author: Danalitic Engineering Team
+ * Website: https://danalitic.in
  *
- * Distributed under the Envato / CodeCanyon License Agreement.
- * Licensed to the purchaser for use as defined by the
- * Envato Market (CodeCanyon) Regular or Extended License.
  *
  * You are NOT permitted to redistribute, resell, sublicense,
  * or share this source code, in whole or in part.
@@ -125,13 +121,13 @@ export default function Conversations() {
   };
 
   const filteredCalls = calls?.filter(call => {
-    const matchesSearch = searchQuery === "" || 
+    const matchesSearch = searchQuery === "" ||
       call.transcript?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       call.aiSummary?.toLowerCase().includes(searchQuery.toLowerCase());
-    
+
     const matchesStatus = filterStatus === "all" || call.status === filterStatus;
     const matchesSentiment = filterSentiment === "all" || call.sentiment === filterSentiment;
-    
+
     return matchesSearch && matchesStatus && matchesSentiment;
   }) || [];
 
@@ -209,8 +205,8 @@ export default function Conversations() {
           ) : (
             <div className="space-y-4">
               {filteredCalls.map((call) => (
-                <Card 
-                  key={call.id} 
+                <Card
+                  key={call.id}
                   className="p-6 hover:shadow-md transition-shadow cursor-pointer hover-elevate"
                   onClick={() => setLocation(`/app/calls/${call.id}`)}
                   data-testid={`card-conversation-${call.id}`}
@@ -279,8 +275,8 @@ export default function Conversations() {
           ) : (
             <div className="space-y-4">
               {callsWithTranscripts.map((call) => (
-                <Card 
-                  key={call.id} 
+                <Card
+                  key={call.id}
                   className="p-6 hover:shadow-md transition-shadow cursor-pointer hover-elevate"
                   onClick={() => setLocation(`/app/calls/${call.id}`)}
                   data-testid={`card-transcribed-${call.id}`}
@@ -341,8 +337,8 @@ export default function Conversations() {
           ) : (
             <div className="space-y-4">
               {callsWithoutTranscripts.map((call) => (
-                <Card 
-                  key={call.id} 
+                <Card
+                  key={call.id}
                   className="p-6 hover:shadow-md transition-shadow cursor-pointer hover-elevate"
                   onClick={() => setLocation(`/app/calls/${call.id}`)}
                   data-testid={`card-pending-${call.id}`}

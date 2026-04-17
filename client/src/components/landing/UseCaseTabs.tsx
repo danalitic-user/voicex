@@ -1,13 +1,9 @@
 /**
  * ============================================================
- * © 2025 Diploy — a brand of Bisht Technologies Private Limited
- * Original Author: BTPL Engineering Team
- * Website: https://diploy.in
- * Contact: cs@diploy.in
+ * © 2026 VoiceX - A Danaltic Product. All rights reserved.
+ * Original Author: Danalitic Engineering Team
+ * Website: https://danalitic.in
  *
- * Distributed under the Envato / CodeCanyon License Agreement.
- * Licensed to the purchaser for use as defined by the
- * Envato Market (CodeCanyon) Regular or Extended License.
  *
  * You are NOT permitted to redistribute, resell, sublicense,
  * or share this source code, in whole or in part.
@@ -307,11 +303,10 @@ function TabButton({ tab, isActive, onClick }: TabButtonProps) {
       aria-selected={isActive}
       aria-controls={`agent-grid-${tab.id}`}
       onClick={onClick}
-      className={`flex items-center gap-3 py-2 px-4 transition-all duration-500 relative ${
-        isActive
+      className={`flex items-center gap-3 py-2 px-4 transition-all duration-500 relative ${isActive
           ? "text-foreground font-semibold"
           : "text-muted-foreground hover:text-foreground"
-      }`}
+        }`}
       data-testid={`tab-button-${tab.id}`}
     >
       <div className="relative w-2.5 flex items-center justify-center">
@@ -353,15 +348,15 @@ export function UseCaseTabs() {
       const rect = section.getBoundingClientRect();
       const sectionHeight = section.offsetHeight;
       const viewportHeight = window.innerHeight;
-      
+
       const scrollableHeight = sectionHeight - viewportHeight;
       const scrollProgress = Math.max(0, Math.min(1, -rect.top / scrollableHeight));
-      
+
       const tabIndex = Math.min(
         Math.floor(scrollProgress * tabsConfig.length),
         tabsConfig.length - 1
       );
-      
+
       const newActiveTab = tabsConfig[tabIndex]?.id || "convert";
       setActiveTab(newActiveTab);
     };
@@ -374,19 +369,19 @@ export function UseCaseTabs() {
 
   const handleTabClick = (tabId: string) => {
     setActiveTab(tabId);
-    
+
     if (isMobile || !sectionRef.current) return;
-    
+
     const section = sectionRef.current;
     const sectionTop = section.offsetTop;
     const sectionHeight = section.offsetHeight;
     const viewportHeight = window.innerHeight;
     const scrollableHeight = sectionHeight - viewportHeight;
-    
+
     const tabIndex = tabsConfig.findIndex((t) => t.id === tabId);
     const targetProgress = tabIndex / tabsConfig.length;
     const targetScroll = sectionTop + (scrollableHeight * targetProgress);
-    
+
     window.scrollTo({
       top: targetScroll,
       behavior: "smooth",

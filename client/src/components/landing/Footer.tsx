@@ -3,6 +3,11 @@
  * © 2026 VoiceX - A Danaltic Product. All rights reserved.
  * Original Author: Danalitic Engineering Team
  * Website: https://danalitic.in
+ *
+ *
+ * You are NOT permitted to redistribute, resell, sublicense,
+ * or share this source code, in whole or in part.
+ * Respect the author's rights and Envato licensing terms.
  * ============================================================
  */
 import { Link } from "wouter";

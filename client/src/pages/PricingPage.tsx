@@ -1,5 +1,5 @@
 'use client';
-import RevealOnScroll from "@/components/RevealOnScroll"; // Keep this from the global folder
+import RevealOnScroll from "@/components/RevealOnScroll"; // Reveal on Scroll Animation
 import Pricing1 from "./Pricing1";
 import Navbar from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";

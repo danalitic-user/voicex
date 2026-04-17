@@ -1,13 +1,9 @@
 /**
  * ============================================================
- * © 2025 Diploy — a brand of Bisht Technologies Private Limited
- * Original Author: BTPL Engineering Team
- * Website: https://diploy.in
- * Contact: cs@diploy.in
+ * © 2026 VoiceX - A Danaltic Product. All rights reserved.
+ * Original Author: Danalitic Engineering Team
+ * Website: https://danalitic.in
  *
- * Distributed under the Envato / CodeCanyon License Agreement.
- * Licensed to the purchaser for use as defined by the
- * Envato Market (CodeCanyon) Regular or Extended License.
  *
  * You are NOT permitted to redistribute, resell, sublicense,
  * or share this source code, in whole or in part.
@@ -170,7 +166,7 @@ export default function Billing() {
   });
 
   const totalTransactionPages = transactions ? Math.ceil(transactions.length / transactionPageSize) : 0;
-  
+
   useEffect(() => {
     if (transactions && transactionPage >= totalTransactionPages && totalTransactionPages > 0) {
       setTransactionPage(totalTransactionPages - 1);
@@ -215,33 +211,33 @@ export default function Billing() {
 
   const buildAvailableCurrencies = (): CurrencyOption[] => {
     if (!paymentGateway) return [];
-    
+
     const currencyMap = new Map<string, GatewayType[]>();
-    
+
     if (paymentGateway.stripeEnabled && paymentGateway.stripeCurrency) {
       const curr = paymentGateway.stripeCurrency.toUpperCase();
       currencyMap.set(curr, [...(currencyMap.get(curr) || []), 'stripe']);
     }
-    
+
     if (paymentGateway.razorpayEnabled) {
       currencyMap.set('INR', [...(currencyMap.get('INR') || []), 'razorpay']);
     }
-    
+
     if (paymentGateway.paypalEnabled && paymentGateway.paypalCurrency) {
       const curr = paymentGateway.paypalCurrency.toUpperCase();
       currencyMap.set(curr, [...(currencyMap.get(curr) || []), 'paypal']);
     }
-    
+
     if (paymentGateway.paystackEnabled && paymentGateway.paystackCurrency) {
       const curr = paymentGateway.paystackCurrency.toUpperCase();
       currencyMap.set(curr, [...(currencyMap.get(curr) || []), 'paystack']);
     }
-    
+
     if (paymentGateway.mercadopagoEnabled && paymentGateway.mercadopagoCurrency) {
       const curr = paymentGateway.mercadopagoCurrency.toUpperCase();
       currencyMap.set(curr, [...(currencyMap.get(curr) || []), 'mercadopago']);
     }
-    
+
     return Array.from(currencyMap.entries()).map(([code, gateways]) => ({
       code,
       symbol: currencySymbols[code] || code,
@@ -261,7 +257,7 @@ export default function Billing() {
   const getPackagePrice = (pkg: CreditPackage, currencyCode: string): { price: string; symbol: string } => {
     const gateway = getGatewayForCurrency(currencyCode);
     const symbol = currencySymbols[currencyCode] || '$';
-    
+
     switch (gateway) {
       case 'razorpay':
         return { price: pkg.razorpayPrice || pkg.price, symbol };
@@ -292,7 +288,7 @@ export default function Billing() {
   useEffect(() => {
     const handlePaymentRedirect = async () => {
       const params = new URLSearchParams(window.location.search);
-      
+
       const stripeSessionId = params.get('session_id');
       const stripeSuccess = params.get('success');
       const paypalSubscription = params.get('paypal_subscription');
@@ -307,11 +303,11 @@ export default function Billing() {
       const planId = params.get('plan_id');
       const billingPeriod = params.get('billing_period');
       const paymentId = params.get('payment_id');
-      
+
       const clearUrlParams = () => {
         window.history.replaceState({}, '', window.location.pathname);
       };
-      
+
       try {
         if (stripeSuccess === 'true' && stripeSessionId) {
           const response = await apiRequest("POST", "/api/stripe/verify-session", { sessionId: stripeSessionId });
@@ -326,7 +322,7 @@ export default function Billing() {
           }
           clearUrlParams();
         }
-        
+
         else if (paystackSubscription === 'success' && reference) {
           const response = await apiRequest("POST", "/api/paystack/verify-subscription", { reference });
           if (response.ok) {
@@ -339,7 +335,7 @@ export default function Billing() {
           }
           clearUrlParams();
         }
-        
+
         else if (paystackCredits === 'success' && reference && packageId) {
           const response = await apiRequest("POST", "/api/paystack/verify-credits", { reference, packageId });
           if (response.ok) {
@@ -352,7 +348,7 @@ export default function Billing() {
           }
           clearUrlParams();
         }
-        
+
         else if (mercadopago === 'success' && paymentId) {
           const response = await apiRequest("POST", "/api/mercadopago/verify-payment", { paymentId });
           if (response.ok) {
@@ -365,7 +361,7 @@ export default function Billing() {
           }
           clearUrlParams();
         }
-        
+
         else if (mercadopagoSubscription === 'success' && mercadopagoPreapprovalId && planId) {
           const response = await apiRequest("POST", "/api/mercadopago/confirm-subscription", {
             subscriptionId: mercadopagoPreapprovalId,
@@ -385,7 +381,7 @@ export default function Billing() {
           }
           clearUrlParams();
         }
-        
+
         else if (paypalSubscription === 'success' && paypalSubscriptionId && planId) {
           const response = await apiRequest("POST", "/api/paypal/confirm-subscription", {
             subscriptionId: paypalSubscriptionId,
@@ -405,7 +401,7 @@ export default function Billing() {
           }
           clearUrlParams();
         }
-        
+
         else if (mercadopago === 'failed' || mercadopago === 'pending') {
           toast({
             title: mercadopago === 'pending' ? 'Payment Pending' : 'Payment Failed',
@@ -424,7 +420,7 @@ export default function Billing() {
         clearUrlParams();
       }
     };
-    
+
     handlePaymentRedirect();
   }, []);
 
@@ -443,7 +439,7 @@ export default function Billing() {
       } else {
         endpoint = "/api/stripe/cancel-subscription";
       }
-      
+
       const response = await apiRequest("POST", endpoint);
       if (!response.ok) {
         const error = await response.json();
@@ -555,363 +551,356 @@ export default function Billing() {
 
         <TabsContent value="plans" className="space-y-8">
           {subscription && hasActiveSubscription && !subscription.cancelAtPeriodEnd && subscription.plan.name !== "free" && (subscription.stripeSubscriptionId || subscription.razorpaySubscriptionId || subscription.paypalSubscriptionId || subscription.paystackSubscriptionCode || subscription.mercadopagoSubscriptionId) && (
-        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-50 via-white to-purple-50/50 dark:from-indigo-950/40 dark:via-slate-800/80 dark:to-purple-950/30 border border-indigo-200/50 dark:border-indigo-700/30 p-6">
-          <div className="absolute inset-0 bg-grid-indigo-200/30 dark:bg-grid-indigo-700/10 [mask-image:linear-gradient(0deg,transparent,rgba(255,255,255,0.5))]" />
-          <div className="relative">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/25">
-                <Calendar className="h-5 w-5 text-white" />
-              </div>
-              <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-100">{t('billing.subscriptionPeriod') || 'Subscription Period'}</h3>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="bg-white/70 dark:bg-slate-800/50 rounded-xl p-4 border border-indigo-100 dark:border-indigo-800/30">
-                <div className="flex items-center gap-2 mb-1">
-                  <Clock className="h-4 w-4 text-indigo-500 dark:text-indigo-400" />
-                  <span className="text-sm font-medium text-indigo-600 dark:text-indigo-400">{t('billing.startDate') || 'Start Date'}</span>
+            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-50 via-white to-purple-50/50 dark:from-indigo-950/40 dark:via-slate-800/80 dark:to-purple-950/30 border border-indigo-200/50 dark:border-indigo-700/30 p-6">
+              <div className="absolute inset-0 bg-grid-indigo-200/30 dark:bg-grid-indigo-700/10 [mask-image:linear-gradient(0deg,transparent,rgba(255,255,255,0.5))]" />
+              <div className="relative">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/25">
+                    <Calendar className="h-5 w-5 text-white" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-100">{t('billing.subscriptionPeriod') || 'Subscription Period'}</h3>
                 </div>
-                <div className="text-xl font-bold text-slate-800 dark:text-slate-100" data-testid="text-subscription-start-date">
-                  {subscription.currentPeriodStart ? format(new Date(subscription.currentPeriodStart), 'MMM dd, yyyy') : '-'}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="bg-white/70 dark:bg-slate-800/50 rounded-xl p-4 border border-indigo-100 dark:border-indigo-800/30">
+                    <div className="flex items-center gap-2 mb-1">
+                      <Clock className="h-4 w-4 text-indigo-500 dark:text-indigo-400" />
+                      <span className="text-sm font-medium text-indigo-600 dark:text-indigo-400">{t('billing.startDate') || 'Start Date'}</span>
+                    </div>
+                    <div className="text-xl font-bold text-slate-800 dark:text-slate-100" data-testid="text-subscription-start-date">
+                      {subscription.currentPeriodStart ? format(new Date(subscription.currentPeriodStart), 'MMM dd, yyyy') : '-'}
+                    </div>
+                    <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                      {subscription.currentPeriodStart ? formatDistanceToNow(new Date(subscription.currentPeriodStart), { addSuffix: true }) : ''}
+                    </div>
+                  </div>
+                  <div className="bg-white/70 dark:bg-slate-800/50 rounded-xl p-4 border border-purple-100 dark:border-purple-800/30">
+                    <div className="flex items-center gap-2 mb-1">
+                      <Calendar className="h-4 w-4 text-purple-500 dark:text-purple-400" />
+                      <span className="text-sm font-medium text-purple-600 dark:text-purple-400">{t('billing.renewalDate') || 'Renewal Date'}</span>
+                    </div>
+                    <div className="text-xl font-bold text-slate-800 dark:text-slate-100" data-testid="text-subscription-end-date">
+                      {subscription.currentPeriodEnd ? format(new Date(subscription.currentPeriodEnd), 'MMM dd, yyyy') : '-'}
+                    </div>
+                    <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                      {subscription.currentPeriodEnd ? formatDistanceToNow(new Date(subscription.currentPeriodEnd), { addSuffix: true }) : ''}
+                    </div>
+                  </div>
                 </div>
-                <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                  {subscription.currentPeriodStart ? formatDistanceToNow(new Date(subscription.currentPeriodStart), { addSuffix: true }) : ''}
-                </div>
-              </div>
-              <div className="bg-white/70 dark:bg-slate-800/50 rounded-xl p-4 border border-purple-100 dark:border-purple-800/30">
-                <div className="flex items-center gap-2 mb-1">
-                  <Calendar className="h-4 w-4 text-purple-500 dark:text-purple-400" />
-                  <span className="text-sm font-medium text-purple-600 dark:text-purple-400">{t('billing.renewalDate') || 'Renewal Date'}</span>
-                </div>
-                <div className="text-xl font-bold text-slate-800 dark:text-slate-100" data-testid="text-subscription-end-date">
-                  {subscription.currentPeriodEnd ? format(new Date(subscription.currentPeriodEnd), 'MMM dd, yyyy') : '-'}
-                </div>
-                <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                  {subscription.currentPeriodEnd ? formatDistanceToNow(new Date(subscription.currentPeriodEnd), { addSuffix: true }) : ''}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {subscription && subscription.plan.name !== "free" && !subscription.cancelAtPeriodEnd && (subscription.stripeSubscriptionId || subscription.razorpaySubscriptionId || subscription.paypalSubscriptionId || subscription.paystackSubscriptionCode || subscription.mercadopagoSubscriptionId) && (
-        <div className="flex justify-end">
-          <Button 
-            variant="outline" 
-            onClick={() => setCancelDialogOpen(true)}
-            data-testid="button-cancel-subscription"
-          >
-            {t('billing.cancelSubscription')}
-          </Button>
-        </div>
-      )}
-
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-50 via-white to-indigo-50/50 dark:from-slate-900 dark:via-slate-800/80 dark:to-indigo-950/30 border border-slate-200 dark:border-slate-700/50 p-6 md:p-8">
-        <div className="absolute inset-0 bg-grid-slate-200/50 dark:bg-grid-slate-700/20 [mask-image:linear-gradient(0deg,transparent,rgba(255,255,255,0.5))]" />
-        <div className="relative">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-6">
-            <div className="flex items-center gap-4">
-              <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 dark:from-emerald-600 dark:to-emerald-700 flex items-center justify-center shadow-lg shadow-emerald-500/25 dark:shadow-emerald-600/20">
-                <Coins className="h-7 w-7 text-white" />
-              </div>
-              <div>
-                <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">{t('billing.creditsAndUsage')}</h2>
-                <p className="text-slate-600 dark:text-slate-400 text-sm">{t('billing.creditsSubtitle')}</p>
               </div>
             </div>
-            
-            {buildAvailableCurrencies().length > 1 && (
-              <div className="flex items-center gap-2">
-                <Globe className="h-4 w-4 text-muted-foreground" />
-                <Select value={selectedCurrency} onValueChange={setSelectedCurrency}>
-                  <SelectTrigger className="w-[140px] bg-white/80 dark:bg-slate-800/60" data-testid="select-billing-currency">
-                    <SelectValue placeholder="Currency" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {buildAvailableCurrencies().map((currency) => (
-                      <SelectItem key={currency.code} value={currency.code}>
-                        {currency.symbol} {currency.code}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            )}
-          </div>
-
-          {!hasActiveSubscription && (
-            <Alert className="mb-6 border-amber-200 dark:border-amber-800/50 bg-amber-50/80 dark:bg-amber-950/30">
-              <AlertCircle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
-              <AlertDescription className="text-amber-700 dark:text-amber-300">
-                {t('billing.membershipRequired')}
-              </AlertDescription>
-            </Alert>
           )}
 
-          <div className="bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-xl p-6 border border-slate-200/50 dark:border-slate-700/50 mb-8">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-              <div className="flex items-center gap-6">
-                <div className="h-20 w-20 rounded-2xl bg-gradient-to-br from-slate-700 to-slate-800 dark:from-slate-600 dark:to-slate-700 flex items-center justify-center shadow-lg">
-                  <Wallet className="h-10 w-10 text-white" />
-                </div>
-                <div>
-                  <div className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-1">{t('billing.currentBalance')}</div>
-                  <div className="text-5xl font-bold font-mono tabular-nums text-slate-800 dark:text-slate-100" data-testid="text-credit-balance">
-                    {currentBalance.toLocaleString()}
-                  </div>
-                  <div className="text-sm text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-1">
-                    <Sparkles className="h-3 w-3" />
-                    {t('billing.availableCredits')}
-                  </div>
-                </div>
-              </div>
-              <Button 
-                size="lg" 
-                onClick={() => packages && packages[0] && handlePurchaseCredits(packages[0].id)}
-                disabled={!hasActiveSubscription || !!loadingCheckout}
-                className="bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 dark:from-emerald-600 dark:to-emerald-700 shadow-lg shadow-emerald-500/25"
-                data-testid="button-recharge-credits"
+          {subscription && subscription.plan.name !== "free" && !subscription.cancelAtPeriodEnd && (subscription.stripeSubscriptionId || subscription.razorpaySubscriptionId || subscription.paypalSubscriptionId || subscription.paystackSubscriptionCode || subscription.mercadopagoSubscriptionId) && (
+            <div className="flex justify-end">
+              <Button
+                variant="outline"
+                onClick={() => setCancelDialogOpen(true)}
+                data-testid="button-cancel-subscription"
               >
-                <Plus className="h-5 w-5 mr-2" />
-                {t('billing.purchaseCredits')}
+                {t('billing.cancelSubscription')}
               </Button>
             </div>
-          </div>
+          )}
 
-          {packages && packages.length > 0 && (
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2">
-                <TrendingUp className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
-                {t('billing.creditPackages')}
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {packages.map((pkg, index) => {
-                  const priceInfo = getPackagePrice(pkg, selectedCurrency);
-                  const displayPrice = parseFloat(priceInfo.price);
-                  const currencySymbol = priceInfo.symbol;
-                  const isPopular = index === 1;
-                  
-                  return (
-                    <div 
-                      key={pkg.id} 
-                      className={`relative bg-white dark:bg-slate-800/80 rounded-xl border overflow-hidden transition-all duration-200 hover:shadow-lg ${
-                        isPopular 
-                          ? "ring-2 ring-indigo-500 dark:ring-indigo-400 border-indigo-200 dark:border-indigo-800" 
-                          : "border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600"
-                      }`}
-                      data-testid={`card-package-${pkg.name.toLowerCase().replace(/\s+/g, "-")}`}
-                    >
-                      {isPopular && (
-                        <div className="absolute top-0 left-0 right-0 bg-gradient-to-r from-indigo-600 to-indigo-700 text-white text-xs font-medium py-1.5 text-center">
-                          <Sparkles className="h-3 w-3 inline mr-1" />
-                          {t('billing.popular')}
-                        </div>
-                      )}
-                      <div className={`p-5 ${isPopular ? 'pt-9' : ''}`}>
-                        <div className="flex items-start justify-between mb-4">
-                          <div>
-                            <h4 className="text-lg font-semibold text-slate-800 dark:text-slate-100">{pkg.name}</h4>
-                            {pkg.description && (
-                              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{pkg.description}</p>
-                            )}
-                          </div>
-                          <div className={`h-10 w-10 rounded-xl flex items-center justify-center ${
-                            isPopular 
-                              ? 'bg-indigo-100 dark:bg-indigo-900/50' 
-                              : 'bg-slate-100 dark:bg-slate-700/50'
-                          }`}>
-                            <Coins className={`h-5 w-5 ${
-                              isPopular 
-                                ? 'text-indigo-600 dark:text-indigo-400' 
-                                : 'text-slate-600 dark:text-slate-400'
-                            }`} />
-                          </div>
-                        </div>
-                        
-                        <div className="mb-4">
-                          <div className="text-3xl font-bold text-slate-800 dark:text-slate-100">
-                            {currencySymbol}{displayPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                          </div>
-                          <div className="flex items-center gap-2 mt-2">
-                            <span className="text-xl font-mono font-semibold text-emerald-600 dark:text-emerald-400">
-                              {pkg.credits.toLocaleString()}
-                            </span>
-                            <span className="text-sm text-slate-500 dark:text-slate-400">{t('billing.credits')}</span>
-                          </div>
-                        </div>
-                        
-                        <div className="flex items-center gap-2 mb-4 text-xs text-slate-500 dark:text-slate-400">
-                          <Check className="h-3.5 w-3.5 text-emerald-500" />
-                          {currencySymbol}{(displayPrice / pkg.credits).toLocaleString(undefined, { minimumFractionDigits: 4, maximumFractionDigits: 4 })} {t('billing.perMinute')}
-                        </div>
-                        
-                        <Button 
-                          className={`w-full ${
-                            isPopular 
-                              ? "bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800" 
-                              : ""
-                          }`}
-                          variant={isPopular ? "default" : "outline"}
-                          onClick={() => handlePurchaseCredits(pkg.id)}
-                          disabled={!hasActiveSubscription || !!loadingCheckout}
-                          data-testid={`button-buy-${pkg.name.toLowerCase().replace(/\s+/g, "-")}`}
-                        >
-                          {loadingCheckout === `package-${pkg.id}` ? (
-                            <Loader2 className="h-4 w-4 animate-spin" />
-                          ) : (
-                            <>
-                              {t('billing.purchase')}
-                              <ArrowUpRight className="h-4 w-4 ml-1" />
-                            </>
-                          )}
-                        </Button>
+          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-50 via-white to-indigo-50/50 dark:from-slate-900 dark:via-slate-800/80 dark:to-indigo-950/30 border border-slate-200 dark:border-slate-700/50 p-6 md:p-8">
+            <div className="absolute inset-0 bg-grid-slate-200/50 dark:bg-grid-slate-700/20 [mask-image:linear-gradient(0deg,transparent,rgba(255,255,255,0.5))]" />
+            <div className="relative">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-6">
+                <div className="flex items-center gap-4">
+                  <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 dark:from-emerald-600 dark:to-emerald-700 flex items-center justify-center shadow-lg shadow-emerald-500/25 dark:shadow-emerald-600/20">
+                    <Coins className="h-7 w-7 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">{t('billing.creditsAndUsage')}</h2>
+                    <p className="text-slate-600 dark:text-slate-400 text-sm">{t('billing.creditsSubtitle')}</p>
+                  </div>
+                </div>
+
+                {buildAvailableCurrencies().length > 1 && (
+                  <div className="flex items-center gap-2">
+                    <Globe className="h-4 w-4 text-muted-foreground" />
+                    <Select value={selectedCurrency} onValueChange={setSelectedCurrency}>
+                      <SelectTrigger className="w-[140px] bg-white/80 dark:bg-slate-800/60" data-testid="select-billing-currency">
+                        <SelectValue placeholder="Currency" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {buildAvailableCurrencies().map((currency) => (
+                          <SelectItem key={currency.code} value={currency.code}>
+                            {currency.symbol} {currency.code}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+              </div>
+
+              {!hasActiveSubscription && (
+                <Alert className="mb-6 border-amber-200 dark:border-amber-800/50 bg-amber-50/80 dark:bg-amber-950/30">
+                  <AlertCircle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                  <AlertDescription className="text-amber-700 dark:text-amber-300">
+                    {t('billing.membershipRequired')}
+                  </AlertDescription>
+                </Alert>
+              )}
+
+              <div className="bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-xl p-6 border border-slate-200/50 dark:border-slate-700/50 mb-8">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                  <div className="flex items-center gap-6">
+                    <div className="h-20 w-20 rounded-2xl bg-gradient-to-br from-slate-700 to-slate-800 dark:from-slate-600 dark:to-slate-700 flex items-center justify-center shadow-lg">
+                      <Wallet className="h-10 w-10 text-white" />
+                    </div>
+                    <div>
+                      <div className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-1">{t('billing.currentBalance')}</div>
+                      <div className="text-5xl font-bold font-mono tabular-nums text-slate-800 dark:text-slate-100" data-testid="text-credit-balance">
+                        {currentBalance.toLocaleString()}
+                      </div>
+                      <div className="text-sm text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-1">
+                        <Sparkles className="h-3 w-3" />
+                        {t('billing.availableCredits')}
                       </div>
                     </div>
-                  );
-                })}
+                  </div>
+                  <Button
+                    size="lg"
+                    onClick={() => packages && packages[0] && handlePurchaseCredits(packages[0].id)}
+                    disabled={!hasActiveSubscription || !!loadingCheckout}
+                    className="bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 dark:from-emerald-600 dark:to-emerald-700 shadow-lg shadow-emerald-500/25"
+                    data-testid="button-recharge-credits"
+                  >
+                    <Plus className="h-5 w-5 mr-2" />
+                    {t('billing.purchaseCredits')}
+                  </Button>
+                </div>
               </div>
-            </div>
-          )}
-        </div>
-      </div>
 
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-50 via-white to-slate-100/50 dark:from-slate-900 dark:via-slate-800/80 dark:to-slate-900/50 border border-slate-200 dark:border-slate-700/50 p-6 md:p-8">
-        <div className="absolute inset-0 bg-grid-slate-200/50 dark:bg-grid-slate-700/20 [mask-image:linear-gradient(0deg,transparent,rgba(255,255,255,0.5))]" />
-        <div className="relative">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-            <div className="flex items-center gap-4">
-              <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-slate-700 to-slate-800 dark:from-slate-600 dark:to-slate-700 flex items-center justify-center shadow-lg shadow-slate-500/25 dark:shadow-slate-600/20">
-                <Receipt className="h-7 w-7 text-white" />
-              </div>
-              <div>
-                <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">{t('billing.transactionHistory')}</h2>
-                <p className="text-slate-600 dark:text-slate-400 text-sm">{t('billing.transactionSubtitle') || 'View your credit transactions and payment history'}</p>
-              </div>
-            </div>
-            <Button 
-              variant="outline" 
-              onClick={handleExportTransactions} 
-              data-testid="button-export-transactions"
-              className="border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700"
-            >
-              <Download className="h-4 w-4 mr-2" />
-              {t('billing.exportCSV')}
-            </Button>
-          </div>
+              {packages && packages.length > 0 && (
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                    <TrendingUp className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
+                    {t('billing.creditPackages')}
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {packages.map((pkg, index) => {
+                      const priceInfo = getPackagePrice(pkg, selectedCurrency);
+                      const displayPrice = parseFloat(priceInfo.price);
+                      const currencySymbol = priceInfo.symbol;
+                      const isPopular = index === 1;
 
-          {transactions && transactions.length > 0 ? (
-            <>
-              <div className="bg-white dark:bg-slate-800/60 rounded-xl border border-slate-200/80 dark:border-slate-700/50 overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow className="bg-slate-50/80 dark:bg-slate-900/50 border-b border-slate-200 dark:border-slate-700">
-                      <TableHead className="font-semibold uppercase text-xs text-slate-600 dark:text-slate-400 tracking-wider">{t('billing.tableHeaders.type')}</TableHead>
-                      <TableHead className="font-semibold uppercase text-xs text-slate-600 dark:text-slate-400 tracking-wider">{t('billing.tableHeaders.description')}</TableHead>
-                      <TableHead className="font-semibold uppercase text-xs text-slate-600 dark:text-slate-400 tracking-wider text-right">{t('billing.tableHeaders.amount')}</TableHead>
-                      <TableHead className="font-semibold uppercase text-xs text-slate-600 dark:text-slate-400 tracking-wider">{t('billing.tableHeaders.date')}</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {[...transactions]
-                      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-                      .slice(transactionPage * transactionPageSize, (transactionPage + 1) * transactionPageSize)
-                      .map((transaction, index, arr) => (
-                      <TableRow 
-                        key={transaction.id}
-                        className={`transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/30 ${
-                          index !== arr.length - 1 ? 'border-b border-slate-100 dark:border-slate-700/50' : ''
-                        }`}
-                      >
-                        <TableCell className="py-4">
-                          <Badge 
-                            variant={transaction.type === "credit" ? "default" : "destructive"}
-                            className={`${
-                              transaction.type === "credit" 
-                                ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-900/50 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800" 
-                                : "bg-red-100 text-red-700 hover:bg-red-100 dark:bg-red-900/50 dark:text-red-400 border border-red-200 dark:border-red-800"
+                      return (
+                        <div
+                          key={pkg.id}
+                          className={`relative bg-white dark:bg-slate-800/80 rounded-xl border overflow-hidden transition-all duration-200 hover:shadow-lg ${isPopular
+                              ? "ring-2 ring-indigo-500 dark:ring-indigo-400 border-indigo-200 dark:border-indigo-800"
+                              : "border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600"
                             }`}
-                          >
-                            {transaction.type === "credit" ? (
-                              <><Plus className="h-3 w-3 mr-1" />{t('billing.credit')}</>
-                            ) : (
-                              <>{t('billing.debit')}</>
-                            )}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="py-4">
-                          <div className="font-medium text-sm text-slate-800 dark:text-slate-200">{transaction.description}</div>
-                          {transaction.stripePaymentId && (
-                            <div className="text-xs text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-1">
-                              <CreditCard className="h-3 w-3" />
-                              {transaction.stripePaymentId.substring(0, 20)}...
+                          data-testid={`card-package-${pkg.name.toLowerCase().replace(/\s+/g, "-")}`}
+                        >
+                          {isPopular && (
+                            <div className="absolute top-0 left-0 right-0 bg-gradient-to-r from-indigo-600 to-indigo-700 text-white text-xs font-medium py-1.5 text-center">
+                              <Sparkles className="h-3 w-3 inline mr-1" />
+                              {t('billing.popular')}
                             </div>
                           )}
-                        </TableCell>
-                        <TableCell className="py-4 text-right">
-                          <span className={`font-mono text-sm font-bold ${
-                            transaction.type === "credit" 
-                              ? "text-emerald-600 dark:text-emerald-400" 
-                              : "text-red-600 dark:text-red-400"
-                          }`}>
-                            {transaction.type === "credit" ? "+" : "-"}{Math.abs(transaction.amount).toLocaleString()}
-                          </span>
-                        </TableCell>
-                        <TableCell className="py-4">
-                          <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
-                            <Clock className="h-3.5 w-3.5" />
-                            {formatDistanceToNow(new Date(transaction.createdAt), { addSuffix: true })}
+                          <div className={`p-5 ${isPopular ? 'pt-9' : ''}`}>
+                            <div className="flex items-start justify-between mb-4">
+                              <div>
+                                <h4 className="text-lg font-semibold text-slate-800 dark:text-slate-100">{pkg.name}</h4>
+                                {pkg.description && (
+                                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{pkg.description}</p>
+                                )}
+                              </div>
+                              <div className={`h-10 w-10 rounded-xl flex items-center justify-center ${isPopular
+                                  ? 'bg-indigo-100 dark:bg-indigo-900/50'
+                                  : 'bg-slate-100 dark:bg-slate-700/50'
+                                }`}>
+                                <Coins className={`h-5 w-5 ${isPopular
+                                    ? 'text-indigo-600 dark:text-indigo-400'
+                                    : 'text-slate-600 dark:text-slate-400'
+                                  }`} />
+                              </div>
+                            </div>
+
+                            <div className="mb-4">
+                              <div className="text-3xl font-bold text-slate-800 dark:text-slate-100">
+                                {currencySymbol}{displayPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                              </div>
+                              <div className="flex items-center gap-2 mt-2">
+                                <span className="text-xl font-mono font-semibold text-emerald-600 dark:text-emerald-400">
+                                  {pkg.credits.toLocaleString()}
+                                </span>
+                                <span className="text-sm text-slate-500 dark:text-slate-400">{t('billing.credits')}</span>
+                              </div>
+                            </div>
+
+                            <div className="flex items-center gap-2 mb-4 text-xs text-slate-500 dark:text-slate-400">
+                              <Check className="h-3.5 w-3.5 text-emerald-500" />
+                              {currencySymbol}{(displayPrice / pkg.credits).toLocaleString(undefined, { minimumFractionDigits: 4, maximumFractionDigits: 4 })} {t('billing.perMinute')}
+                            </div>
+
+                            <Button
+                              className={`w-full ${isPopular
+                                  ? "bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800"
+                                  : ""
+                                }`}
+                              variant={isPopular ? "default" : "outline"}
+                              onClick={() => handlePurchaseCredits(pkg.id)}
+                              disabled={!hasActiveSubscription || !!loadingCheckout}
+                              data-testid={`button-buy-${pkg.name.toLowerCase().replace(/\s+/g, "-")}`}
+                            >
+                              {loadingCheckout === `package-${pkg.id}` ? (
+                                <Loader2 className="h-4 w-4 animate-spin" />
+                              ) : (
+                                <>
+                                  {t('billing.purchase')}
+                                  <ArrowUpRight className="h-4 w-4 ml-1" />
+                                </>
+                              )}
+                            </Button>
                           </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-              
-              {totalTransactionPages > 1 && (
-                <div className="flex items-center justify-between mt-4">
-                  <div className="text-sm text-slate-500 dark:text-slate-400">
-                    {t('billing.pagination', { 
-                      start: transactionPage * transactionPageSize + 1, 
-                      end: Math.min((transactionPage + 1) * transactionPageSize, transactions.length),
-                      total: transactions.length 
+                        </div>
+                      );
                     })}
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setTransactionPage(p => Math.max(0, p - 1))}
-                      disabled={transactionPage === 0}
-                      data-testid="button-billing-previous-page"
-                    >
-                      <ChevronLeft className="h-4 w-4" />
-                      {t('billing.previous')}
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setTransactionPage(p => Math.min(p + 1, totalTransactionPages - 1))}
-                      disabled={transactionPage >= totalTransactionPages - 1}
-                      data-testid="button-billing-next-page"
-                    >
-                      {t('billing.next')}
-                      <ChevronRight className="h-4 w-4" />
-                    </Button>
                   </div>
                 </div>
               )}
-            </>
-          ) : (
-            <div className="bg-white/60 dark:bg-slate-800/40 rounded-xl border border-slate-200/50 dark:border-slate-700/50 p-12 text-center">
-              <div className="h-16 w-16 rounded-2xl bg-slate-100 dark:bg-slate-700/50 flex items-center justify-center mx-auto mb-4">
-                <Receipt className="h-8 w-8 text-slate-400 dark:text-slate-500" />
-              </div>
-              <p className="text-slate-500 dark:text-slate-400">{t('billing.noTransactions')}</p>
             </div>
-          )}
-        </div>
-      </div>
+          </div>
+
+          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-50 via-white to-slate-100/50 dark:from-slate-900 dark:via-slate-800/80 dark:to-slate-900/50 border border-slate-200 dark:border-slate-700/50 p-6 md:p-8">
+            <div className="absolute inset-0 bg-grid-slate-200/50 dark:bg-grid-slate-700/20 [mask-image:linear-gradient(0deg,transparent,rgba(255,255,255,0.5))]" />
+            <div className="relative">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+                <div className="flex items-center gap-4">
+                  <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-slate-700 to-slate-800 dark:from-slate-600 dark:to-slate-700 flex items-center justify-center shadow-lg shadow-slate-500/25 dark:shadow-slate-600/20">
+                    <Receipt className="h-7 w-7 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">{t('billing.transactionHistory')}</h2>
+                    <p className="text-slate-600 dark:text-slate-400 text-sm">{t('billing.transactionSubtitle') || 'View your credit transactions and payment history'}</p>
+                  </div>
+                </div>
+                <Button
+                  variant="outline"
+                  onClick={handleExportTransactions}
+                  data-testid="button-export-transactions"
+                  className="border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700"
+                >
+                  <Download className="h-4 w-4 mr-2" />
+                  {t('billing.exportCSV')}
+                </Button>
+              </div>
+
+              {transactions && transactions.length > 0 ? (
+                <>
+                  <div className="bg-white dark:bg-slate-800/60 rounded-xl border border-slate-200/80 dark:border-slate-700/50 overflow-x-auto">
+                    <Table>
+                      <TableHeader>
+                        <TableRow className="bg-slate-50/80 dark:bg-slate-900/50 border-b border-slate-200 dark:border-slate-700">
+                          <TableHead className="font-semibold uppercase text-xs text-slate-600 dark:text-slate-400 tracking-wider">{t('billing.tableHeaders.type')}</TableHead>
+                          <TableHead className="font-semibold uppercase text-xs text-slate-600 dark:text-slate-400 tracking-wider">{t('billing.tableHeaders.description')}</TableHead>
+                          <TableHead className="font-semibold uppercase text-xs text-slate-600 dark:text-slate-400 tracking-wider text-right">{t('billing.tableHeaders.amount')}</TableHead>
+                          <TableHead className="font-semibold uppercase text-xs text-slate-600 dark:text-slate-400 tracking-wider">{t('billing.tableHeaders.date')}</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {[...transactions]
+                          .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+                          .slice(transactionPage * transactionPageSize, (transactionPage + 1) * transactionPageSize)
+                          .map((transaction, index, arr) => (
+                            <TableRow
+                              key={transaction.id}
+                              className={`transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/30 ${index !== arr.length - 1 ? 'border-b border-slate-100 dark:border-slate-700/50' : ''
+                                }`}
+                            >
+                              <TableCell className="py-4">
+                                <Badge
+                                  variant={transaction.type === "credit" ? "default" : "destructive"}
+                                  className={`${transaction.type === "credit"
+                                      ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-900/50 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800"
+                                      : "bg-red-100 text-red-700 hover:bg-red-100 dark:bg-red-900/50 dark:text-red-400 border border-red-200 dark:border-red-800"
+                                    }`}
+                                >
+                                  {transaction.type === "credit" ? (
+                                    <><Plus className="h-3 w-3 mr-1" />{t('billing.credit')}</>
+                                  ) : (
+                                    <>{t('billing.debit')}</>
+                                  )}
+                                </Badge>
+                              </TableCell>
+                              <TableCell className="py-4">
+                                <div className="font-medium text-sm text-slate-800 dark:text-slate-200">{transaction.description}</div>
+                                {transaction.stripePaymentId && (
+                                  <div className="text-xs text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-1">
+                                    <CreditCard className="h-3 w-3" />
+                                    {transaction.stripePaymentId.substring(0, 20)}...
+                                  </div>
+                                )}
+                              </TableCell>
+                              <TableCell className="py-4 text-right">
+                                <span className={`font-mono text-sm font-bold ${transaction.type === "credit"
+                                    ? "text-emerald-600 dark:text-emerald-400"
+                                    : "text-red-600 dark:text-red-400"
+                                  }`}>
+                                  {transaction.type === "credit" ? "+" : "-"}{Math.abs(transaction.amount).toLocaleString()}
+                                </span>
+                              </TableCell>
+                              <TableCell className="py-4">
+                                <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+                                  <Clock className="h-3.5 w-3.5" />
+                                  {formatDistanceToNow(new Date(transaction.createdAt), { addSuffix: true })}
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+
+                  {totalTransactionPages > 1 && (
+                    <div className="flex items-center justify-between mt-4">
+                      <div className="text-sm text-slate-500 dark:text-slate-400">
+                        {t('billing.pagination', {
+                          start: transactionPage * transactionPageSize + 1,
+                          end: Math.min((transactionPage + 1) * transactionPageSize, transactions.length),
+                          total: transactions.length
+                        })}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setTransactionPage(p => Math.max(0, p - 1))}
+                          disabled={transactionPage === 0}
+                          data-testid="button-billing-previous-page"
+                        >
+                          <ChevronLeft className="h-4 w-4" />
+                          {t('billing.previous')}
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setTransactionPage(p => Math.min(p + 1, totalTransactionPages - 1))}
+                          disabled={transactionPage >= totalTransactionPages - 1}
+                          data-testid="button-billing-next-page"
+                        >
+                          {t('billing.next')}
+                          <ChevronRight className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="bg-white/60 dark:bg-slate-800/40 rounded-xl border border-slate-200/50 dark:border-slate-700/50 p-12 text-center">
+                  <div className="h-16 w-16 rounded-2xl bg-slate-100 dark:bg-slate-700/50 flex items-center justify-center mx-auto mb-4">
+                    <Receipt className="h-8 w-8 text-slate-400 dark:text-slate-500" />
+                  </div>
+                  <p className="text-slate-500 dark:text-slate-400">{t('billing.noTransactions')}</p>
+                </div>
+              )}
+            </div>
+          </div>
         </TabsContent>
 
         <TabsContent value="credits">
@@ -931,8 +920,8 @@ export default function Billing() {
             <Button variant="outline" onClick={() => setCancelDialogOpen(false)}>
               {t('billing.keepSubscription')}
             </Button>
-            <Button 
-              variant="destructive" 
+            <Button
+              variant="destructive"
               onClick={() => cancelMutation.mutate()}
               disabled={cancelMutation.isPending}
               data-testid="button-confirm-cancel"

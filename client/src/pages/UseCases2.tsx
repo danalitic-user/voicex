@@ -3,7 +3,7 @@
 import React from 'react';
 import { useLocation } from "wouter";
 import { useTranslation } from 'react-i18next';
-import { AuthStorage } from "@/lib/auth-storage"; // Import Auth Logic
+import { AuthStorage } from "@/lib/auth-storage";
 import {
     TrendingUp,
     Headset,
@@ -49,13 +49,11 @@ export default function UseCases2() {
     const [, setLocation] = useLocation();
     const { t } = useTranslation();
 
-    // Synced Auth Logic
     const isAuthenticated = AuthStorage.isAuthenticated();
     const isAdmin = AuthStorage.isAdmin();
 
     const handleAuthRedirect = () => {
         if (isAuthenticated) {
-            // Use window.location for hard redirect or setLocation for SPA nav
             window.location.href = isAdmin ? "/admin" : "/app";
         } else {
             setLocation("/login");
@@ -103,7 +101,7 @@ export default function UseCases2() {
                 </div>
             </div>
 
-            {/* CTA Section - SYNCED LOGIC */}
+            {/* CTA Section */}
             <div className="relative z-10 w-full max-w-5xl mx-auto px-4 pb-24 mt-40">
                 <div className="bg-gray-50/50 border border-gray-100 rounded-3xl p-8 md:p-12 flex flex-col items-center text-center gap-6">
 

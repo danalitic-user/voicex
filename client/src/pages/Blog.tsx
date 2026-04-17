@@ -1,13 +1,9 @@
 /**
  * ============================================================
- * © 2025 Diploy — a brand of Bisht Technologies Private Limited
- * Original Author: BTPL Engineering Team
- * Website: https://diploy.in
- * Contact: cs@diploy.in
+ * © 2026 VoiceX - A Danaltic Product. All rights reserved.
+ * Original Author: Danalitic Engineering Team
+ * Website: https://danalitic.in
  *
- * Distributed under the Envato / CodeCanyon License Agreement.
- * Licensed to the purchaser for use as defined by the
- * Envato Market (CodeCanyon) Regular or Extended License.
  *
  * You are NOT permitted to redistribute, resell, sublicense,
  * or share this source code, in whole or in part.
@@ -305,8 +301,8 @@ export default function Blog() {
           data-testid="section-blog-hero"
         >
           <div className="absolute inset-0 bg-gradient-to-br from-slate-100/50 via-transparent to-slate-200/30 dark:from-slate-900/50 dark:via-transparent dark:to-slate-800/30" />
-          <div className="absolute top-20 left-10 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl" />
-          <div className="absolute bottom-10 right-10 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
+          <div className="absolute top-20 left-10 w-72 h-72 bg-pink-500/10 rounded-full blur-3xl" />
+          <div className="absolute bottom-10 right-10 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl" />
 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
             <motion.div
@@ -357,11 +353,10 @@ export default function Blog() {
                   <Button
                     key={category}
                     variant={activeCategory === category ? "default" : "outline"}
-                    className={`rounded-full ${
-                      activeCategory === category
-                        ? "bg-slate-900 hover:bg-slate-800 text-white dark:bg-slate-100 dark:hover:bg-slate-200 dark:text-slate-900"
-                        : ""
-                    }`}
+                    className={`rounded-full ${activeCategory === category
+                      ? "bg-slate-900 hover:bg-slate-800 text-white dark:bg-slate-100 dark:hover:bg-slate-200 dark:text-slate-900"
+                      : ""
+                      }`}
                     onClick={() => setActiveCategory(category)}
                     data-testid={`button-filter-${category.toLowerCase().replace(/\s+/g, "-")}`}
                   >
@@ -423,7 +418,7 @@ export default function Blog() {
           </div>
         </section>
 
-        <section
+        {/*<section
           className="py-16 md:py-24 bg-muted/30"
           data-testid="section-newsletter"
         >
@@ -463,7 +458,7 @@ export default function Blog() {
               </p>
             </motion.div>
           </div>
-        </section>
+        </section>*/}
       </main>
 
       <Footer />

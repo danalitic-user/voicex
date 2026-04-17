@@ -1,3 +1,5 @@
+// Task Autmoation Section on Lnading Page
+
 "use client";
 
 import React from 'react';
@@ -63,7 +65,6 @@ export default function TaskAutomation() {
   const isAuthenticated = AuthStorage.isAuthenticated();
   const isAdmin = AuthStorage.isAdmin();
 
-  // Logic matching your Navbar redirect behavior
   const handleActionRedirect = () => {
     if (isAuthenticated) {
       setLocation(isAdmin ? "/admin" : "/app");

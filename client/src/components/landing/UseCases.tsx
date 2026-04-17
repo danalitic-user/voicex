@@ -1,7 +1,20 @@
+/**
+ * ============================================================
+ * © 2026 VoiceX - A Danaltic Product. All rights reserved.
+ * Original Author: Danalitic Engineering Team
+ * Website: https://danalitic.in
+ *
+ *
+ * You are NOT permitted to redistribute, resell, sublicense,
+ * or share this source code, in whole or in part.
+ * Respect the author's rights and Envato licensing terms.
+ * ============================================================
+ */
+
 import React from 'react';
 import { Target, Headset, CalendarCheck, ClipboardList } from 'lucide-react';
 
-// Using exactly 4 items to create a perfect 2x2 grid
+// 2x2 Grid for Use Cases Section
 const useCases = [
   {
     title: "Sales & Lead Qualification",

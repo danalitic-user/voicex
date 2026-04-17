@@ -1,13 +1,9 @@
 /**
  * ============================================================
- * © 2025 Diploy — a brand of Bisht Technologies Private Limited
- * Original Author: BTPL Engineering Team
- * Website: https://diploy.in
- * Contact: cs@diploy.in
+ * © 2026 VoiceX - A Danaltic Product. All rights reserved.
+ * Original Author: Danalitic Engineering Team
+ * Website: https://danalitic.in
  *
- * Distributed under the Envato / CodeCanyon License Agreement.
- * Licensed to the purchaser for use as defined by the
- * Envato Market (CodeCanyon) Regular or Extended License.
  *
  * You are NOT permitted to redistribute, resell, sublicense,
  * or share this source code, in whole or in part.
@@ -34,7 +30,7 @@ interface PromptTemplate {
 
 export default function PromptTemplates() {
   const { t } = useTranslation();
-  
+
   const { data: templates = [], isLoading } = useQuery<PromptTemplate[]>({
     queryKey: ['/api/prompt-templates', 'all'],
     queryFn: async () => {
@@ -102,7 +98,7 @@ export default function PromptTemplates() {
                 </div>
               </CardContent>
             </Card>
-            
+
             <Card className="border hover-elevate">
               <CardContent className="p-5">
                 <div className="flex items-center justify-between">
@@ -118,7 +114,7 @@ export default function PromptTemplates() {
                 </div>
               </CardContent>
             </Card>
-            
+
             <Card className="border hover-elevate">
               <CardContent className="p-5">
                 <div className="flex items-center justify-between">
@@ -134,7 +130,7 @@ export default function PromptTemplates() {
                 </div>
               </CardContent>
             </Card>
-            
+
             <Card className="border hover-elevate">
               <CardContent className="p-5">
                 <div className="flex items-center justify-between">
@@ -155,7 +151,7 @@ export default function PromptTemplates() {
       </div>
 
       {/* Info Banner */}
-      <div 
+      <div
         className="flex items-center gap-3 p-4 rounded-xl border border-primary/20 bg-primary/5"
         data-info-banner
       >

@@ -1,13 +1,9 @@
 /**
  * ============================================================
- * © 2025 Diploy — a brand of Bisht Technologies Private Limited
- * Original Author: BTPL Engineering Team
- * Website: https://diploy.in
- * Contact: cs@diploy.in
+ * © 2026 VoiceX - A Danaltic Product. All rights reserved.
+ * Original Author: Danalitic Engineering Team
+ * Website: https://danalitic.in
  *
- * Distributed under the Envato / CodeCanyon License Agreement.
- * Licensed to the purchaser for use as defined by the
- * Envato Market (CodeCanyon) Regular or Extended License.
  *
  * You are NOT permitted to redistribute, resell, sublicense,
  * or share this source code, in whole or in part.
@@ -139,25 +135,25 @@ function createOrUpdateMetaTag(
   content: string
 ): void {
   let element = document.querySelector(`meta[${attributeType}="${attributeValue}"]`);
-  
+
   if (!element) {
     element = document.createElement("meta");
     element.setAttribute(attributeType, attributeValue);
     document.head.appendChild(element);
   }
-  
+
   element.setAttribute("content", content);
 }
 
 function createOrUpdateLinkTag(rel: string, href: string): void {
   let element = document.querySelector(`link[rel="${rel}"]`);
-  
+
   if (!element) {
     element = document.createElement("link");
     element.setAttribute("rel", rel);
     document.head.appendChild(element);
   }
-  
+
   element.setAttribute("href", href);
 }
 
@@ -177,14 +173,14 @@ function removeLinkTag(rel: string): void {
 
 function getOrCreateJsonLdScript(): HTMLScriptElement {
   let script = document.querySelector('script[type="application/ld+json"][data-seo-head]') as HTMLScriptElement | null;
-  
+
   if (!script) {
     script = document.createElement("script");
     script.type = "application/ld+json";
     script.setAttribute("data-seo-head", "true");
     document.head.appendChild(script);
   }
-  
+
   return script;
 }
 
@@ -198,14 +194,14 @@ function removeJsonLdScript(): void {
 // Helper to create additional JSON-LD scripts for Organization, FAQ, Product schemas
 function getOrCreateJsonLdScriptById(id: string): HTMLScriptElement {
   let script = document.querySelector(`script[type="application/ld+json"][data-seo-id="${id}"]`) as HTMLScriptElement | null;
-  
+
   if (!script) {
     script = document.createElement("script");
     script.type = "application/ld+json";
     script.setAttribute("data-seo-id", id);
     document.head.appendChild(script);
   }
-  
+
   return script;
 }
 
@@ -240,18 +236,18 @@ export function SEOHead({
 }: SEOHeadProps): null {
   const { branding } = useBranding();
   const effectiveSiteName = ogSiteName || branding.app_name || "AI Platform";
-  
+
   useEffect(() => {
     const previousTitle = document.title;
-    
-    const formattedTitle = title.includes(effectiveSiteName) 
-      ? title 
+
+    const formattedTitle = title.includes(effectiveSiteName)
+      ? title
       : `${title} | ${effectiveSiteName}`;
-    
+
     document.title = formattedTitle;
 
     createOrUpdateMetaTag("name", "description", description);
-    
+
     if (keywords.length > 0) {
       createOrUpdateMetaTag("name", "keywords", keywords.join(", "));
     }
@@ -279,25 +275,25 @@ export function SEOHead({
     createOrUpdateMetaTag("property", "og:description", description);
     createOrUpdateMetaTag("property", "og:type", ogType);
     createOrUpdateMetaTag("property", "og:site_name", effectiveSiteName);
-    
+
     if (ogImage) {
-      const absoluteOgImage = ogImage.startsWith("http") 
-        ? ogImage 
+      const absoluteOgImage = ogImage.startsWith("http")
+        ? ogImage
         : `${window.location.origin}${ogImage}`;
       createOrUpdateMetaTag("property", "og:image", absoluteOgImage);
       createOrUpdateMetaTag("property", "og:image:alt", title);
       createOrUpdateMetaTag("property", "og:image:width", "1200");
       createOrUpdateMetaTag("property", "og:image:height", "630");
       const ogImageExt = ogImage.toLowerCase().split('.').pop()?.split('?')[0] || 'png';
-      const ogImageType = ['jpg', 'jpeg'].includes(ogImageExt) ? 'image/jpeg' 
-        : ogImageExt === 'gif' ? 'image/gif' 
-        : ogImageExt === 'webp' ? 'image/webp' 
-        : 'image/png';
+      const ogImageType = ['jpg', 'jpeg'].includes(ogImageExt) ? 'image/jpeg'
+        : ogImageExt === 'gif' ? 'image/gif'
+          : ogImageExt === 'webp' ? 'image/webp'
+            : 'image/png';
       createOrUpdateMetaTag("property", "og:image:type", ogImageType);
     }
-    
+
     createOrUpdateMetaTag("property", "og:locale", "en_US");
-    
+
     if (canonicalUrl) {
       createOrUpdateMetaTag("property", "og:url", canonicalUrl);
       createOrUpdateLinkTag("canonical", canonicalUrl);
@@ -306,19 +302,19 @@ export function SEOHead({
     createOrUpdateMetaTag("name", "twitter:card", twitterCard);
     createOrUpdateMetaTag("name", "twitter:title", formattedTitle);
     createOrUpdateMetaTag("name", "twitter:description", description);
-    
+
     if (ogImage) {
-      const absoluteOgImage = ogImage.startsWith("http") 
-        ? ogImage 
+      const absoluteOgImage = ogImage.startsWith("http")
+        ? ogImage
         : `${window.location.origin}${ogImage}`;
       createOrUpdateMetaTag("name", "twitter:image", absoluteOgImage);
       createOrUpdateMetaTag("name", "twitter:image:alt", title);
     }
-    
+
     if (twitterSite) {
       createOrUpdateMetaTag("name", "twitter:site", twitterSite);
     }
-    
+
     if (twitterCreator) {
       createOrUpdateMetaTag("name", "twitter:creator", twitterCreator);
     }
@@ -358,8 +354,8 @@ export function SEOHead({
             ...structuredDataOrg.contactPoint
           }
         }),
-        ...(structuredDataOrg.sameAs && structuredDataOrg.sameAs.length > 0 && { 
-          sameAs: structuredDataOrg.sameAs 
+        ...(structuredDataOrg.sameAs && structuredDataOrg.sameAs.length > 0 && {
+          sameAs: structuredDataOrg.sameAs
         })
       };
       const orgScript = getOrCreateJsonLdScriptById("org");
@@ -393,13 +389,13 @@ export function SEOHead({
         'PreOrder': 'https://schema.org/PreOrder',
         'Discontinued': 'https://schema.org/Discontinued'
       };
-      
+
       const productSchema: Record<string, any> = {
         "@context": "https://schema.org",
         "@type": "Product",
         name: structuredDataProduct.name
       };
-      
+
       if (structuredDataProduct.description) {
         productSchema.description = structuredDataProduct.description;
       }
@@ -418,7 +414,7 @@ export function SEOHead({
           name: structuredDataProduct.brand
         };
       }
-      
+
       // Add offers with price and availability
       if (structuredDataProduct.price || structuredDataProduct.availability) {
         const offers: Record<string, any> = {
@@ -438,7 +434,7 @@ export function SEOHead({
         }
         productSchema.offers = offers;
       }
-      
+
       // Add aggregate rating if provided
       if (structuredDataProduct.ratingValue && structuredDataProduct.ratingCount) {
         productSchema.aggregateRating = {
@@ -447,21 +443,21 @@ export function SEOHead({
           reviewCount: structuredDataProduct.ratingCount
         };
       }
-      
+
       const productScript = getOrCreateJsonLdScriptById("product");
       productScript.textContent = JSON.stringify(productSchema, null, 2);
     }
 
     return () => {
       document.title = previousTitle;
-      
+
       removeMetaTag("name", "description");
       removeMetaTag("name", "keywords");
       removeMetaTag("name", "robots");
       removeMetaTag("name", "google-site-verification");
       removeMetaTag("name", "msvalidate.01");
       removeMetaTag("property", "fb:app_id");
-      
+
       removeMetaTag("property", "og:title");
       removeMetaTag("property", "og:description");
       removeMetaTag("property", "og:type");
@@ -473,7 +469,7 @@ export function SEOHead({
       removeMetaTag("property", "og:image:type");
       removeMetaTag("property", "og:locale");
       removeMetaTag("property", "og:url");
-      
+
       removeMetaTag("name", "twitter:card");
       removeMetaTag("name", "twitter:title");
       removeMetaTag("name", "twitter:description");
@@ -481,9 +477,9 @@ export function SEOHead({
       removeMetaTag("name", "twitter:image:alt");
       removeMetaTag("name", "twitter:site");
       removeMetaTag("name", "twitter:creator");
-      
+
       removeLinkTag("canonical");
-      
+
       additionalMetaTags.forEach(tag => {
         if (tag.name) {
           removeMetaTag("name", tag.name);
@@ -491,7 +487,7 @@ export function SEOHead({
           removeMetaTag("property", tag.property);
         }
       });
-      
+
       removeJsonLdScript();
       removeJsonLdScriptById("org");
       removeJsonLdScriptById("faq");

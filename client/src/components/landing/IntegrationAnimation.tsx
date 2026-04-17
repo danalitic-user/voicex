@@ -1,3 +1,16 @@
+/**
+ * ============================================================
+ * © 2026 VoiceX - A Danaltic Product. All rights reserved.
+ * Original Author: Danalitic Engineering Team
+ * Website: https://danalitic.in
+ *
+ *
+ * You are NOT permitted to redistribute, resell, sublicense,
+ * or share this source code, in whole or in part.
+ * Respect the author's rights and Envato licensing terms.
+ * ============================================================
+ */
+
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -27,7 +40,7 @@ const ANIMATION_SPEED_MS = 3000;
 export default function IntegrationTimeline() {
     const [activeIndex, setActiveIndex] = useState(0);
 
-    // Infinite Auto-play logic
+    // Playing the Integration Timeline animation in a infinite loop
     useEffect(() => {
         const interval = setInterval(() => {
             setActiveIndex((prev) => (prev + 1) % timelineEvents.length);
@@ -56,7 +69,7 @@ export default function IntegrationTimeline() {
 
                 <div className="flex flex-col lg:flex-row gap-12 lg:gap-24 items-center">
 
-                    {/* LEFT COLUMN: The Animated Timeline */}
+                    {/* LEFT COLUMN */}
                     <div className="w-full lg:w-1/2 relative py-10">
                         {/* The vertical track line */}
                         <div className="absolute left-[39px] top-0 bottom-0 w-0.5 bg-gray-800 rounded-full" />
@@ -77,9 +90,8 @@ export default function IntegrationTimeline() {
 
                                 return (
                                     <div key={event.id} className="flex items-center gap-6">
-                                        {/* Node Circle */}
                                         <div className="relative">
-                                            {/* Pulsing ring for active state */}
+
                                             {isActive && (
                                                 <motion.div
                                                     layoutId="activeRing"
@@ -108,7 +120,7 @@ export default function IntegrationTimeline() {
                         </div>
                     </div>
 
-                    {/* RIGHT COLUMN: The Analytic Console Display */}
+                    {/* RIGHT COLUMN */}
                     <div className="w-full lg:w-1/2 lg:sticky lg:top-32 space-y-8">
 
                         {/* The changing blurb box */}

@@ -1,8 +1,11 @@
+// Contact Section at end of the landing page
+
 "use client";
 
 import React, { useState } from "react";
 import { Send, Loader2, MessageSquare } from "lucide-react";
 
+// Logic for form submission using web3forms.com API Key
 export default function ContactPage() {
   const [result, setResult] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);

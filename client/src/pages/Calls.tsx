@@ -1,13 +1,9 @@
 /**
  * ============================================================
- * © 2025 Diploy — a brand of Bisht Technologies Private Limited
- * Original Author: BTPL Engineering Team
- * Website: https://diploy.in
- * Contact: cs@diploy.in
+ * © 2026 VoiceX - A Danaltic Product. All rights reserved.
+ * Original Author: Danalitic Engineering Team
+ * Website: https://danalitic.in
  *
- * Distributed under the Envato / CodeCanyon License Agreement.
- * Licensed to the purchaser for use as defined by the
- * Envato Market (CodeCanyon) Regular or Extended License.
  *
  * You are NOT permitted to redistribute, resell, sublicense,
  * or share this source code, in whole or in part.
@@ -104,11 +100,11 @@ export default function Calls() {
     ];
 
     const rows = calls.map(call => {
-      const contactName = call.contact 
+      const contactName = call.contact
         ? `${call.contact.firstName} ${call.contact.lastName || ''}`.trim()
         : '';
       const phoneNumber = call.phoneNumber || call.fromNumber || call.toNumber || '';
-      
+
       return [
         call.id,
         phoneNumber,
@@ -245,7 +241,7 @@ export default function Calls() {
 
   const handlePlayRecording = async (e: React.MouseEvent, call: Call) => {
     e.stopPropagation();
-    
+
     if (playingCallId === call.id) {
       if (audioRef.current) {
         audioRef.current.pause();
@@ -254,44 +250,44 @@ export default function Calls() {
       setPlayingCallId(null);
       return;
     }
-    
+
     if (audioRef.current) {
       audioRef.current.pause();
     }
-    
+
     setLoadingRecording(call.id);
-    
+
     try {
       const headers: Record<string, string> = {};
       const authHeader = AuthStorage.getAuthHeader();
       if (authHeader) {
         headers["Authorization"] = authHeader;
       }
-      
+
       const response = await fetch(`/api/calls/${call.id}/recording`, {
         headers,
         credentials: "include",
       });
-      
+
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.error || "Failed to fetch recording");
       }
-      
+
       const blob = await response.blob();
       const audioUrl = URL.createObjectURL(blob);
-      
+
       const audio = new Audio(audioUrl);
       audioRef.current = audio;
       setPlayingCallId(call.id);
       setLoadingRecording(null);
-      
+
       audio.onended = () => {
         setPlayingCallId(null);
         audioRef.current = null;
         URL.revokeObjectURL(audioUrl);
       };
-      
+
       audio.onerror = () => {
         toast({
           title: "Playback Error",
@@ -301,7 +297,7 @@ export default function Calls() {
         setPlayingCallId(null);
         audioRef.current = null;
       };
-      
+
       await audio.play();
     } catch (error: any) {
       setLoadingRecording(null);
@@ -323,20 +319,20 @@ export default function Calls() {
 
   const filteredCalls = (calls || []).filter((call) => {
     const contactFullName = call.contact ? `${call.contact.firstName} ${call.contact.lastName || ""}`.toLowerCase() : "";
-    const matchesSearch = 
-      searchQuery === "" || 
+    const matchesSearch =
+      searchQuery === "" ||
       contactFullName.includes(searchQuery.toLowerCase()) ||
       call.contact?.phone?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       call.phoneNumber?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       call.transcript?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       call.aiSummary?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       call.id.toLowerCase().includes(searchQuery.toLowerCase());
-    
+
     const matchesStatus = statusFilter === "all" || call.status === statusFilter;
     const matchesSentiment = sentimentFilter === "all" || call.sentiment === sentimentFilter;
     const matchesDirection = directionFilter === "all" || call.callDirection === directionFilter;
     const matchesLead = leadFilter === "all" || call.classification === leadFilter;
-    
+
     return matchesSearch && matchesStatus && matchesSentiment && matchesDirection && matchesLead;
   });
 
@@ -361,7 +357,7 @@ export default function Calls() {
   }
 
   const renderCallCard = (call: Call, testIdPrefix: string = "") => (
-    <div 
+    <div
       key={call.id}
       className="group bg-card border rounded-lg overflow-hidden hover:shadow-lg transition-all duration-200 cursor-pointer"
       onClick={() => setLocation(`/app/calls/${call.id}`)}
@@ -369,18 +365,17 @@ export default function Calls() {
     >
       <div className="flex">
         <div className={`w-1 ${call.status === 'completed' ? 'bg-emerald-500' : call.status === 'failed' ? 'bg-rose-500' : 'bg-amber-500'}`} />
-        
+
         <div className="flex-1 p-4">
           <div className="flex items-start justify-between gap-4">
             <div className="flex items-start gap-3 min-w-0">
-              <div className={`flex-shrink-0 h-10 w-10 rounded-full flex items-center justify-center ${
-                call.callDirection === 'incoming' 
-                  ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' 
+              <div className={`flex-shrink-0 h-10 w-10 rounded-full flex items-center justify-center ${call.callDirection === 'incoming'
+                  ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
                   : 'bg-blue-500/10 text-blue-600 dark:text-blue-400'
-              }`}>
+                }`}>
                 {getDirectionIcon(call.callDirection)}
               </div>
-              
+
               <div className="min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
                   <h3 className="font-semibold text-foreground truncate">
@@ -405,7 +400,7 @@ export default function Calls() {
                   {getSentimentBadge(call.sentiment)}
                   {getClassificationBadge(call.classification)}
                 </div>
-                
+
                 <div className="flex items-center gap-3 mt-1 text-sm text-muted-foreground flex-wrap">
                   {call.callDirection === 'incoming' ? (
                     <>
@@ -440,7 +435,7 @@ export default function Calls() {
                 </div>
               </div>
             </div>
-            
+
             <div className="flex items-center gap-2 flex-shrink-0">
               {hasRecording(call) && (
                 <Button
@@ -462,7 +457,7 @@ export default function Calls() {
               )}
             </div>
           </div>
-          
+
           <div className="flex items-center gap-4 mt-3 flex-wrap">
             <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
               <Clock className="h-3.5 w-3.5" />
@@ -473,7 +468,7 @@ export default function Calls() {
               <span>{formatRelativeTime(call.createdAt) || format(new Date(call.createdAt), "MMM d, h:mm a")}</span>
             </div>
           </div>
-          
+
           {(call.aiSummary || call.transcript) && (
             <div className="mt-3 pt-3 border-t border-border/50">
               {call.aiSummary && (
@@ -494,7 +489,7 @@ export default function Calls() {
               )}
             </div>
           )}
-          
+
           <div className="flex items-center justify-between gap-2 mt-3">
             <div className="flex items-center gap-2">
               {hasRecording(call) && (
@@ -516,7 +511,7 @@ export default function Calls() {
                 </div>
               )}
             </div>
-            
+
             <Button
               variant="outline"
               size="sm"
@@ -549,7 +544,7 @@ export default function Calls() {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Button 
+            <Button
               variant="default"
               onClick={handleExportCsv}
               data-testid="button-export-calls"
@@ -559,7 +554,7 @@ export default function Calls() {
             </Button>
           </div>
         </div>
-        
+
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-6">
           <div className="bg-background/60 backdrop-blur-sm rounded-lg p-3 border">
             <div className="flex items-center gap-2">
@@ -668,8 +663,8 @@ export default function Calls() {
               <Phone className="h-12 w-12 mx-auto text-muted-foreground/50 mb-4" />
               <h3 className="font-medium text-lg mb-1">{t('calls.noCalls')}</h3>
               <p className="text-muted-foreground text-sm">
-                {calls?.length === 0 
-                  ? t('calls.createCampaignToStart') 
+                {calls?.length === 0
+                  ? t('calls.createCampaignToStart')
                   : t('calls.noMatchingFilters')}
               </p>
             </Card>

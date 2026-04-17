@@ -1,13 +1,9 @@
 /**
  * ============================================================
- * © 2025 Diploy — a brand of Bisht Technologies Private Limited
- * Original Author: BTPL Engineering Team
- * Website: https://diploy.in
- * Contact: cs@diploy.in
+ * © 2026 VoiceX - A Danaltic Product. All rights reserved.
+ * Original Author: Danalitic Engineering Team
+ * Website: https://danalitic.in
  *
- * Distributed under the Envato / CodeCanyon License Agreement.
- * Licensed to the purchaser for use as defined by the
- * Envato Market (CodeCanyon) Regular or Extended License.
  *
  * You are NOT permitted to redistribute, resell, sublicense,
  * or share this source code, in whole or in part.
@@ -214,7 +210,7 @@ export default function WebhookConfigPage() {
     mutationFn: async () => {
       let authCredentials: Record<string, any> | null = null;
       let authType: string | null = null;
-      
+
       if (formData.authType === "basic") {
         authType = "basic";
         authCredentials = {
@@ -238,11 +234,11 @@ export default function WebhookConfigPage() {
         url: formData.url,
         description: formData.description || null,
         events: formData.events,
-        campaignIds: formData.filterByCampaign && formData.selectedCampaigns.length > 0 
-          ? formData.selectedCampaigns 
+        campaignIds: formData.filterByCampaign && formData.selectedCampaigns.length > 0
+          ? formData.selectedCampaigns
           : null,
       };
-      
+
       if (authType) {
         payload.authType = authType;
         payload.authCredentials = authCredentials;
@@ -372,14 +368,14 @@ export default function WebhookConfigPage() {
 
   const toggleCampaign = (campaignId: string) => {
     if (formData.selectedCampaigns.includes(campaignId)) {
-      setFormData({ 
-        ...formData, 
-        selectedCampaigns: formData.selectedCampaigns.filter(id => id !== campaignId) 
+      setFormData({
+        ...formData,
+        selectedCampaigns: formData.selectedCampaigns.filter(id => id !== campaignId)
       });
     } else {
-      setFormData({ 
-        ...formData, 
-        selectedCampaigns: [...formData.selectedCampaigns, campaignId] 
+      setFormData({
+        ...formData,
+        selectedCampaigns: [...formData.selectedCampaigns, campaignId]
       });
     }
   };
@@ -422,8 +418,8 @@ export default function WebhookConfigPage() {
               <p className="text-muted-foreground mt-0.5">{t('webhooks.subtitle')}</p>
             </div>
           </div>
-          <Button 
-            onClick={() => setCreateDialogOpen(true)} 
+          <Button
+            onClick={() => setCreateDialogOpen(true)}
             className="bg-violet-600 hover:bg-violet-700 text-white"
             data-testid="button-create-webhook"
           >
@@ -619,19 +615,19 @@ export default function WebhookConfigPage() {
                     </Tooltip>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Button 
-                      type="button" 
-                      variant="outline" 
-                      size="sm" 
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
                       onClick={selectAllEvents}
                       data-testid="button-select-all-events"
                     >
                       {t('webhooks.actions.selectAll')}
                     </Button>
-                    <Button 
-                      type="button" 
-                      variant="ghost" 
-                      size="sm" 
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
                       onClick={clearAllEvents}
                       data-testid="button-clear-all-events"
                     >
@@ -649,7 +645,7 @@ export default function WebhookConfigPage() {
                   const groupEventValues = group.events.map(e => e.value);
                   const isFullySelected = isGroupFullySelected(groupEventValues);
                   const isPartiallySelected = isGroupPartiallySelected(groupEventValues);
-                  
+
                   return (
                     <div key={group.name} className="space-y-2">
                       <div className="flex items-center justify-between">
@@ -659,19 +655,19 @@ export default function WebhookConfigPage() {
                           <span className="text-xs text-muted-foreground">({group.events.length})</span>
                         </div>
                         <div className="flex items-center gap-1">
-                          <Button 
-                            type="button" 
-                            variant="ghost" 
-                            size="sm" 
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
                             className="h-6 px-2 text-xs"
                             onClick={() => selectGroupEvents(groupEventValues)}
                           >
                             {t('common.all')}
                           </Button>
-                          <Button 
-                            type="button" 
-                            variant="ghost" 
-                            size="sm" 
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
                             className="h-6 px-2 text-xs"
                             onClick={() => clearGroupEvents(groupEventValues)}
                           >
@@ -683,16 +679,15 @@ export default function WebhookConfigPage() {
                         {group.events.map((event) => (
                           <div
                             key={event.value}
-                            className={`p-3 border rounded-md cursor-pointer transition-colors ${
-                              formData.events.includes(event.value) 
-                                ? "border-primary bg-primary/5 dark:bg-primary/10" 
+                            className={`p-3 border rounded-md cursor-pointer transition-colors ${formData.events.includes(event.value)
+                                ? "border-primary bg-primary/5 dark:bg-primary/10"
                                 : "hover:bg-muted/50"
-                            }`}
+                              }`}
                             onClick={() => toggleEvent(event.value)}
                             data-testid={`event-option-${event.value}`}
                           >
                             <div className="flex items-start gap-2">
-                              <Checkbox 
+                              <Checkbox
                                 checked={formData.events.includes(event.value)}
                                 className="mt-0.5"
                               />
@@ -751,15 +746,15 @@ export default function WebhookConfigPage() {
                       <Switch
                         id="filter-toggle"
                         checked={formData.filterByCampaign}
-                        onCheckedChange={(checked) => setFormData({ 
-                          ...formData, 
+                        onCheckedChange={(checked) => setFormData({
+                          ...formData,
                           filterByCampaign: checked,
                           selectedCampaigns: checked ? formData.selectedCampaigns : []
                         })}
                         data-testid="switch-filter-by-campaign"
                       />
                     </div>
-                    
+
                     {formData.filterByCampaign && (
                       <div className="space-y-2">
                         <Label>{t('webhooks.labels.selectCampaigns')}</Label>
@@ -770,11 +765,10 @@ export default function WebhookConfigPage() {
                             {campaigns.map((campaign) => (
                               <div
                                 key={campaign.id}
-                                className={`flex items-center gap-3 p-2 border rounded-md cursor-pointer transition-colors ${
-                                  formData.selectedCampaigns.includes(campaign.id)
+                                className={`flex items-center gap-3 p-2 border rounded-md cursor-pointer transition-colors ${formData.selectedCampaigns.includes(campaign.id)
                                     ? "border-primary bg-primary/5"
                                     : "hover:bg-muted/50"
-                                }`}
+                                  }`}
                                 onClick={() => toggleCampaign(campaign.id)}
                                 data-testid={`campaign-option-${campaign.id}`}
                               >
@@ -829,7 +823,7 @@ export default function WebhookConfigPage() {
                       )}
                     </div>
                     <CardDescription className="text-xs">
-                      {formData.authType === "none" 
+                      {formData.authType === "none"
                         ? t('webhooks.labels.noAuthConfigured')
                         : t('webhooks.labels.usingAuth', { type: formData.authType })}
                     </CardDescription>

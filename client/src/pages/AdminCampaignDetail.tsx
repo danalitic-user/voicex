@@ -1,13 +1,9 @@
 /**
  * ============================================================
- * © 2025 Diploy — a brand of Bisht Technologies Private Limited
- * Original Author: BTPL Engineering Team
- * Website: https://diploy.in
- * Contact: cs@diploy.in
+ * © 2026 VoiceX - A Danaltic Product. All rights reserved.
+ * Original Author: Danalitic Engineering Team
+ * Website: https://danalitic.in
  *
- * Distributed under the Envato / CodeCanyon License Agreement.
- * Licensed to the purchaser for use as defined by the
- * Envato Market (CodeCanyon) Regular or Extended License.
  *
  * You are NOT permitted to redistribute, resell, sublicense,
  * or share this source code, in whole or in part.
@@ -144,7 +140,7 @@ export default function AdminCampaignDetail() {
     );
   }
 
-  const progress = campaign.totalContacts > 0 
+  const progress = campaign.totalContacts > 0
     ? Math.round((campaign.completedCalls / campaign.totalContacts) * 100)
     : 0;
 
@@ -172,7 +168,7 @@ export default function AdminCampaignDetail() {
   const getCallStatusIcon = (contactId: string) => {
     const call = calls.find(c => c.contactId === contactId);
     if (!call) return <Clock className="h-4 w-4 text-muted-foreground" />;
-    
+
     switch (call.status) {
       case "completed":
         return <CheckCircle2 className="h-4 w-4 text-green-500" />;
@@ -188,7 +184,7 @@ export default function AdminCampaignDetail() {
   const getCallStatus = (contactId: string) => {
     const call = calls.find(c => c.contactId === contactId);
     if (!call) return t('campaignDetail.callStatus.pending');
-    
+
     switch (call.status) {
       case "completed":
         return t('campaignDetail.callStatus.completed');
@@ -271,8 +267,8 @@ export default function AdminCampaignDetail() {
             <p className="text-sm text-muted-foreground">{t('campaignDetail.labels.progress')}</p>
             <div className="flex items-center gap-2">
               <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
-                <div 
-                  className="h-full bg-primary transition-all" 
+                <div
+                  className="h-full bg-primary transition-all"
                   style={{ width: `${progress}%` }}
                 />
               </div>
@@ -392,23 +388,23 @@ export default function AdminCampaignDetail() {
                     <TableHead>{t('campaignDetail.table.status')}</TableHead>
                   </TableRow>
                 </TableHeader>
-              <TableBody>
-                {contacts.slice(0, 50).map((contact) => (
-                  <TableRow key={contact.id} data-testid={`row-contact-${contact.id}`}>
-                    <TableCell className="font-medium">
-                      {contact.firstName} {contact.lastName || ""}
-                    </TableCell>
-                    <TableCell>{contact.phone}</TableCell>
-                    <TableCell className="text-muted-foreground">{contact.email || "-"}</TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-2">
-                        {getCallStatusIcon(contact.id)}
-                        <span className="text-sm">{getCallStatus(contact.id)}</span>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
+                <TableBody>
+                  {contacts.slice(0, 50).map((contact) => (
+                    <TableRow key={contact.id} data-testid={`row-contact-${contact.id}`}>
+                      <TableCell className="font-medium">
+                        {contact.firstName} {contact.lastName || ""}
+                      </TableCell>
+                      <TableCell>{contact.phone}</TableCell>
+                      <TableCell className="text-muted-foreground">{contact.email || "-"}</TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          {getCallStatusIcon(contact.id)}
+                          <span className="text-sm">{getCallStatus(contact.id)}</span>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
               </Table>
             </div>
             {contacts.length > 50 && (

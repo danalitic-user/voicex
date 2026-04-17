@@ -1,13 +1,9 @@
 /**
  * ============================================================
- * © 2025 Diploy — a brand of Bisht Technologies Private Limited
- * Original Author: BTPL Engineering Team
- * Website: https://diploy.in
- * Contact: cs@diploy.in
+ * © 2026 VoiceX - A Danaltic Product. All rights reserved.
+ * Original Author: Danalitic Engineering Team
+ * Website: https://danalitic.in
  *
- * Distributed under the Envato / CodeCanyon License Agreement.
- * Licensed to the purchaser for use as defined by the
- * Envato Market (CodeCanyon) Regular or Extended License.
  *
  * You are NOT permitted to redistribute, resell, sublicense,
  * or share this source code, in whole or in part.
@@ -80,7 +76,7 @@ export default function Voices() {
     if (!accountVoices) return [];
     if (!debouncedSearch) return accountVoices;
     const searchLower = debouncedSearch.toLowerCase();
-    return accountVoices.filter(v => 
+    return accountVoices.filter(v =>
       v.name.toLowerCase().includes(searchLower) ||
       v.labels?.language?.toLowerCase().includes(searchLower) ||
       v.labels?.gender?.toLowerCase().includes(searchLower) ||
@@ -92,7 +88,7 @@ export default function Voices() {
   const filteredOpenAIVoices = useMemo(() => {
     if (!debouncedSearch) return OPENAI_VOICES;
     const searchLower = debouncedSearch.toLowerCase();
-    return OPENAI_VOICES.filter(v => 
+    return OPENAI_VOICES.filter(v =>
       v.name.toLowerCase().includes(searchLower) ||
       v.description.toLowerCase().includes(searchLower) ||
       v.gender.toLowerCase().includes(searchLower) ||
@@ -102,7 +98,7 @@ export default function Voices() {
 
   const handlePlayPreview = (voiceId: string, previewUrl?: string) => {
     if (!previewUrl) return;
-    
+
     if (playingVoice === voiceId) {
       if (audioRef.current) {
         audioRef.current.pause();
@@ -231,7 +227,7 @@ export default function Voices() {
           {(activeTab === "openai" || !isLoading) && (
             <div className="flex items-center gap-2">
               <span className="text-sm text-muted-foreground">
-                {debouncedSearch 
+                {debouncedSearch
                   ? t('voices.showingFiltered', { count: getFilteredCount(), total: getTotalVoiceCount() })
                   : t('voices.totalVoices', { count: getTotalVoiceCount() })}
               </span>
@@ -241,109 +237,109 @@ export default function Voices() {
 
         <TabsContent value="elevenlabs" className="space-y-4">
           {isError ? (
-        <Alert variant="destructive" data-testid="alert-voices-error">
-          <AlertCircle className="h-4 w-4" />
-          <AlertTitle>{t('common.error')}</AlertTitle>
-          <AlertDescription>
-            {(error as Error)?.message || t('voices.errorLoading', 'Failed to load voices. Please check your ElevenLabs API key configuration.')}
-          </AlertDescription>
-        </Alert>
-      ) : isLoading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {Array.from({ length: 8 }).map((_, i) => (
-            <Card key={i} className="p-4">
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex-1">
-                  <Skeleton className="h-5 w-3/4 mb-2" />
-                  <div className="flex gap-2">
-                    <Skeleton className="h-5 w-16" />
-                    <Skeleton className="h-5 w-12" />
+            <Alert variant="destructive" data-testid="alert-voices-error">
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle>{t('common.error')}</AlertTitle>
+              <AlertDescription>
+                {(error as Error)?.message || t('voices.errorLoading', 'Failed to load voices. Please check your ElevenLabs API key configuration.')}
+              </AlertDescription>
+            </Alert>
+          ) : isLoading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <Card key={i} className="p-4">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex-1">
+                      <Skeleton className="h-5 w-3/4 mb-2" />
+                      <div className="flex gap-2">
+                        <Skeleton className="h-5 w-16" />
+                        <Skeleton className="h-5 w-12" />
+                      </div>
+                    </div>
+                    <Skeleton className="h-9 w-9 rounded-md" />
                   </div>
-                </div>
-                <Skeleton className="h-9 w-9 rounded-md" />
-              </div>
+                </Card>
+              ))}
+            </div>
+          ) : filteredVoices.length === 0 ? (
+            <Card className="p-16 text-center">
+              <Mic className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+              <h3 className="text-lg font-semibold mb-2">
+                {debouncedSearch
+                  ? t('voices.noVoicesMatch', 'No voices match your search')
+                  : t('voices.noVoicesAvailable', 'No voices available')}
+              </h3>
+              <p className="text-muted-foreground">
+                {debouncedSearch
+                  ? t('voices.tryDifferentSearch', 'Try a different search term')
+                  : t('voices.voicesWillAppear', 'Your ElevenLabs account voices will appear here')}
+              </p>
             </Card>
-          ))}
-        </div>
-      ) : filteredVoices.length === 0 ? (
-        <Card className="p-16 text-center">
-          <Mic className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-          <h3 className="text-lg font-semibold mb-2">
-            {debouncedSearch 
-              ? t('voices.noVoicesMatch', 'No voices match your search')
-              : t('voices.noVoicesAvailable', 'No voices available')}
-          </h3>
-          <p className="text-muted-foreground">
-            {debouncedSearch 
-              ? t('voices.tryDifferentSearch', 'Try a different search term')
-              : t('voices.voicesWillAppear', 'Your ElevenLabs account voices will appear here')}
-          </p>
-        </Card>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {filteredVoices.map((voice) => (
-            <Card
-              key={voice.voice_id}
-              className="p-4 hover-elevate relative overflow-visible border-green-200 dark:border-green-800/50"
-              data-testid={`card-voice-${voice.voice_id}`}
-            >
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-green-400 via-emerald-500 to-green-400 rounded-t-lg" />
-              
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold truncate mb-1.5" data-testid="text-voice-name">
-                    {voice.name}
-                  </h3>
-                  <div className="flex items-center gap-1.5 flex-wrap">
-                    {voice.labels?.language && (
-                      <Badge variant="secondary" className="text-xs">
-                        {formatLanguageName(voice.labels.language)}
-                      </Badge>
-                    )}
-                    {voice.labels?.gender && (
-                      <Badge variant="outline" className="text-xs capitalize">
-                        {voice.labels.gender}
-                      </Badge>
-                    )}
-                    {voice.labels?.accent && (
-                      <Badge variant="outline" className="text-xs capitalize">
-                        {voice.labels.accent}
-                      </Badge>
-                    )}
-                  </div>
-                </div>
-                {voice.preview_url && (
-                  <Button
-                    variant={playingVoice === voice.voice_id ? "default" : "ghost"}
-                    size="icon"
-                    onClick={() => handlePlayPreview(voice.voice_id, voice.preview_url)}
-                    data-testid="button-play-voice"
-                  >
-                    {playingVoice === voice.voice_id ? (
-                      <Square className="h-4 w-4" />
-                    ) : (
-                      <Play className="h-4 w-4" />
-                    )}
-                  </Button>
-                )}
-              </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              {filteredVoices.map((voice) => (
+                <Card
+                  key={voice.voice_id}
+                  className="p-4 hover-elevate relative overflow-visible border-green-200 dark:border-green-800/50"
+                  data-testid={`card-voice-${voice.voice_id}`}
+                >
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-green-400 via-emerald-500 to-green-400 rounded-t-lg" />
 
-              <div className="flex items-center gap-1.5 flex-wrap">
-                {voice.category && (
-                  <Badge className="text-xs capitalize bg-gradient-to-r from-green-500 to-emerald-500 text-white border-0">
-                    {voice.category}
-                  </Badge>
-                )}
-                {voice.labels?.age && (
-                  <Badge variant="outline" className="text-xs capitalize">
-                    {voice.labels.age}
-                  </Badge>
-                )}
-              </div>
-            </Card>
-          ))}
-        </div>
-      )}
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold truncate mb-1.5" data-testid="text-voice-name">
+                        {voice.name}
+                      </h3>
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        {voice.labels?.language && (
+                          <Badge variant="secondary" className="text-xs">
+                            {formatLanguageName(voice.labels.language)}
+                          </Badge>
+                        )}
+                        {voice.labels?.gender && (
+                          <Badge variant="outline" className="text-xs capitalize">
+                            {voice.labels.gender}
+                          </Badge>
+                        )}
+                        {voice.labels?.accent && (
+                          <Badge variant="outline" className="text-xs capitalize">
+                            {voice.labels.accent}
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+                    {voice.preview_url && (
+                      <Button
+                        variant={playingVoice === voice.voice_id ? "default" : "ghost"}
+                        size="icon"
+                        onClick={() => handlePlayPreview(voice.voice_id, voice.preview_url)}
+                        data-testid="button-play-voice"
+                      >
+                        {playingVoice === voice.voice_id ? (
+                          <Square className="h-4 w-4" />
+                        ) : (
+                          <Play className="h-4 w-4" />
+                        )}
+                      </Button>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    {voice.category && (
+                      <Badge className="text-xs capitalize bg-gradient-to-r from-green-500 to-emerald-500 text-white border-0">
+                        {voice.category}
+                      </Badge>
+                    )}
+                    {voice.labels?.age && (
+                      <Badge variant="outline" className="text-xs capitalize">
+                        {voice.labels.age}
+                      </Badge>
+                    )}
+                  </div>
+                </Card>
+              ))}
+            </div>
+          )}
         </TabsContent>
 
         <TabsContent value="openai" className="space-y-4">
@@ -366,7 +362,7 @@ export default function Voices() {
                   data-testid={`card-openai-voice-${voice.id}`}
                 >
                   <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-violet-400 via-purple-500 to-violet-400 rounded-t-lg" />
-                  
+
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex-1 min-w-0">
                       <h3 className="font-semibold truncate mb-1.5" data-testid="text-openai-voice-name">

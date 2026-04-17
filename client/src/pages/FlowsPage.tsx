@@ -1,13 +1,9 @@
 /**
  * ============================================================
- * © 2025 Diploy — a brand of Bisht Technologies Private Limited
- * Original Author: BTPL Engineering Team
- * Website: https://diploy.in
- * Contact: cs@diploy.in
+ * © 2026 VoiceX - A Danaltic Product. All rights reserved.
+ * Original Author: Danalitic Engineering Team
+ * Website: https://danalitic.in
  *
- * Distributed under the Envato / CodeCanyon License Agreement.
- * Licensed to the purchaser for use as defined by the
- * Envato Market (CodeCanyon) Regular or Extended License.
  *
  * You are NOT permitted to redistribute, resell, sublicense,
  * or share this source code, in whole or in part.
@@ -147,7 +143,7 @@ export default function FlowsPage() {
         transfer: `node-${nanoid()}`,
         end: `node-${nanoid()}`,
       };
-      
+
       // Pre-configured Call Transfer Flow template
       // Node type must match data.type for React Flow to render correctly
       const templateNodes = [
@@ -308,11 +304,11 @@ export default function FlowsPage() {
               Templates
             </TabsTrigger>
           </TabsList>
-          
+
           {activeTab === "flows" && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button 
+                <Button
                   disabled={createNewFlowMutation.isPending || createTemplateFlowMutation.isPending}
                   data-testid="button-create-flow"
                 >
@@ -336,157 +332,157 @@ export default function FlowsPage() {
 
         <TabsContent value="flows" className="space-y-4">
 
-      {!flows || flows.length === 0 ? (
-        <Card>
-          <CardContent className="flex flex-col items-center justify-center py-16">
-            <GitBranch className="w-16 h-16 text-muted-foreground mb-4" />
-            <h3 className="text-xl font-semibold mb-2">No flows yet</h3>
-            <p className="text-muted-foreground text-center mb-6 max-w-md">
-              Create your first visual conversation flow to build complex multi-step conversations
-            </p>
-            <div className="space-y-3">
-              <Button 
-                onClick={() => createNewFlowMutation.mutate()} 
-                disabled={createNewFlowMutation.isPending}
-                data-testid="button-create-first-flow"
-                className="w-full"
-              >
-                <Plus className="w-4 h-4 mr-2" />
-                {createNewFlowMutation.isPending ? "Creating..." : "Create Blank Flow"}
-              </Button>
-              <Button 
-                onClick={() => createTemplateFlowMutation.mutate()} 
-                disabled={createTemplateFlowMutation.isPending}
-                variant="outline"
-                data-testid="button-create-template-flow"
-                className="w-full"
-              >
-                <FileText className="w-4 h-4 mr-2" />
-                {createTemplateFlowMutation.isPending ? "Creating..." : "Use Call Transfer Template"}
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      ) : (
-        <>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {paginatedFlows.map((flow) => (
-              <Card key={flow.id} className="hover-elevate" data-testid={`card-flow-${flow.id}`}>
-                <CardHeader>
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="flex items-center gap-2">
-                      <GitBranch className="h-5 w-5 text-primary" />
-                      <Badge variant={flow.isActive ? "default" : "secondary"} className="text-xs">
-                        {flow.isActive ? "Active" : "Inactive"}
-                      </Badge>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Switch
-                        checked={flow.isActive}
-                        onCheckedChange={(checked) =>
-                          toggleActiveMutation.mutate({ flowId: flow.id, isActive: checked })
-                        }
-                        data-testid={`switch-flow-active-${flow.id}`}
-                      />
-                    </div>
-                  </div>
-                  <CardTitle className="text-xl" data-testid={`text-flow-name-${flow.id}`}>
-                    {flow.name}
-                  </CardTitle>
-                  {flow.description && (
-                    <CardDescription className="text-sm mt-2">{flow.description}</CardDescription>
-                  )}
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <Badge variant="outline" className="text-xs">
-                      {flow.nodes?.length || 0} nodes
-                    </Badge>
-                    <Badge variant="outline" className="text-xs">
-                      {flow.edges?.length || 0} connections
-                    </Badge>
-                  </div>
-                  <div className="text-xs text-muted-foreground">
-                    Last updated: {new Date(flow.updatedAt).toLocaleDateString()}
-                  </div>
-                </CardContent>
-                <CardFooter className="flex gap-2">
+          {!flows || flows.length === 0 ? (
+            <Card>
+              <CardContent className="flex flex-col items-center justify-center py-16">
+                <GitBranch className="w-16 h-16 text-muted-foreground mb-4" />
+                <h3 className="text-xl font-semibold mb-2">No flows yet</h3>
+                <p className="text-muted-foreground text-center mb-6 max-w-md">
+                  Create your first visual conversation flow to build complex multi-step conversations
+                </p>
+                <div className="space-y-3">
                   <Button
+                    onClick={() => createNewFlowMutation.mutate()}
+                    disabled={createNewFlowMutation.isPending}
+                    data-testid="button-create-first-flow"
+                    className="w-full"
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    {createNewFlowMutation.isPending ? "Creating..." : "Create Blank Flow"}
+                  </Button>
+                  <Button
+                    onClick={() => createTemplateFlowMutation.mutate()}
+                    disabled={createTemplateFlowMutation.isPending}
                     variant="outline"
-                    size="sm"
-                    className="flex-1"
-                    onClick={() => setLocation(`/app/flows/${flow.id}`)}
-                    data-testid={`button-edit-flow-${flow.id}`}
+                    data-testid="button-create-template-flow"
+                    className="w-full"
                   >
-                    <Edit className="w-4 h-4 mr-2" />
-                    Edit
+                    <FileText className="w-4 h-4 mr-2" />
+                    {createTemplateFlowMutation.isPending ? "Creating..." : "Use Call Transfer Template"}
                   </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="flex-1"
-                    onClick={() => setFlowToTest(flow)}
-                    data-testid={`button-test-flow-${flow.id}`}
-                  >
-                    <Play className="w-4 h-4 mr-2" />
-                    Test
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => setFlowToDelete(flow)}
-                    data-testid={`button-delete-flow-${flow.id}`}
-                  >
-                    <Trash2 className="w-4 h-4 text-destructive" />
-                  </Button>
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
-          <DataPagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            totalItems={totalItems}
-            itemsPerPage={itemsPerPage}
-            onPageChange={handlePageChange}
-            onItemsPerPageChange={handleItemsPerPageChange}
-            itemsPerPageOptions={[6, 9, 12, 24]}
-          />
-        </>
-      )}
+                </div>
+              </CardContent>
+            </Card>
+          ) : (
+            <>
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {paginatedFlows.map((flow) => (
+                  <Card key={flow.id} className="hover-elevate" data-testid={`card-flow-${flow.id}`}>
+                    <CardHeader>
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex items-center gap-2">
+                          <GitBranch className="h-5 w-5 text-primary" />
+                          <Badge variant={flow.isActive ? "default" : "secondary"} className="text-xs">
+                            {flow.isActive ? "Active" : "Inactive"}
+                          </Badge>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Switch
+                            checked={flow.isActive}
+                            onCheckedChange={(checked) =>
+                              toggleActiveMutation.mutate({ flowId: flow.id, isActive: checked })
+                            }
+                            data-testid={`switch-flow-active-${flow.id}`}
+                          />
+                        </div>
+                      </div>
+                      <CardTitle className="text-xl" data-testid={`text-flow-name-${flow.id}`}>
+                        {flow.name}
+                      </CardTitle>
+                      {flow.description && (
+                        <CardDescription className="text-sm mt-2">{flow.description}</CardDescription>
+                      )}
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <Badge variant="outline" className="text-xs">
+                          {flow.nodes?.length || 0} nodes
+                        </Badge>
+                        <Badge variant="outline" className="text-xs">
+                          {flow.edges?.length || 0} connections
+                        </Badge>
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        Last updated: {new Date(flow.updatedAt).toLocaleDateString()}
+                      </div>
+                    </CardContent>
+                    <CardFooter className="flex gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="flex-1"
+                        onClick={() => setLocation(`/app/flows/${flow.id}`)}
+                        data-testid={`button-edit-flow-${flow.id}`}
+                      >
+                        <Edit className="w-4 h-4 mr-2" />
+                        Edit
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="flex-1"
+                        onClick={() => setFlowToTest(flow)}
+                        data-testid={`button-test-flow-${flow.id}`}
+                      >
+                        <Play className="w-4 h-4 mr-2" />
+                        Test
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => setFlowToDelete(flow)}
+                        data-testid={`button-delete-flow-${flow.id}`}
+                      >
+                        <Trash2 className="w-4 h-4 text-destructive" />
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                ))}
+              </div>
+              <DataPagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                totalItems={totalItems}
+                itemsPerPage={itemsPerPage}
+                onPageChange={handlePageChange}
+                onItemsPerPageChange={handleItemsPerPageChange}
+                itemsPerPageOptions={[6, 9, 12, 24]}
+              />
+            </>
+          )}
 
-      {/* Test Flow Dialog */}
-      {flowToTest && (
-        <TestFlowDialog
-          open={!!flowToTest}
-          onOpenChange={(open) => !open && setFlowToTest(null)}
-          flowId={flowToTest.id}
-          flowName={flowToTest.name}
-        />
-      )}
+          {/* Test Flow Dialog */}
+          {flowToTest && (
+            <TestFlowDialog
+              open={!!flowToTest}
+              onOpenChange={(open) => !open && setFlowToTest(null)}
+              flowId={flowToTest.id}
+              flowName={flowToTest.name}
+            />
+          )}
 
-      {/* Delete Confirmation Dialog */}
-      <AlertDialog open={!!flowToDelete} onOpenChange={(open) => !open && setFlowToDelete(null)}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Delete Flow</AlertDialogTitle>
-            <AlertDialogDescription>
-              Are you sure you want to delete "{flowToDelete?.name}"? This action cannot be undone.
-              Any campaigns using this flow will need to be updated.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel data-testid="button-cancel-delete">Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={() => flowToDelete && deleteMutation.mutate(flowToDelete.id)}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-              data-testid="button-confirm-delete"
-            >
-              {deleteMutation.isPending ? "Deleting..." : "Delete Flow"}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+          {/* Delete Confirmation Dialog */}
+          <AlertDialog open={!!flowToDelete} onOpenChange={(open) => !open && setFlowToDelete(null)}>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Delete Flow</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Are you sure you want to delete "{flowToDelete?.name}"? This action cannot be undone.
+                  Any campaigns using this flow will need to be updated.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel data-testid="button-cancel-delete">Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={() => flowToDelete && deleteMutation.mutate(flowToDelete.id)}
+                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  data-testid="button-confirm-delete"
+                >
+                  {deleteMutation.isPending ? "Deleting..." : "Delete Flow"}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </TabsContent>
 
         <TabsContent value="templates" className="space-y-4">

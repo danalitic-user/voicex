@@ -13,7 +13,7 @@ import {
   Blocks
 } from 'lucide-react';
 
-// The first 4 items go into the interactive tabs
+// The first 4 items are into the interactive tabs. Clicking each tab changes the rightside board content
 const tabbedCapabilities = [
   {
     id: 'tts-asr',
@@ -41,7 +41,7 @@ const tabbedCapabilities = [
   }
 ];
 
-// The next 4 items go into the 2x2 grid below
+// The next section which contains other 4 capabilities
 const gridCapabilities = [
   {
     id: 'analytics',
@@ -52,7 +52,7 @@ const gridCapabilities = [
   {
     id: 'global',
     title: 'Global Scale',
-    description: '50+ languages with zero latency.',
+    description: '30+ languages with zero latency.',
     icon: Globe,
   },
   {
@@ -86,10 +86,9 @@ export default function CoreCapabilities() {
           </p>
         </div>
 
-        {/* --- PART 1: The Interactive Tabs (First 4 items) --- */}
+        {/* The Interactive Tabs Logic */}
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center mb-24">
-
-          {/* Left Column: Tab Navigation */}
+          {/* Left Column */}
           <div className="lg:col-span-4 flex flex-col space-y-3">
             {tabbedCapabilities.map((item, index) => {
               const isActive = activeFeature === index;
@@ -114,7 +113,7 @@ export default function CoreCapabilities() {
             })}
           </div>
 
-          {/* Right Column: Dynamic Billboard */}
+          {/* Right Column */}
           <div className="lg:col-span-8">
             <div className="relative w-full aspect-square md:aspect-video bg-white rounded-[2.5rem] shadow-xl overflow-hidden border border-gray-100 flex items-center justify-center p-8 group">
 
@@ -153,7 +152,7 @@ export default function CoreCapabilities() {
                 })}
               </div>
 
-              {/* SVG Gradient Definition */}
+              {/* Danalitic Gradient here */}
               <svg width="0" height="0" className="absolute">
                 <defs>
                   <linearGradient id="danalitic-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -167,7 +166,7 @@ export default function CoreCapabilities() {
           </div>
         </div>
 
-        {/* --- PART 2: The 2x2 Grid (Next 4 items) --- */}
+        {/* Next section -> 2x2 Grid */}
         <div className="mt-20 border-t border-gray-200 pt-16">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 max-w-5xl mx-auto">
             {gridCapabilities.map((feature, index) => {
@@ -177,7 +176,7 @@ export default function CoreCapabilities() {
                   key={feature.id}
                   className="group relative bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300"
                 >
-                  {/* Magical Hover Gradient Border Effect */}
+                  {/* Gradient Border Effect when hovered */}
                   <div className="absolute inset-0 bg-gradient-to-r from-[#FF0066] via-[#FF6633] to-[#FFBB33] rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 blur-[2px] m-[-2px]"></div>
 
                   {/* Card Content */}
@@ -187,7 +186,7 @@ export default function CoreCapabilities() {
                       <Icon className="w-7 h-7 text-[#FF0066]" />
                     </div>
 
-                    {/* Feature Text */}
+                    {/* Features paragraph */}
                     <h4 className="text-xl font-bold text-gray-900 mb-2">
                       {feature.title}
                     </h4>

@@ -1,13 +1,9 @@
 /**
  * ============================================================
- * © 2025 Diploy — a brand of Bisht Technologies Private Limited
- * Original Author: BTPL Engineering Team
- * Website: https://diploy.in
- * Contact: cs@diploy.in
+ * © 2026 VoiceX - A Danaltic Product. All rights reserved.
+ * Original Author: Danalitic Engineering Team
+ * Website: https://danalitic.in
  *
- * Distributed under the Envato / CodeCanyon License Agreement.
- * Licensed to the purchaser for use as defined by the
- * Envato Market (CodeCanyon) Regular or Extended License.
  *
  * You are NOT permitted to redistribute, resell, sublicense,
  * or share this source code, in whole or in part.
@@ -186,7 +182,7 @@ function FlowNode({ data, selected }: { data: any; selected?: boolean }) {
   const Icon = nodeTypeIcons[data.type as keyof typeof nodeTypeIcons] || MessageSquare;
   const colors = nodeTypeColors[data.type as keyof typeof nodeTypeColors] || nodeTypeColors.message;
   const hasMultipleOutputs = data.type === "condition";
-  
+
   return (
     <div className="relative">
       {/* Input Handle (top) */}
@@ -196,7 +192,7 @@ function FlowNode({ data, selected }: { data: any; selected?: boolean }) {
         style={{ background: colors.handle }}
         className="!w-3 !h-3 !border-2 !border-white dark:!border-gray-900"
       />
-      
+
       <div className={`bg-gradient-to-br ${colors.bg} rounded-lg p-3 min-w-[220px] shadow-lg ${selected ? 'ring-2 ring-white dark:ring-gray-300 ring-offset-2 ring-offset-background' : ''} transition-all hover:shadow-xl`}>
         <div className="flex items-center gap-2.5">
           <Icon className={`w-5 h-5 ${colors.icon} flex-shrink-0`} />
@@ -215,7 +211,7 @@ function FlowNode({ data, selected }: { data: any; selected?: boolean }) {
           </div>
         </div>
       </div>
-      
+
       {/* Output Handle (bottom) - single or multiple */}
       {hasMultipleOutputs ? (
         <>
@@ -265,7 +261,7 @@ export default function FlowBuilderPage() {
   const [, params] = useRoute("/app/flows/:id");
   const [, setLocation] = useLocation();
   const flowId = params?.id;
-  
+
   const [nodes, setNodes, onNodesChange] = useNodesState<FlowNode>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<FlowEdge>([]);
   const [flowName, setFlowName] = useState(t("flows.flowNamePlaceholder"));
@@ -289,7 +285,7 @@ export default function FlowBuilderPage() {
     { type: "play_audio", label: t("flows.nodeTypes.playAudio"), description: t("flows.nodeDescriptions.playAudio"), icon: Volume2 },
     { type: "end", label: t("flows.nodeTypes.end"), description: t("flows.nodeDescriptions.end"), icon: StopCircle },
   ];
-  
+
   // Fetch agents for selection
   const { data: agents, isError: agentsError } = useQuery<any[]>({
     queryKey: ["/api/agents"],
@@ -297,9 +293,9 @@ export default function FlowBuilderPage() {
 
   // Check if selected agent uses ElevenLabs engine (doesn't support audio playback)
   const selectedAgent = agents?.find((a: any) => a.id === agentId);
-  const isElevenLabsEngine = selectedAgent?.telephonyProvider === 'twilio' || 
-                             selectedAgent?.telephonyProvider === 'elevenlabs-sip' ||
-                             !selectedAgent?.telephonyProvider; // Default is twilio (ElevenLabs)
+  const isElevenLabsEngine = selectedAgent?.telephonyProvider === 'twilio' ||
+    selectedAgent?.telephonyProvider === 'elevenlabs-sip' ||
+    !selectedAgent?.telephonyProvider; // Default is twilio (ElevenLabs)
 
   // Fetch forms for form node selection
   const { data: availableForms, isLoading: isLoadingForms, isError: formsError } = useQuery<Array<{
@@ -351,14 +347,14 @@ export default function FlowBuilderPage() {
         });
         return;
       }
-      
+
       // Add edge with ID immediately (required for state management)
       const edgeWithId = {
         ...connection,
         id: `edge-${connection.source}-${connection.target}${connection.sourceHandle ? `-${connection.sourceHandle}` : ''}`,
         animated: true,
       };
-      
+
       // @ts-expect-error - xyflow's addEdge has overly strict animated type requirement
       setEdges((eds) => addEdge(edgeWithId, eds));
     },
@@ -396,10 +392,10 @@ export default function FlowBuilderPage() {
       };
 
       const isNewFlow = !flowId || flowId === "new";
-      const response = isNewFlow 
+      const response = isNewFlow
         ? await apiRequest("POST", "/api/flow-automation/flows", flowData)
         : await apiRequest("PATCH", `/api/flow-automation/flows/${flowId}`, flowData);
-      
+
       // Parse and return the JSON response so onSuccess gets the flow data with id
       const data = await response.json();
       return data;
@@ -410,14 +406,14 @@ export default function FlowBuilderPage() {
         description: t("flows.toast.savedDescription"),
       });
       queryClient.invalidateQueries({ queryKey: ["/api/flow-automation/flows"] });
-      
+
       const isNewFlow = !flowId || flowId === "new";
-      
+
       // Invalidate the individual flow query to refresh the editor with latest data
       if (!isNewFlow) {
         queryClient.invalidateQueries({ queryKey: [`/api/flow-automation/flows/${flowId}`] });
       }
-      
+
       // Navigate to edit mode if this was a new flow
       if (isNewFlow && data?.id) {
         setLocation(`/app/flows/${data.id}`);
@@ -454,7 +450,7 @@ export default function FlowBuilderPage() {
   // Update selected node configuration
   const updateNodeConfig = (config: any) => {
     if (!selectedNode) return;
-    
+
     setNodes((nds) =>
       nds.map((node) =>
         node.id === selectedNode.id
@@ -462,7 +458,7 @@ export default function FlowBuilderPage() {
           : node
       )
     );
-    
+
     // Update selected node state
     setSelectedNode((prev) =>
       prev ? { ...prev, data: { ...prev.data, config: { ...prev.data.config, ...config } } } : null
@@ -472,7 +468,7 @@ export default function FlowBuilderPage() {
   // Delete selected node
   const deleteNode = () => {
     if (!selectedNode) return;
-    
+
     setNodes((nds) => nds.filter((node) => node.id !== selectedNode.id));
     setEdges((eds) => eds.filter((edge) => edge.source !== selectedNode.id && edge.target !== selectedNode.id));
     setSelectedNode(null);
@@ -533,7 +529,7 @@ export default function FlowBuilderPage() {
                   onClick={() => addNode(nodeType.type)}
                   data-testid={`button-add-${nodeType.type}-node`}
                 >
-                  <div 
+                  <div
                     className={`p-1.5 rounded bg-gradient-to-br ${colors.bg}`}
                   >
                     <Icon className="w-3.5 h-3.5 text-white" />
@@ -619,18 +615,18 @@ export default function FlowBuilderPage() {
                         {t("flows.helpContent.howToBuildDesc")}
                       </p>
                     </div>
-                    
+
                     <div>
                       <h4 className="font-semibold text-sm mb-2">{t("flows.helpContent.questionVariables")}</h4>
                       <p className="text-xs text-muted-foreground mb-2">
                         {t("flows.helpContent.questionVariablesDesc")}
                       </p>
                       <div className="bg-muted/50 p-2 rounded text-xs font-mono">
-                        Question: "Can I transfer your call?"<br/>
+                        Question: "Can I transfer your call?"<br />
                         Variable: transfer_consent
                       </div>
                     </div>
-                    
+
                     <div>
                       <h4 className="font-semibold text-sm mb-2">{t("flows.helpContent.usingConditions")}</h4>
                       <p className="text-xs text-muted-foreground mb-2">
@@ -642,7 +638,7 @@ export default function FlowBuilderPage() {
                         <div>response contains "help"</div>
                       </div>
                     </div>
-                    
+
                     <div>
                       <h4 className="font-semibold text-sm mb-2">{t("flows.helpContent.callTransferExample")}</h4>
                       <p className="text-xs text-muted-foreground">
@@ -653,7 +649,7 @@ export default function FlowBuilderPage() {
                 </PopoverContent>
               </Popover>
             </TooltipProvider>
-            
+
             <Button
               variant="outline"
               size="sm"
@@ -701,12 +697,12 @@ export default function FlowBuilderPage() {
             fitView
             snapToGrid
             snapGrid={[15, 15]}
-            defaultEdgeOptions={{ 
-              animated: true, 
-              style: { 
+            defaultEdgeOptions={{
+              animated: true,
+              style: {
                 strokeWidth: 2.5,
                 stroke: 'url(#edge-gradient)',
-              } 
+              }
             }}
             data-testid="flow-canvas"
           >
@@ -719,15 +715,15 @@ export default function FlowBuilderPage() {
                 </linearGradient>
               </defs>
             </svg>
-            <Background 
-              variant={BackgroundVariant.Dots} 
-              gap={20} 
-              size={1.5} 
-              className="bg-gradient-to-br from-teal-50/30 via-cyan-50/30 to-white dark:from-teal-950/20 dark:via-cyan-950/20 dark:to-background" 
+            <Background
+              variant={BackgroundVariant.Dots}
+              gap={20}
+              size={1.5}
+              className="bg-gradient-to-br from-teal-50/30 via-cyan-50/30 to-white dark:from-teal-950/20 dark:via-cyan-950/20 dark:to-background"
             />
             <Controls className="!bg-background/90 !backdrop-blur !border !border-border !shadow-lg" />
-            <MiniMap 
-              className="!bg-background/90 !backdrop-blur !border !border-border !shadow-lg" 
+            <MiniMap
+              className="!bg-background/90 !backdrop-blur !border !border-border !shadow-lg"
               nodeColor={(node) => {
                 const type = node.data?.type as keyof typeof nodeTypeColors;
                 const colors = nodeTypeColors[type];
@@ -837,8 +833,8 @@ export default function FlowBuilderPage() {
                                 {t("flows.nodeConfig.variableTooltip")}
                               </p>
                               <div className="mt-2 p-2 bg-muted rounded text-xs font-mono">
-                                {t("flows.nodeConfig.variableExample")}<br/>
-                                Variable: transfer_consent<br/>
+                                {t("flows.nodeConfig.variableExample")}<br />
+                                Variable: transfer_consent<br />
                                 Use in condition: transfer_consent == "yes"
                               </div>
                             </TooltipContent>
@@ -907,7 +903,7 @@ export default function FlowBuilderPage() {
                         {t("flows.nodeConfig.conditionHint")}
                       </p>
                     </div>
-                    
+
                     {/* True Branch - Node Selector */}
                     <div>
                       <Label htmlFor="trueBranch">{t("flows.nodeConfig.trueBranch")}</Label>
@@ -1031,9 +1027,9 @@ export default function FlowBuilderPage() {
                               <X className="w-4 h-4 text-destructive" />
                             </Button>
                           </div>
-                          <audio 
-                            controls 
-                            src={selectedNode.data.config?.audioUrl} 
+                          <audio
+                            controls
+                            src={selectedNode.data.config?.audioUrl}
                             className="w-full mt-2 h-8"
                             data-testid="audio-preview"
                           />
@@ -1046,9 +1042,9 @@ export default function FlowBuilderPage() {
                               <p className="text-xs text-muted-foreground">{t("flows.nodeConfig.uploadAudio")}</p>
                               <p className="text-xs text-muted-foreground/70">MP3, WAV (max 5MB)</p>
                             </div>
-                            <input 
-                              type="file" 
-                              className="hidden" 
+                            <input
+                              type="file"
+                              className="hidden"
                               accept=".mp3,.wav,audio/mpeg,audio/wav"
                               onChange={async (e) => {
                                 const file = e.target.files?.[0];
@@ -1061,8 +1057,8 @@ export default function FlowBuilderPage() {
                                 formData.append("audio", file);
                                 try {
                                   const token = localStorage.getItem("auth_token");
-                                  const res = await fetch("/api/audio/upload", { 
-                                    method: "POST", 
+                                  const res = await fetch("/api/audio/upload", {
+                                    method: "POST",
                                     body: formData,
                                     headers: token ? { Authorization: `Bearer ${token}` } : {}
                                   });
@@ -1132,7 +1128,7 @@ export default function FlowBuilderPage() {
                         value={selectedNode.data.config?.formId || ""}
                         onValueChange={(value) => {
                           const selectedForm = availableForms?.find(f => f.id === value);
-                          updateNodeConfig({ 
+                          updateNodeConfig({
                             formId: value,
                             formName: selectedForm?.name || ""
                           });
@@ -1175,7 +1171,7 @@ export default function FlowBuilderPage() {
                     {selectedNode.data.config?.formId && (() => {
                       const selectedForm = availableForms?.find(f => f.id === selectedNode.data.config?.formId);
                       const formFields = selectedForm?.fields;
-                      
+
                       return (
                         <div className="p-3 bg-muted/50 rounded-md">
                           <p className="text-xs font-medium text-muted-foreground mb-2">

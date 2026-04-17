@@ -1,4 +1,4 @@
-"use client"; // Required because we are using useState for the tabs!
+"use client";
 
 import React, { useState } from 'react';
 import {
@@ -8,7 +8,7 @@ import {
 
 const highlights = [
     { name: "Real-time Analytics", icon: BarChart3 },
-    { name: "50+ Languages", icon: Globe },
+    { name: "30+ Languages", icon: Globe },
     { name: "Enterprise Security", icon: ShieldCheck },
     { name: "100+ Integrations", icon: Blocks },
 ];
@@ -21,7 +21,7 @@ const industries = [
         description: "Eliminate hold times and resolve tier-1 tickets instantly. VoiceX acts as your frontline defense, handling repetitive queries so your human agents can focus on complex escalations.",
         bullets: ["24/7 Automated resolution", "Seamless live-agent handoff", "Instant CRM ticket creation"],
         icon: Headset,
-        // Unique Blue Theme
+
         theme: {
             activeTab: "bg-blue-500 text-white border-blue-500 shadow-blue-500/25",
             iconBg: "bg-blue-50",
@@ -36,7 +36,7 @@ const industries = [
         description: "Scale your outbound campaigns infinitely. Our AI agents can dial thousands of leads per minute, pre-qualify prospects, and book meetings directly onto your sales team's calendars.",
         bullets: ["High-volume cold calling", "Automated lead qualification", "Direct calendar scheduling"],
         icon: Target,
-        // Unique Pink/Orange Theme (Brand Colors)
+
         theme: {
             activeTab: "bg-[#FF0066] text-white border-[#FF0066] shadow-[#FF0066]/25",
             iconBg: "bg-[#FF0066]/10",
@@ -51,7 +51,7 @@ const industries = [
         description: "Streamline patient communications securely. Automate appointment reminders, process basic triage questions, and conduct post-discharge follow-ups while maintaining strict HIPAA compliance.",
         bullets: ["HIPAA-compliant infrastructure", "Automated appointment reminders", "Patient feedback collection"],
         icon: HeartPulse,
-        // Unique Emerald/Teal Theme
+
         theme: {
             activeTab: "bg-emerald-500 text-white border-emerald-500 shadow-emerald-500/25",
             iconBg: "bg-emerald-50",
@@ -66,7 +66,7 @@ const industries = [
         description: "Deliver secure, private, and instant financial support. Automate payment collection calls, verify suspicious account activity, and provide balance inquiries with bank-grade security.",
         bullets: ["SOC2 & PCI compliance", "Fraud verification alerts", "Automated payment reminders"],
         icon: Landmark,
-        // Unique Purple Theme
+
         theme: {
             activeTab: "bg-purple-600 text-white border-purple-600 shadow-purple-600/25",
             iconBg: "bg-purple-50",
@@ -77,10 +77,10 @@ const industries = [
 ];
 
 export default function UseCases1() {
-    // Set the first industry (Support) as the default active tab
+
     const [activeTab, setActiveTab] = useState(industries[0].id);
 
-    // Find the currently selected industry data
+
     const activeData = industries.find(ind => ind.id === activeTab) || industries[0];
     const ActiveIcon = activeData.icon;
 
@@ -126,8 +126,8 @@ export default function UseCases1() {
                                 onClick={() => setActiveTab(industry.id)}
                                 className={`flex items-center gap-2 px-5 py-3 rounded-full font-bold text-sm transition-all duration-300 border shadow-sm
                                     ${isActive
-                                        ? industry.theme.activeTab // The specific color theme when clicked
-                                        : "bg-white text-gray-600 border-gray-200 hover:border-gray-300 hover:bg-gray-50" // Neutral state when not clicked
+                                        ? industry.theme.activeTab
+                                        : "bg-white text-gray-600 border-gray-200 hover:border-gray-300 hover:bg-gray-50"
                                     }
                                 `}
                             >
@@ -139,11 +139,10 @@ export default function UseCases1() {
                 </div>
 
                 {/* 3. The Active Content Card */}
-                {/* Key prop forces React to re-animate the div when the activeTab changes */}
                 <div key={activeTab} className="max-w-5xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out">
                     <div className="bg-white border border-gray-100 rounded-[2.5rem] shadow-xl overflow-hidden p-8 md:p-12 lg:p-16 flex flex-col lg:flex-row gap-12 items-center">
 
-                        {/* Left Side: Text and Bullets */}
+                        {/* Left Side */}
                         <div className="w-full lg:w-3/5 space-y-8">
                             <div className="space-y-4">
                                 <h3 className="text-3xl md:text-4xl font-black text-gray-900 tracking-tight">
@@ -173,7 +172,7 @@ export default function UseCases1() {
                             </div>
                         </div>
 
-                        {/* Right Side: Large Themed Visual Element */}
+                        {/* Right Side */}
                         <div className="w-full lg:w-2/5 flex justify-center">
                             <div className={`relative w-64 h-64 md:w-80 md:h-80 rounded-[3rem] ${activeData.theme.iconBg} flex items-center justify-center transform transition-transform hover:scale-105 duration-500`}>
                                 {/* Soft background rings for depth */}

@@ -1,13 +1,9 @@
 /**
  * ============================================================
- * © 2025 Diploy — a brand of Bisht Technologies Private Limited
- * Original Author: BTPL Engineering Team
- * Website: https://diploy.in
- * Contact: cs@diploy.in
+ * © 2026 VoiceX - A Danaltic Product. All rights reserved.
+ * Original Author: Danalitic Engineering Team
+ * Website: https://danalitic.in
  *
- * Distributed under the Envato / CodeCanyon License Agreement.
- * Licensed to the purchaser for use as defined by the
- * Envato Market (CodeCanyon) Regular or Extended License.
  *
  * You are NOT permitted to redistribute, resell, sublicense,
  * or share this source code, in whole or in part.
@@ -272,72 +268,72 @@ export default function Integrations() {
                 {t('integrations.createWebhook')}
               </Button>
             </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>{t('integrations.dialog.createTitle')}</DialogTitle>
-              <DialogDescription>
-                {t('integrations.dialog.createDescription')}
-              </DialogDescription>
-            </DialogHeader>
-            <div className="space-y-4 py-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">{t('integrations.form.nameLabel')}</Label>
-                <Input
-                  id="name"
-                  data-testid="input-webhook-name"
-                  placeholder={t('integrations.form.namePlaceholder')}
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                />
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>{t('integrations.dialog.createTitle')}</DialogTitle>
+                <DialogDescription>
+                  {t('integrations.dialog.createDescription')}
+                </DialogDescription>
+              </DialogHeader>
+              <div className="space-y-4 py-4">
+                <div className="space-y-2">
+                  <Label htmlFor="name">{t('integrations.form.nameLabel')}</Label>
+                  <Input
+                    id="name"
+                    data-testid="input-webhook-name"
+                    placeholder={t('integrations.form.namePlaceholder')}
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="url">{t('integrations.form.urlLabel')}</Label>
+                  <Input
+                    id="url"
+                    data-testid="input-webhook-url"
+                    placeholder={t('integrations.form.urlPlaceholder')}
+                    value={formData.url}
+                    onChange={(e) => setFormData({ ...formData, url: e.target.value })}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="campaign">{t('integrations.form.campaignLabel')}</Label>
+                  <Select
+                    value={formData.campaignId || "all"}
+                    onValueChange={(value) => setFormData({ ...formData, campaignId: value === "all" ? "" : value })}
+                  >
+                    <SelectTrigger data-testid="select-webhook-campaign">
+                      <SelectValue placeholder={t('integrations.form.allCampaigns')} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">{t('integrations.form.allCampaigns')}</SelectItem>
+                      {campaigns.map((campaign) => (
+                        <SelectItem key={campaign.id} value={campaign.id}>
+                          {campaign.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="url">{t('integrations.form.urlLabel')}</Label>
-                <Input
-                  id="url"
-                  data-testid="input-webhook-url"
-                  placeholder={t('integrations.form.urlPlaceholder')}
-                  value={formData.url}
-                  onChange={(e) => setFormData({ ...formData, url: e.target.value })}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="campaign">{t('integrations.form.campaignLabel')}</Label>
-                <Select
-                  value={formData.campaignId || "all"}
-                  onValueChange={(value) => setFormData({ ...formData, campaignId: value === "all" ? "" : value })}
+              <DialogFooter>
+                <Button
+                  variant="outline"
+                  onClick={() => setIsCreateDialogOpen(false)}
+                  data-testid="button-cancel-create"
                 >
-                  <SelectTrigger data-testid="select-webhook-campaign">
-                    <SelectValue placeholder={t('integrations.form.allCampaigns')} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">{t('integrations.form.allCampaigns')}</SelectItem>
-                    {campaigns.map((campaign) => (
-                      <SelectItem key={campaign.id} value={campaign.id}>
-                        {campaign.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            <DialogFooter>
-              <Button
-                variant="outline"
-                onClick={() => setIsCreateDialogOpen(false)}
-                data-testid="button-cancel-create"
-              >
-                {t('common.cancel')}
-              </Button>
-              <Button
-                onClick={handleCreateWebhook}
-                disabled={createWebhookMutation.isPending}
-                data-testid="button-submit-create"
-              >
-                {createWebhookMutation.isPending ? t('integrations.actions.creating') : t('common.create')}
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+                  {t('common.cancel')}
+                </Button>
+                <Button
+                  onClick={handleCreateWebhook}
+                  disabled={createWebhookMutation.isPending}
+                  data-testid="button-submit-create"
+                >
+                  {createWebhookMutation.isPending ? t('integrations.actions.creating') : t('common.create')}
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         )}
       </div>
 
@@ -350,7 +346,7 @@ export default function Integrations() {
                 <Lock className="w-8 h-8 text-primary absolute -bottom-1 -right-1 bg-background rounded-full p-1" />
               </div>
             </div>
-            
+
             <div className="space-y-3">
               <h2 className="text-2xl font-bold">{t('integrations.unlock.title')}</h2>
               <p className="text-muted-foreground text-lg">
@@ -393,8 +389,8 @@ export default function Integrations() {
             </div>
 
             <div className="pt-4">
-              <Button 
-                size="lg" 
+              <Button
+                size="lg"
                 className="gap-2"
                 onClick={() => setLocation('/app/upgrade')}
                 data-testid="button-upgrade-to-pro"

@@ -1,6 +1,16 @@
 /**
  * ============================================================
- * HeroSection - VoiceX Design
+ * © 2026 VoiceX - A Danaltic Product. All rights reserved.
+ * Original Author: Danalitic Engineering Team
+ * Website: https://danalitic.in
+ *
+ *
+ * You are NOT permitted to redistribute, resell, sublicense,
+ * or share this source code, in whole or in part.
+ * Respect the author's rights and Envato licensing terms.
+ * ============================================================
+ * 
+ * HeroSection
  * Features: White background, animated soundwave overlay,
  * Pink-to-Orange gradients, and centered typography.
  * ============================================================
@@ -136,9 +146,7 @@ export function HeroSection() {
             <Button
               variant="outline"
               onClick={() => {
-                // If you have a demo call trigger
                 window.dispatchEvent(new CustomEvent('trigger-demo-call'));
-                // Or simply scroll
                 handleScroll();
               }}
               className="h-14 px-10 bg-white/80 border-2 border-slate-200 text-slate-900 rounded-full font-bold hover:bg-slate-50 hover:border-slate-300 active:scale-95 transition-all shadow-sm"

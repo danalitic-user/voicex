@@ -1,13 +1,9 @@
 /**
  * ============================================================
- * © 2025 Diploy — a brand of Bisht Technologies Private Limited
- * Original Author: BTPL Engineering Team
- * Website: https://diploy.in
- * Contact: cs@diploy.in
+ * © 2026 VoiceX - A Danaltic Product. All rights reserved.
+ * Original Author: Danalitic Engineering Team
+ * Website: https://danalitic.in
  *
- * Distributed under the Envato / CodeCanyon License Agreement.
- * Licensed to the purchaser for use as defined by the
- * Envato Market (CodeCanyon) Regular or Extended License.
  *
  * You are NOT permitted to redistribute, resell, sublicense,
  * or share this source code, in whole or in part.
@@ -103,22 +99,22 @@ export default function KnowledgeBase() {
   const [, setLocation] = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
   const [typeFilter, setTypeFilter] = useState<string | null>(null);
-  
+
   const [urlDialogOpen, setUrlDialogOpen] = useState(false);
   const [urlInput, setUrlInput] = useState("");
   const [urlName, setUrlName] = useState("");
-  
+
   const [textDialogOpen, setTextDialogOpen] = useState(false);
   const [textInput, setTextInput] = useState("");
   const [textName, setTextName] = useState("");
-  
+
   const [fileDialogOpen, setFileDialogOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [fileName, setFileName] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
-  
+
   const [deletingItem, setDeletingItem] = useState<KnowledgeBaseItem | null>(null);
-  
+
   const { toast } = useToast();
 
   const { data: user, isLoading: userLoading, isError: userError } = useQuery<User>({
@@ -147,25 +143,25 @@ export default function KnowledgeBase() {
       if (data.name) {
         formData.append('name', data.name);
       }
-      
+
       const headers: Record<string, string> = {};
       const authHeader = AuthStorage.getAuthHeader();
       if (authHeader) {
         headers['Authorization'] = authHeader;
       }
-      
+
       const response = await fetch('/api/rag-knowledge/upload', {
         method: 'POST',
         headers,
         credentials: 'include',
         body: formData,
       });
-      
+
       if (!response.ok) {
         const error = await response.json();
         throw new Error(error.error || t('knowledgeBase.errors.uploadFailed'));
       }
-      
+
       return response.json();
     },
     onSuccess: () => {
@@ -441,7 +437,7 @@ export default function KnowledgeBase() {
                 <Lock className="w-8 h-8 text-primary absolute -bottom-1 -right-1 bg-background rounded-full p-1" />
               </div>
             </div>
-            
+
             <div className="space-y-3">
               <h2 className="text-2xl font-bold">{t('knowledgeBase.unlock.title')}</h2>
               <p className="text-muted-foreground text-lg">
@@ -491,8 +487,8 @@ export default function KnowledgeBase() {
             </div>
 
             <div className="pt-4">
-              <Button 
-                size="lg" 
+              <Button
+                size="lg"
                 className="gap-2"
                 onClick={() => setLocation('/app/upgrade')}
                 data-testid="button-upgrade-to-pro"
@@ -531,7 +527,7 @@ export default function KnowledgeBase() {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Button 
+            <Button
               onClick={() => setUrlDialogOpen(true)}
               className="bg-gradient-to-r from-violet-600 to-purple-600 text-white shadow-lg"
               data-testid="button-add-url"
@@ -539,7 +535,7 @@ export default function KnowledgeBase() {
               <Link className="h-4 w-4 mr-2" />
               {t('knowledgeBase.actions.addUrl')}
             </Button>
-            <Button 
+            <Button
               variant="outline"
               onClick={() => setFileDialogOpen(true)}
               data-testid="button-add-files"
@@ -547,7 +543,7 @@ export default function KnowledgeBase() {
               <FileText className="h-4 w-4 mr-2" />
               {t('knowledgeBase.actions.addFiles')}
             </Button>
-            <Button 
+            <Button
               variant="outline"
               onClick={() => setTextDialogOpen(true)}
               data-testid="button-create-text"
@@ -557,7 +553,7 @@ export default function KnowledgeBase() {
             </Button>
           </div>
         </div>
-        
+
         <div className="relative mt-6 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4">
           <div className="bg-white/80 dark:bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-violet-100/50 dark:border-violet-800/30">
             <div className="text-2xl font-bold text-violet-700 dark:text-violet-300">{knowledgeBase.length}</div>
@@ -590,9 +586,9 @@ export default function KnowledgeBase() {
                 <div className="text-lg font-bold text-purple-700 dark:text-purple-300">{formatBytes(totalSize)}</div>
                 <span className="text-xs text-purple-600/70 dark:text-purple-400/70">/ 20 MB</span>
               </div>
-              <Progress 
-                value={storageUsage?.usagePercent || Math.round((totalSize / (20 * 1024 * 1024)) * 100)} 
-                className="h-1.5" 
+              <Progress
+                value={storageUsage?.usagePercent || Math.round((totalSize / (20 * 1024 * 1024)) * 100)}
+                className="h-1.5"
               />
             </div>
             <div className="text-purple-600/70 dark:text-purple-400/70 text-sm mt-1">{t('knowledgeBase.stats.storageUsed')}</div>
@@ -605,9 +601,9 @@ export default function KnowledgeBase() {
             <span className="text-sm text-blue-700 dark:text-blue-300">
               {t('knowledgeBase.processing.message', { count: processingCount })}
             </span>
-            <Button 
-              variant="ghost" 
-              size="sm" 
+            <Button
+              variant="ghost"
+              size="sm"
               className="ml-auto h-7 text-blue-600"
               onClick={() => refetch()}
               data-testid="button-refresh-status"
@@ -712,13 +708,13 @@ export default function KnowledgeBase() {
                           </div>
                         </TooltipTrigger>
                         <TooltipContent>
-                          {item.ragStatus === 'completed' 
+                          {item.ragStatus === 'completed'
                             ? t('knowledgeBase.tooltips.indexed')
                             : item.ragStatus === 'processing'
-                            ? t('knowledgeBase.tooltips.generating')
-                            : item.ragStatus === 'failed'
-                            ? t('knowledgeBase.tooltips.failed')
-                            : t('knowledgeBase.tooltips.waiting')}
+                              ? t('knowledgeBase.tooltips.generating')
+                              : item.ragStatus === 'failed'
+                                ? t('knowledgeBase.tooltips.failed')
+                                : t('knowledgeBase.tooltips.waiting')}
                         </TooltipContent>
                       </Tooltip>
                     </TableCell>
@@ -791,8 +787,8 @@ export default function KnowledgeBase() {
             <Button variant="outline" onClick={() => setUrlDialogOpen(false)}>
               {t('common.cancel')}
             </Button>
-            <Button 
-              onClick={handleAddUrl} 
+            <Button
+              onClick={handleAddUrl}
               disabled={addUrlMutation.isPending}
               data-testid="button-submit-url"
             >
@@ -852,8 +848,8 @@ export default function KnowledgeBase() {
             }}>
               {t('common.cancel')}
             </Button>
-            <Button 
-              onClick={handleUploadFile} 
+            <Button
+              onClick={handleUploadFile}
               disabled={!selectedFile || uploadFileMutation.isPending}
               data-testid="button-submit-file"
             >
@@ -902,8 +898,8 @@ export default function KnowledgeBase() {
             <Button variant="outline" onClick={() => setTextDialogOpen(false)}>
               {t('common.cancel')}
             </Button>
-            <Button 
-              onClick={handleAddText} 
+            <Button
+              onClick={handleAddText}
               disabled={addTextMutation.isPending}
               data-testid="button-submit-text"
             >

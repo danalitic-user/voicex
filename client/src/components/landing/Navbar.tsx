@@ -1,3 +1,16 @@
+/**
+ * ============================================================
+ * © 2026 VoiceX - A Danaltic Product. All rights reserved.
+ * Original Author: Danalitic Engineering Team
+ * Website: https://danalitic.in
+ *
+ *
+ * You are NOT permitted to redistribute, resell, sublicense,
+ * or share this source code, in whole or in part.
+ * Respect the author's rights and Envato licensing terms.
+ * ============================================================
+ */
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -86,7 +99,7 @@ export function Navbar() {
 
           {/* ACTIONS & LANG - Right Group */}
           <div className="flex items-center gap-4 md:gap-6 z-10">
-            {/* DESKTOP LANGUAGE SELECTOR - COMMENTED OUT
+            {/* DESKTOP LANGUAGE SELECTOR - commented out for now, need to redesign languages of all pages first
           <div className="hidden md:flex items-center">
             <LandingLanguageSelector needsLightText={false} />
           </div>

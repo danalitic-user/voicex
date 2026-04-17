@@ -1,7 +1,7 @@
 import Navbar from "@/components/landing/Navbar";
 import UseCases1 from "./UseCases1";
 import UseCases2 from "./UseCases2";
-import RevealOnScroll from "@/components/RevealOnScroll"; // Keep this from the global folder
+import RevealOnScroll from "@/components/RevealOnScroll";
 import { Footer } from "@/components/landing/Footer";
 
 export default function FeaturesPage() {

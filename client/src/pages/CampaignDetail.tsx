@@ -1,13 +1,9 @@
 /**
  * ============================================================
- * © 2025 Diploy — a brand of Bisht Technologies Private Limited
- * Original Author: BTPL Engineering Team
- * Website: https://diploy.in
- * Contact: cs@diploy.in
+ * © 2026 VoiceX - A Danaltic Product. All rights reserved.
+ * Original Author: Danalitic Engineering Team
+ * Website: https://danalitic.in
  *
- * Distributed under the Envato / CodeCanyon License Agreement.
- * Licensed to the purchaser for use as defined by the
- * Envato Market (CodeCanyon) Regular or Extended License.
  *
  * You are NOT permitted to redistribute, resell, sublicense,
  * or share this source code, in whole or in part.
@@ -225,7 +221,7 @@ export default function CampaignDetail() {
       if (authHeader) {
         headers['Authorization'] = authHeader;
       }
-      
+
       const response = await fetch(`/api/campaigns/${id}/export`, {
         headers
       });
@@ -289,7 +285,7 @@ export default function CampaignDetail() {
     );
   }
 
-  const progress = campaign.totalContacts > 0 
+  const progress = campaign.totalContacts > 0
     ? Math.round((campaign.completedCalls / campaign.totalContacts) * 100)
     : 0;
 
@@ -311,7 +307,7 @@ export default function CampaignDetail() {
   const getCallStatusIcon = (contactId: string) => {
     const call = calls.find(c => c.contactId === contactId);
     if (!call) return <Clock className="h-4 w-4 text-muted-foreground" />;
-    
+
     switch (call.status) {
       case "completed":
         return <CheckCircle2 className="h-4 w-4 text-green-500" />;
@@ -327,7 +323,7 @@ export default function CampaignDetail() {
   const getCallStatus = (contactId: string) => {
     const call = calls.find(c => c.contactId === contactId);
     if (!call) return t('campaignDetail.callStatus.pending');
-    
+
     switch (call.status) {
       case "completed":
         return t('campaignDetail.callStatus.completed');
@@ -354,8 +350,8 @@ export default function CampaignDetail() {
         </Button>
         <div className="flex gap-2">
           {campaign.status === "in-progress" && (
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               data-testid="button-pause"
               onClick={() => pauseMutation.mutate()}
               disabled={pauseMutation.isPending}
@@ -369,8 +365,8 @@ export default function CampaignDetail() {
             </Button>
           )}
           {campaign.status === "paused" && (
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               data-testid="button-resume"
               onClick={() => resumeMutation.mutate()}
               disabled={resumeMutation.isPending}
@@ -384,8 +380,8 @@ export default function CampaignDetail() {
             </Button>
           )}
           {campaign.status === "failed" && (
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               data-testid="button-retry"
               onClick={() => resumeMutation.mutate()}
               disabled={resumeMutation.isPending}
@@ -399,8 +395,8 @@ export default function CampaignDetail() {
             </Button>
           )}
           {(campaign.status === "in-progress" || campaign.status === "paused" || campaign.status === "pending") && (
-            <Button 
-              variant="destructive" 
+            <Button
+              variant="destructive"
               data-testid="button-stop"
               onClick={() => stopMutation.mutate()}
               disabled={stopMutation.isPending}
@@ -451,8 +447,8 @@ export default function CampaignDetail() {
             <p className="text-sm text-muted-foreground">{t('campaignDetail.labels.progress')}</p>
             <div className="flex items-center gap-2">
               <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
-                <div 
-                  className="h-full bg-primary transition-all" 
+                <div
+                  className="h-full bg-primary transition-all"
                   style={{ width: `${progress}%` }}
                 />
               </div>
@@ -594,16 +590,16 @@ export default function CampaignDetail() {
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                     <div>
                       <p className="text-muted-foreground">{t('campaignDetail.labels.status')}</p>
-                      <Badge 
+                      <Badge
                         variant={
                           batchJobData.batchJob.status === 'completed' ? 'default' :
-                          batchJobData.batchJob.status === 'in_progress' ? 'secondary' :
-                          batchJobData.batchJob.status === 'failed' ? 'destructive' : 'outline'
+                            batchJobData.batchJob.status === 'in_progress' ? 'secondary' :
+                              batchJobData.batchJob.status === 'failed' ? 'destructive' : 'outline'
                         }
                         className={
                           batchJobData.batchJob.status === 'completed' ? 'bg-green-500/10 text-green-500 border-green-500/20' :
-                          batchJobData.batchJob.status === 'in_progress' ? 'bg-amber-500/10 text-amber-500 border-amber-500/20' :
-                          ''
+                            batchJobData.batchJob.status === 'in_progress' ? 'bg-amber-500/10 text-amber-500 border-amber-500/20' :
+                              ''
                         }
                         data-testid="badge-batch-status"
                       >
@@ -708,8 +704,8 @@ export default function CampaignDetail() {
                     </span>
                   </div>
                   <div className="h-2 bg-muted rounded-full overflow-hidden">
-                    <div 
-                      className="h-full bg-blue-500" 
+                    <div
+                      className="h-full bg-blue-500"
                       style={{ width: `${campaign.totalContacts > 0 ? (campaign.completedCalls / campaign.totalContacts) * 100 : 0}%` }}
                       data-testid="progress-completion-rate"
                     />
@@ -723,8 +719,8 @@ export default function CampaignDetail() {
                     </span>
                   </div>
                   <div className="h-2 bg-muted rounded-full overflow-hidden">
-                    <div 
-                      className="h-full bg-green-500" 
+                    <div
+                      className="h-full bg-green-500"
                       style={{ width: `${campaign.completedCalls > 0 ? (campaign.successfulCalls / campaign.completedCalls) * 100 : 0}%` }}
                       data-testid="progress-success-rate"
                     />
@@ -774,8 +770,8 @@ export default function CampaignDetail() {
                     <span className="font-medium">{calls.filter(c => c.classification === "hot").length}</span>
                   </div>
                   <div className="h-2 bg-muted rounded-full overflow-hidden">
-                    <div 
-                      className="h-full bg-red-500" 
+                    <div
+                      className="h-full bg-red-500"
                       style={{ width: `${calls.length > 0 ? (calls.filter(c => c.classification === "hot").length / calls.length) * 100 : 0}%` }}
                     />
                   </div>
@@ -789,8 +785,8 @@ export default function CampaignDetail() {
                     <span className="font-medium">{calls.filter(c => c.classification === "warm").length}</span>
                   </div>
                   <div className="h-2 bg-muted rounded-full overflow-hidden">
-                    <div 
-                      className="h-full bg-orange-500" 
+                    <div
+                      className="h-full bg-orange-500"
                       style={{ width: `${calls.length > 0 ? (calls.filter(c => c.classification === "warm").length / calls.length) * 100 : 0}%` }}
                     />
                   </div>
@@ -804,8 +800,8 @@ export default function CampaignDetail() {
                     <span className="font-medium">{calls.filter(c => c.classification === "cold" || c.classification === "lost").length}</span>
                   </div>
                   <div className="h-2 bg-muted rounded-full overflow-hidden">
-                    <div 
-                      className="h-full bg-blue-500" 
+                    <div
+                      className="h-full bg-blue-500"
                       style={{ width: `${calls.length > 0 ? (calls.filter(c => c.classification === "cold" || c.classification === "lost").length / calls.length) * 100 : 0}%` }}
                     />
                   </div>
@@ -899,8 +895,8 @@ export default function CampaignDetail() {
                         </TableCell>
                         <TableCell>
                           {call && (
-                            <Button 
-                              variant="ghost" 
+                            <Button
+                              variant="ghost"
                               size="sm"
                               onClick={() => setLocation(`/app/calls/${call.id}`)}
                               data-testid={`button-view-call-${contact.id}`}
@@ -1040,8 +1036,8 @@ export default function CampaignDetail() {
                             {call.duration ? `${Math.floor(call.duration / 60)}:${(call.duration % 60).toString().padStart(2, '0')}` : "—"}
                           </TableCell>
                           <TableCell>
-                            <Button 
-                              variant="ghost" 
+                            <Button
+                              variant="ghost"
                               size="sm"
                               onClick={() => setLocation(`/app/calls/${call.id}`)}
                               data-testid={`button-view-lead-call-${call.id}`}

@@ -1,13 +1,9 @@
 /**
  * ============================================================
- * © 2025 Diploy — a brand of Bisht Technologies Private Limited
- * Original Author: BTPL Engineering Team
- * Website: https://diploy.in
- * Contact: cs@diploy.in
+ * © 2026 VoiceX - A Danaltic Product. All rights reserved.
+ * Original Author: Danalitic Engineering Team
+ * Website: https://danalitic.in
  *
- * Distributed under the Envato / CodeCanyon License Agreement.
- * Licensed to the purchaser for use as defined by the
- * Envato Market (CodeCanyon) Regular or Extended License.
  *
  * You are NOT permitted to redistribute, resell, sublicense,
  * or share this source code, in whole or in part.
@@ -109,7 +105,7 @@ export default function Analytics() {
         timeRange,
         callType
       });
-      
+
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -192,7 +188,7 @@ export default function Analytics() {
                 <SelectItem value="year">{t('analytics.timeRange.thisYear')}</SelectItem>
               </SelectContent>
             </Select>
-            <Button 
+            <Button
               className="bg-purple-600 hover:bg-purple-700 text-white"
               onClick={handleExportPDF}
               disabled={isExporting}
@@ -286,33 +282,33 @@ export default function Analytics() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <AnalyticsChart 
-              title={getCallVolumeTitle()} 
-              type="bar" 
-              data={formattedDailyCalls.length > 0 ? formattedDailyCalls : [{ name: t('analytics.noData'), value: 0 }]} 
+            <AnalyticsChart
+              title={getCallVolumeTitle()}
+              type="bar"
+              data={formattedDailyCalls.length > 0 ? formattedDailyCalls : [{ name: t('analytics.noData'), value: 0 }]}
               testId="chart-calls-this-week"
             />
-            <AnalyticsChart 
-              title={t('analytics.leadDistribution')} 
-              type="pie" 
-              data={leadDistribution.length > 0 ? leadDistribution : [{ name: t('analytics.noData'), value: 1 }]} 
+            <AnalyticsChart
+              title={t('analytics.leadDistribution')}
+              type="pie"
+              data={leadDistribution.length > 0 ? leadDistribution : [{ name: t('analytics.noData'), value: 1 }]}
               testId="chart-lead-distribution"
             />
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <AnalyticsChart 
-              title={t('analytics.campaignSuccessRate')} 
-              type="bar" 
-              data={campaignPerformance.length > 0 ? campaignPerformance : [{ name: t('analytics.noCampaigns'), value: 0 }]} 
+            <AnalyticsChart
+              title={t('analytics.campaignSuccessRate')}
+              type="bar"
+              data={campaignPerformance.length > 0 ? campaignPerformance : [{ name: t('analytics.noCampaigns'), value: 0 }]}
               xAxisKey="name"
               dataKey="value"
               testId="chart-campaign-success"
             />
-            <AnalyticsChart 
-              title={t('analytics.sentimentAnalysis')} 
-              type="pie" 
-              data={sentimentDistribution.length > 0 ? sentimentDistribution : [{ name: t('analytics.noData'), value: 1 }]} 
+            <AnalyticsChart
+              title={t('analytics.sentimentAnalysis')}
+              type="pie"
+              data={sentimentDistribution.length > 0 ? sentimentDistribution : [{ name: t('analytics.noData'), value: 1 }]}
               testId="chart-sentiment-analysis"
             />
           </div>

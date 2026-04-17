@@ -1,13 +1,9 @@
 /**
  * ============================================================
- * © 2025 Diploy — a brand of Bisht Technologies Private Limited
- * Original Author: BTPL Engineering Team
- * Website: https://diploy.in
- * Contact: cs@diploy.in
+ * © 2026 VoiceX - A Danaltic Product. All rights reserved.
+ * Original Author: Danalitic Engineering Team
+ * Website: https://danalitic.in
  *
- * Distributed under the Envato / CodeCanyon License Agreement.
- * Licensed to the purchaser for use as defined by the
- * Envato Market (CodeCanyon) Regular or Extended License.
  *
  * You are NOT permitted to redistribute, resell, sublicense,
  * or share this source code, in whole or in part.
@@ -142,7 +138,7 @@ export default function AdminDashboard() {
   // Perform the actual connection test - internal function
   const performConnectionCheck = async (settingsToUse: any): Promise<void> => {
     setCheckingStatus(true);
-    
+
     try {
       // Test Twilio connection
       if (settingsToUse?.twilio_configured) {
@@ -210,7 +206,7 @@ export default function AdminDashboard() {
   const checkAPIConnections = (currentSettings?: any) => {
     const settingsToUse = currentSettings || settings;
     if (!settingsToUse) return;
-    
+
     // Chain this check onto the existing promise chain
     checkChainRef.current = checkChainRef.current
       .then(() => performConnectionCheck(settingsToUse))
@@ -268,185 +264,169 @@ export default function AdminDashboard() {
           </p>
         </div>
         <div className="flex items-center gap-2 md:gap-3 flex-wrap">
-              <div 
-                className={`flex items-center gap-2 px-3 py-2 rounded-lg border transition-colors ${
-                  twilioStatus?.connected 
-                    ? 'bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-800' 
-                    : 'bg-slate-50 dark:bg-slate-900/30 border-slate-200 dark:border-slate-700'
-                }`}
-                data-testid={twilioStatus?.connected ? "status-twilio-connected" : "status-twilio-disconnected"}
-                title={twilioStatus?.error || undefined}
-              >
-                <div className={`p-1 rounded-full ${
-                  twilioStatus?.connected 
-                    ? 'bg-emerald-500' 
-                    : 'bg-slate-400'
+          <div
+            className={`flex items-center gap-2 px-3 py-2 rounded-lg border transition-colors ${twilioStatus?.connected
+                ? 'bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-800'
+                : 'bg-slate-50 dark:bg-slate-900/30 border-slate-200 dark:border-slate-700'
+              }`}
+            data-testid={twilioStatus?.connected ? "status-twilio-connected" : "status-twilio-disconnected"}
+            title={twilioStatus?.error || undefined}
+          >
+            <div className={`p-1 rounded-full ${twilioStatus?.connected
+                ? 'bg-emerald-500'
+                : 'bg-slate-400'
+              }`}>
+              <Phone className="h-3 w-3 text-white" />
+            </div>
+            <div className="flex flex-col">
+              <span className={`text-xs font-medium ${twilioStatus?.connected
+                  ? 'text-emerald-700 dark:text-emerald-400'
+                  : 'text-slate-600 dark:text-slate-400'
                 }`}>
-                  <Phone className="h-3 w-3 text-white" />
-                </div>
-                <div className="flex flex-col">
-                  <span className={`text-xs font-medium ${
-                    twilioStatus?.connected 
-                      ? 'text-emerald-700 dark:text-emerald-400' 
-                      : 'text-slate-600 dark:text-slate-400'
-                  }`}>
-                    Twilio
-                  </span>
-                  <span className={`text-[10px] ${
-                    twilioStatus?.connected 
-                      ? 'text-emerald-600/70 dark:text-emerald-500/70' 
-                      : 'text-slate-500 dark:text-slate-500'
-                  }`}>
-                    {twilioStatus?.connected ? 'Connected' : 'Not Connected'}
-                  </span>
-                </div>
-              </div>
-              
-              <div 
-                className={`flex items-center gap-2 px-3 py-2 rounded-lg border transition-colors ${
-                  elevenLabsStatus?.connected 
-                    ? 'bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-800' 
-                    : 'bg-slate-50 dark:bg-slate-900/30 border-slate-200 dark:border-slate-700'
-                }`}
-                data-testid={elevenLabsStatus?.connected ? "status-elevenlabs-connected" : "status-elevenlabs-disconnected"}
-                title={elevenLabsStatus?.error || undefined}
-              >
-                <div className={`p-1 rounded-full ${
-                  elevenLabsStatus?.connected 
-                    ? 'bg-emerald-500' 
-                    : 'bg-slate-400'
+                Twilio
+              </span>
+              <span className={`text-[10px] ${twilioStatus?.connected
+                  ? 'text-emerald-600/70 dark:text-emerald-500/70'
+                  : 'text-slate-500 dark:text-slate-500'
                 }`}>
-                  <Server className="h-3 w-3 text-white" />
-                </div>
-                <div className="flex flex-col">
-                  <span className={`text-xs font-medium ${
-                    elevenLabsStatus?.connected 
-                      ? 'text-emerald-700 dark:text-emerald-400' 
-                      : 'text-slate-600 dark:text-slate-400'
-                  }`}>
-                    ElevenLabs
-                  </span>
-                  <span className={`text-[10px] ${
-                    elevenLabsStatus?.connected 
-                      ? 'text-emerald-600/70 dark:text-emerald-500/70' 
-                      : 'text-slate-500 dark:text-slate-500'
-                  }`}>
-                    {elevenLabsStatus?.connected 
-                      ? elevenLabsStatus.voiceCount !== undefined 
-                        ? `${elevenLabsStatus.voiceCount} voices` 
-                        : 'Connected'
-                      : 'Not Connected'}
-                  </span>
-                </div>
-              </div>
+                {twilioStatus?.connected ? 'Connected' : 'Not Connected'}
+              </span>
+            </div>
+          </div>
 
-              {/* OpenAI Status Indicator */}
-              <div 
-                className={`flex items-center gap-2 px-3 py-2 rounded-lg border transition-colors ${
-                  openaiStatus?.connected 
-                    ? 'bg-purple-50 dark:bg-purple-950/30 border-purple-200 dark:border-purple-800' 
-                    : 'bg-slate-50 dark:bg-slate-900/30 border-slate-200 dark:border-slate-700'
-                }`}
-                data-testid={openaiStatus?.connected ? "status-openai-connected" : "status-openai-disconnected"}
-                title={openaiStatus?.error || undefined}
-              >
-                <div className={`p-1 rounded-full ${
-                  openaiStatus?.connected 
-                    ? 'bg-purple-500' 
-                    : 'bg-slate-400'
+          <div
+            className={`flex items-center gap-2 px-3 py-2 rounded-lg border transition-colors ${elevenLabsStatus?.connected
+                ? 'bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-800'
+                : 'bg-slate-50 dark:bg-slate-900/30 border-slate-200 dark:border-slate-700'
+              }`}
+            data-testid={elevenLabsStatus?.connected ? "status-elevenlabs-connected" : "status-elevenlabs-disconnected"}
+            title={elevenLabsStatus?.error || undefined}
+          >
+            <div className={`p-1 rounded-full ${elevenLabsStatus?.connected
+                ? 'bg-emerald-500'
+                : 'bg-slate-400'
+              }`}>
+              <Server className="h-3 w-3 text-white" />
+            </div>
+            <div className="flex flex-col">
+              <span className={`text-xs font-medium ${elevenLabsStatus?.connected
+                  ? 'text-emerald-700 dark:text-emerald-400'
+                  : 'text-slate-600 dark:text-slate-400'
                 }`}>
-                  <Sparkles className="h-3 w-3 text-white" />
-                </div>
-                <div className="flex flex-col">
-                  <span className={`text-xs font-medium ${
-                    openaiStatus?.connected 
-                      ? 'text-purple-700 dark:text-purple-400' 
-                      : 'text-slate-600 dark:text-slate-400'
-                  }`}>
-                    OpenAI
-                  </span>
-                  <span className={`text-[10px] ${
-                    openaiStatus?.connected 
-                      ? 'text-purple-600/70 dark:text-purple-500/70' 
-                      : 'text-slate-500 dark:text-slate-500'
-                  }`}>
-                    {openaiStatus?.connected 
-                      ? (openaiStatus as any).modelCount !== undefined 
-                        ? `${(openaiStatus as any).modelCount} models` 
-                        : 'Connected'
-                      : 'Not Connected'}
-                  </span>
-                </div>
-              </div>
-
-              {/* OpenAI Realtime Voice API Status Indicator */}
-              <div 
-                className={`flex items-center gap-2 px-3 py-2 rounded-lg border transition-colors ${
-                  openaiRealtimeStatus?.connected 
-                    ? 'bg-orange-50 dark:bg-orange-950/30 border-orange-200 dark:border-orange-800' 
-                    : 'bg-slate-50 dark:bg-slate-900/30 border-slate-200 dark:border-slate-700'
-                }`}
-                data-testid={openaiRealtimeStatus?.connected ? "status-openai-voice-connected" : "status-openai-voice-disconnected"}
-                title={openaiRealtimeStatus?.error || undefined}
-              >
-                <div className={`p-1 rounded-full ${
-                  openaiRealtimeStatus?.connected 
-                    ? 'bg-orange-500' 
-                    : 'bg-slate-400'
+                ElevenLabs
+              </span>
+              <span className={`text-[10px] ${elevenLabsStatus?.connected
+                  ? 'text-emerald-600/70 dark:text-emerald-500/70'
+                  : 'text-slate-500 dark:text-slate-500'
                 }`}>
-                  <Mic className="h-3 w-3 text-white" />
-                </div>
-                <div className="flex flex-col">
-                  <span className={`text-xs font-medium ${
-                    openaiRealtimeStatus?.connected 
-                      ? 'text-orange-700 dark:text-orange-400' 
-                      : 'text-slate-600 dark:text-slate-400'
-                  }`}>
-                    OpenAI Voice
-                  </span>
-                  <span className={`text-[10px] ${
-                    openaiRealtimeStatus?.connected 
-                      ? 'text-orange-600/70 dark:text-orange-500/70' 
-                      : 'text-slate-500 dark:text-slate-500'
-                  }`}>
-                    {openaiRealtimeStatus?.connected 
-                      ? (openaiRealtimeStatus as any).keyCount !== undefined 
-                        ? `${(openaiRealtimeStatus as any).keyCount} keys` 
-                        : 'Connected'
-                      : 'Not Connected'}
-                  </span>
-                </div>
-              </div>
+                {elevenLabsStatus?.connected
+                  ? elevenLabsStatus.voiceCount !== undefined
+                    ? `${elevenLabsStatus.voiceCount} voices`
+                    : 'Connected'
+                  : 'Not Connected'}
+              </span>
+            </div>
+          </div>
 
-              {/* Version Badge */}
-              <div 
-                className="flex items-center gap-2 px-3 py-2 rounded-lg border transition-colors bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800"
-                data-testid="status-version"
-                title="Application Version"
-              >
-                <div className="p-1 rounded-full bg-blue-500">
-                  <Power className="h-3 w-3 text-white" />
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-xs font-medium text-blue-700 dark:text-blue-400">
-                    Version
-                  </span>
-                  <span className="text-[10px] text-blue-600/70 dark:text-blue-500/70">
-                    v{versionData?.version || '1.0.0'}
-                  </span>
-                </div>
-              </div>
-              
-              <Button 
-                variant="ghost" 
-                size="icon"
-                onClick={handleManualRefresh}
-                disabled={checkingStatus || isFetching}
-                title={checkingStatus ? "Refreshing..." : "Refresh connection status"}
-                data-testid="button-refresh-status"
-              >
-                <RefreshCw className={`h-4 w-4 ${checkingStatus || isFetching ? 'animate-spin' : ''}`} />
-              </Button>
+          {/* OpenAI Status Indicator */}
+          <div
+            className={`flex items-center gap-2 px-3 py-2 rounded-lg border transition-colors ${openaiStatus?.connected
+                ? 'bg-purple-50 dark:bg-purple-950/30 border-purple-200 dark:border-purple-800'
+                : 'bg-slate-50 dark:bg-slate-900/30 border-slate-200 dark:border-slate-700'
+              }`}
+            data-testid={openaiStatus?.connected ? "status-openai-connected" : "status-openai-disconnected"}
+            title={openaiStatus?.error || undefined}
+          >
+            <div className={`p-1 rounded-full ${openaiStatus?.connected
+                ? 'bg-purple-500'
+                : 'bg-slate-400'
+              }`}>
+              <Sparkles className="h-3 w-3 text-white" />
+            </div>
+            <div className="flex flex-col">
+              <span className={`text-xs font-medium ${openaiStatus?.connected
+                  ? 'text-purple-700 dark:text-purple-400'
+                  : 'text-slate-600 dark:text-slate-400'
+                }`}>
+                OpenAI
+              </span>
+              <span className={`text-[10px] ${openaiStatus?.connected
+                  ? 'text-purple-600/70 dark:text-purple-500/70'
+                  : 'text-slate-500 dark:text-slate-500'
+                }`}>
+                {openaiStatus?.connected
+                  ? (openaiStatus as any).modelCount !== undefined
+                    ? `${(openaiStatus as any).modelCount} models`
+                    : 'Connected'
+                  : 'Not Connected'}
+              </span>
+            </div>
+          </div>
+
+          {/* OpenAI Realtime Voice API Status Indicator */}
+          <div
+            className={`flex items-center gap-2 px-3 py-2 rounded-lg border transition-colors ${openaiRealtimeStatus?.connected
+                ? 'bg-orange-50 dark:bg-orange-950/30 border-orange-200 dark:border-orange-800'
+                : 'bg-slate-50 dark:bg-slate-900/30 border-slate-200 dark:border-slate-700'
+              }`}
+            data-testid={openaiRealtimeStatus?.connected ? "status-openai-voice-connected" : "status-openai-voice-disconnected"}
+            title={openaiRealtimeStatus?.error || undefined}
+          >
+            <div className={`p-1 rounded-full ${openaiRealtimeStatus?.connected
+                ? 'bg-orange-500'
+                : 'bg-slate-400'
+              }`}>
+              <Mic className="h-3 w-3 text-white" />
+            </div>
+            <div className="flex flex-col">
+              <span className={`text-xs font-medium ${openaiRealtimeStatus?.connected
+                  ? 'text-orange-700 dark:text-orange-400'
+                  : 'text-slate-600 dark:text-slate-400'
+                }`}>
+                OpenAI Voice
+              </span>
+              <span className={`text-[10px] ${openaiRealtimeStatus?.connected
+                  ? 'text-orange-600/70 dark:text-orange-500/70'
+                  : 'text-slate-500 dark:text-slate-500'
+                }`}>
+                {openaiRealtimeStatus?.connected
+                  ? (openaiRealtimeStatus as any).keyCount !== undefined
+                    ? `${(openaiRealtimeStatus as any).keyCount} keys`
+                    : 'Connected'
+                  : 'Not Connected'}
+              </span>
+            </div>
+          </div>
+
+          {/* Version Badge */}
+          <div
+            className="flex items-center gap-2 px-3 py-2 rounded-lg border transition-colors bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800"
+            data-testid="status-version"
+            title="Application Version"
+          >
+            <div className="p-1 rounded-full bg-blue-500">
+              <Power className="h-3 w-3 text-white" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-xs font-medium text-blue-700 dark:text-blue-400">
+                Version
+              </span>
+              <span className="text-[10px] text-blue-600/70 dark:text-blue-500/70">
+                v{versionData?.version || '1.0.0'}
+              </span>
+            </div>
+          </div>
+
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={handleManualRefresh}
+            disabled={checkingStatus || isFetching}
+            title={checkingStatus ? "Refreshing..." : "Refresh connection status"}
+            data-testid="button-refresh-status"
+          >
+            <RefreshCw className={`h-4 w-4 ${checkingStatus || isFetching ? 'animate-spin' : ''}`} />
+          </Button>
         </div>
       </div>
 
@@ -465,68 +445,68 @@ export default function AdminDashboard() {
               <ChevronLeft className="h-4 w-4" />
             </Button>
           )}
-          
-          <div 
+
+          <div
             ref={tabsScrollRef}
             className="overflow-x-auto flex-1 px-4 md:px-8 pb-2 scrollbar-thin"
             onScroll={checkScrollState}
           >
             <TabsList className="flex gap-1 h-auto w-max min-w-full">
-            <TabsTrigger value="analytics" className="text-xs md:text-sm whitespace-nowrap" data-testid="tab-analytics">
-              <BarChart className="h-4 w-4 mr-1 md:mr-2" />
-              <span className="hidden sm:inline">Analytics</span>
-              <span className="sm:hidden">Stats</span>
-            </TabsTrigger>
-            <TabsTrigger value="users" className="text-xs md:text-sm whitespace-nowrap" data-testid="tab-users">
-              <Users className="h-4 w-4 mr-1 md:mr-2" />
-              Users
-            </TabsTrigger>
-            <TabsTrigger value="contacts" className="text-xs md:text-sm whitespace-nowrap" data-testid="tab-contacts">
-              <ContactRound className="h-4 w-4 mr-1 md:mr-2" />
-              Contacts
-            </TabsTrigger>
-            <TabsTrigger value="billing" className="text-xs md:text-sm whitespace-nowrap" data-testid="tab-billing">
-              <CreditCard className="h-4 w-4 mr-1 md:mr-2" />
-              Billing
-            </TabsTrigger>
-            <TabsTrigger value="phones" className="text-xs md:text-sm whitespace-nowrap" data-testid="tab-phones">
-              <Phone className="h-4 w-4 mr-1 md:mr-2" />
-              Phones
-            </TabsTrigger>
-            <TabsTrigger value="queue" className="text-xs md:text-sm whitespace-nowrap" data-testid="tab-batch-jobs">
-              <ListOrdered className="h-4 w-4 mr-1 md:mr-2" />
-              <span className="hidden sm:inline">Batch Jobs</span>
-              <span className="sm:hidden">Jobs</span>
-            </TabsTrigger>
-            <TabsTrigger value="calls" className="text-xs md:text-sm whitespace-nowrap" data-testid="tab-calls">
-              <Headphones className="h-4 w-4 mr-1 md:mr-2" />
-              <span className="hidden sm:inline">Call Monitoring</span>
-              <span className="sm:hidden">Calls</span>
-            </TabsTrigger>
-            <TabsTrigger value="communications" className="text-xs md:text-sm whitespace-nowrap" data-testid="tab-communications">
-              <MessageSquare className="h-4 w-4 mr-1 md:mr-2" />
-              <span className="hidden sm:inline">Communications</span>
-              <span className="sm:hidden">Comms</span>
-            </TabsTrigger>
-            <TabsTrigger value="voice-ai" className="text-xs md:text-sm whitespace-nowrap" data-testid="tab-voice-ai">
-              <Brain className="h-4 w-4 mr-1 md:mr-2" />
-              <span className="hidden sm:inline">Voice AI</span>
-              <span className="sm:hidden">Voice</span>
-            </TabsTrigger>
-            {adminMenuItems.map((item) => (
-              <TabsTrigger key={item.id} value={item.id} className="text-xs md:text-sm whitespace-nowrap" data-testid={`tab-${item.id}`}>
-                {item.icon === 'Users' && <Building2 className="h-4 w-4 mr-1 md:mr-2" />}
-                {item.icon === 'Server' && <Server className="h-4 w-4 mr-1 md:mr-2" />}
-                {item.label}
+              <TabsTrigger value="analytics" className="text-xs md:text-sm whitespace-nowrap" data-testid="tab-analytics">
+                <BarChart className="h-4 w-4 mr-1 md:mr-2" />
+                <span className="hidden sm:inline">Analytics</span>
+                <span className="sm:hidden">Stats</span>
               </TabsTrigger>
-            ))}
-            <TabsTrigger value="settings" className="text-xs md:text-sm whitespace-nowrap" data-testid="tab-settings">
-              <Settings className="h-4 w-4 mr-1 md:mr-2" />
-              Settings
-            </TabsTrigger>
-          </TabsList>
+              <TabsTrigger value="users" className="text-xs md:text-sm whitespace-nowrap" data-testid="tab-users">
+                <Users className="h-4 w-4 mr-1 md:mr-2" />
+                Users
+              </TabsTrigger>
+              <TabsTrigger value="contacts" className="text-xs md:text-sm whitespace-nowrap" data-testid="tab-contacts">
+                <ContactRound className="h-4 w-4 mr-1 md:mr-2" />
+                Contacts
+              </TabsTrigger>
+              <TabsTrigger value="billing" className="text-xs md:text-sm whitespace-nowrap" data-testid="tab-billing">
+                <CreditCard className="h-4 w-4 mr-1 md:mr-2" />
+                Billing
+              </TabsTrigger>
+              <TabsTrigger value="phones" className="text-xs md:text-sm whitespace-nowrap" data-testid="tab-phones">
+                <Phone className="h-4 w-4 mr-1 md:mr-2" />
+                Phones
+              </TabsTrigger>
+              <TabsTrigger value="queue" className="text-xs md:text-sm whitespace-nowrap" data-testid="tab-batch-jobs">
+                <ListOrdered className="h-4 w-4 mr-1 md:mr-2" />
+                <span className="hidden sm:inline">Batch Jobs</span>
+                <span className="sm:hidden">Jobs</span>
+              </TabsTrigger>
+              <TabsTrigger value="calls" className="text-xs md:text-sm whitespace-nowrap" data-testid="tab-calls">
+                <Headphones className="h-4 w-4 mr-1 md:mr-2" />
+                <span className="hidden sm:inline">Call Monitoring</span>
+                <span className="sm:hidden">Calls</span>
+              </TabsTrigger>
+              <TabsTrigger value="communications" className="text-xs md:text-sm whitespace-nowrap" data-testid="tab-communications">
+                <MessageSquare className="h-4 w-4 mr-1 md:mr-2" />
+                <span className="hidden sm:inline">Communications</span>
+                <span className="sm:hidden">Comms</span>
+              </TabsTrigger>
+              <TabsTrigger value="voice-ai" className="text-xs md:text-sm whitespace-nowrap" data-testid="tab-voice-ai">
+                <Brain className="h-4 w-4 mr-1 md:mr-2" />
+                <span className="hidden sm:inline">Voice AI</span>
+                <span className="sm:hidden">Voice</span>
+              </TabsTrigger>
+              {adminMenuItems.map((item) => (
+                <TabsTrigger key={item.id} value={item.id} className="text-xs md:text-sm whitespace-nowrap" data-testid={`tab-${item.id}`}>
+                  {item.icon === 'Users' && <Building2 className="h-4 w-4 mr-1 md:mr-2" />}
+                  {item.icon === 'Server' && <Server className="h-4 w-4 mr-1 md:mr-2" />}
+                  {item.label}
+                </TabsTrigger>
+              ))}
+              <TabsTrigger value="settings" className="text-xs md:text-sm whitespace-nowrap" data-testid="tab-settings">
+                <Settings className="h-4 w-4 mr-1 md:mr-2" />
+                Settings
+              </TabsTrigger>
+            </TabsList>
           </div>
-          
+
           {/* Right scroll arrow */}
           {canScrollRight && (
             <Button
@@ -595,7 +575,7 @@ export default function AdminDashboard() {
 
 function BillingPanel() {
   const [activeSubTab, setActiveSubTab] = useState("plans");
-  
+
   return (
     <div className="space-y-6">
       <div>
@@ -604,7 +584,7 @@ function BillingPanel() {
           Manage subscription plans, credits, transactions, and payment gateways
         </p>
       </div>
-      
+
       <Tabs value={activeSubTab} onValueChange={setActiveSubTab}>
         <TabsList>
           <TabsTrigger value="plans" data-testid="subtab-plans">
@@ -624,20 +604,20 @@ function BillingPanel() {
             Payments
           </TabsTrigger>
         </TabsList>
-        
+
         <TabsContent value="plans" className="mt-6 space-y-4">
           <PlanManagement />
           <LLMModelsManagement />
         </TabsContent>
-        
+
         <TabsContent value="credits" className="mt-6">
           <CreditPackages />
         </TabsContent>
-        
+
         <TabsContent value="transactions" className="mt-6">
           <TransactionsManagement />
         </TabsContent>
-        
+
         <TabsContent value="payments" className="mt-6">
           <PaymentsSettings />
         </TabsContent>
@@ -648,7 +628,7 @@ function BillingPanel() {
 
 function CallsPanel() {
   const [activeSubTab, setActiveSubTab] = useState("monitoring");
-  
+
   return (
     <div className="space-y-6">
       <div>
@@ -657,7 +637,7 @@ function CallsPanel() {
           Monitor all calls, detect content violations, and manage banned words
         </p>
       </div>
-      
+
       <Tabs value={activeSubTab} onValueChange={setActiveSubTab}>
         <TabsList>
           <TabsTrigger value="monitoring" data-testid="subtab-call-monitoring">
@@ -669,11 +649,11 @@ function CallsPanel() {
             Banned Words
           </TabsTrigger>
         </TabsList>
-        
+
         <TabsContent value="monitoring" className="mt-6">
           <CallMonitoring />
         </TabsContent>
-        
+
         <TabsContent value="banned-words" className="mt-6">
           <BannedWordsManagement />
         </TabsContent>
@@ -684,7 +664,7 @@ function CallsPanel() {
 
 function CommunicationsPanel() {
   const [activeSubTab, setActiveSubTab] = useState("email-settings");
-  
+
   return (
     <div className="space-y-6">
       <div>
@@ -693,7 +673,7 @@ function CommunicationsPanel() {
           Manage email templates, notifications, and communication settings
         </p>
       </div>
-      
+
       <Tabs value={activeSubTab} onValueChange={setActiveSubTab}>
         <TabsList>
           <TabsTrigger value="email-settings" data-testid="subtab-email-settings">
@@ -705,11 +685,11 @@ function CommunicationsPanel() {
             In-App Notifications
           </TabsTrigger>
         </TabsList>
-        
+
         <TabsContent value="email-settings" className="mt-6">
           <EmailSettingsManagement />
         </TabsContent>
-        
+
         <TabsContent value="notifications" className="mt-6">
           <Notifications />
         </TabsContent>
@@ -727,7 +707,7 @@ interface VoiceEngineSettings {
 
 function VoiceAIPanel() {
   const { toast } = useToast();
-  
+
   const { data: voiceEngineSettings, isLoading: settingsLoading } = useQuery<VoiceEngineSettings>({
     queryKey: ["/api/settings/voice-engine"],
   });
@@ -743,10 +723,10 @@ function VoiceAIPanel() {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["/api/settings/voice-engine"] });
-      toast({ 
+      toast({
         title: "Voice engine setting updated",
-        description: data.enabled 
-          ? "Plivo + OpenAI engine has been enabled" 
+        description: data.enabled
+          ? "Plivo + OpenAI engine has been enabled"
           : "Plivo + OpenAI engine has been disabled"
       });
     },
@@ -770,10 +750,10 @@ function VoiceAIPanel() {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["/api/settings/voice-engine"] });
-      toast({ 
+      toast({
         title: "Voice engine setting updated",
-        description: data.enabled 
-          ? "Twilio + OpenAI engine has been enabled" 
+        description: data.enabled
+          ? "Twilio + OpenAI engine has been enabled"
           : "Twilio + OpenAI engine has been disabled"
       });
     },
@@ -797,7 +777,7 @@ function VoiceAIPanel() {
           Manage OpenAI and Plivo configurations for the Voice AI engine
         </p>
       </div>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Card>
           <CardHeader className="pb-4">
@@ -893,7 +873,7 @@ function VoiceAIPanel() {
           </CardContent>
         </Card>
       </div>
-      
+
       <div className="space-y-6">
         <OpenAIPoolManagement />
         <PlivoSettings />
