@@ -61,10 +61,10 @@ export function Footer() {
           <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
             <h1 className="text-2xl md:text-3xl font-black tracking-tighter flex items-center">
               <span className="text-black">
-                {branding.app_name?.split(' ')[0] || "Voice"}
+                {"Voice"}
               </span>
               <span className="bg-gradient-to-r from-[#FF0066] via-[#FF6633] to-[#FFBB33] bg-clip-text text-transparent pr-1">
-                {branding.app_name?.split(' ')[1] || "X"}
+                {"X"}
               </span>
             </h1>
           </Link>
