@@ -7,7 +7,6 @@
  *
  * You are NOT permitted to redistribute, resell, sublicense,
  * or share this source code, in whole or in part.
- * Respect the author's rights and Envato licensing terms.
  * ============================================================
  */
 import { useQuery, useMutation } from "@tanstack/react-query";
@@ -292,14 +291,14 @@ export default function AllContacts() {
                     <TableCell>
                       <span
                         className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ${contact.status === "completed"
-                            ? "bg-green-50 text-green-700 dark:bg-green-500/10 dark:text-green-400"
-                            : contact.status === "pending"
-                              ? "bg-yellow-50 text-yellow-700 dark:bg-yellow-500/10 dark:text-yellow-400"
-                              : contact.status === "incoming_call"
-                                ? "bg-violet-50 text-violet-700 dark:bg-violet-500/10 dark:text-violet-400"
-                                : contact.status === "outgoing_call"
-                                  ? "bg-blue-50 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400"
-                                  : "bg-gray-50 text-gray-700 dark:bg-gray-500/10 dark:text-gray-400"
+                          ? "bg-green-50 text-green-700 dark:bg-green-500/10 dark:text-green-400"
+                          : contact.status === "pending"
+                            ? "bg-yellow-50 text-yellow-700 dark:bg-yellow-500/10 dark:text-yellow-400"
+                            : contact.status === "incoming_call"
+                              ? "bg-violet-50 text-violet-700 dark:bg-violet-500/10 dark:text-violet-400"
+                              : contact.status === "outgoing_call"
+                                ? "bg-blue-50 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400"
+                                : "bg-gray-50 text-gray-700 dark:bg-gray-500/10 dark:text-gray-400"
                           }`}
                       >
                         {contact.status === 'incoming_call' ? t('calls.filters.incoming') :

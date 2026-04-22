@@ -7,7 +7,6 @@
  *
  * You are NOT permitted to redistribute, resell, sublicense,
  * or share this source code, in whole or in part.
- * Respect the author's rights and Envato licensing terms.
  * ============================================================
  */
 import { Card } from "@/components/ui/card";

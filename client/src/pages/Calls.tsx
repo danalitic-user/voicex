@@ -7,7 +7,6 @@
  *
  * You are NOT permitted to redistribute, resell, sublicense,
  * or share this source code, in whole or in part.
- * Respect the author's rights and Envato licensing terms.
  * ============================================================
  */
 import { useState, useRef } from "react";
@@ -370,8 +369,8 @@ export default function Calls() {
           <div className="flex items-start justify-between gap-4">
             <div className="flex items-start gap-3 min-w-0">
               <div className={`flex-shrink-0 h-10 w-10 rounded-full flex items-center justify-center ${call.callDirection === 'incoming'
-                  ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
-                  : 'bg-blue-500/10 text-blue-600 dark:text-blue-400'
+                ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
+                : 'bg-blue-500/10 text-blue-600 dark:text-blue-400'
                 }`}>
                 {getDirectionIcon(call.callDirection)}
               </div>

@@ -7,7 +7,6 @@
  *
  * You are NOT permitted to redistribute, resell, sublicense,
  * or share this source code, in whole or in part.
- * Respect the author's rights and Envato licensing terms.
  * ============================================================
  */
 import { useState } from "react";
@@ -680,8 +679,8 @@ export default function WebhookConfigPage() {
                           <div
                             key={event.value}
                             className={`p-3 border rounded-md cursor-pointer transition-colors ${formData.events.includes(event.value)
-                                ? "border-primary bg-primary/5 dark:bg-primary/10"
-                                : "hover:bg-muted/50"
+                              ? "border-primary bg-primary/5 dark:bg-primary/10"
+                              : "hover:bg-muted/50"
                               }`}
                             onClick={() => toggleEvent(event.value)}
                             data-testid={`event-option-${event.value}`}
@@ -766,8 +765,8 @@ export default function WebhookConfigPage() {
                               <div
                                 key={campaign.id}
                                 className={`flex items-center gap-3 p-2 border rounded-md cursor-pointer transition-colors ${formData.selectedCampaigns.includes(campaign.id)
-                                    ? "border-primary bg-primary/5"
-                                    : "hover:bg-muted/50"
+                                  ? "border-primary bg-primary/5"
+                                  : "hover:bg-muted/50"
                                   }`}
                                 onClick={() => toggleCampaign(campaign.id)}
                                 data-testid={`campaign-option-${campaign.id}`}

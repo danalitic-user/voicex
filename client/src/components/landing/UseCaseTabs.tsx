@@ -7,7 +7,6 @@
  *
  * You are NOT permitted to redistribute, resell, sublicense,
  * or share this source code, in whole or in part.
- * Respect the author's rights and Envato licensing terms.
  * ============================================================
  */
 import { useState, useEffect, useRef } from "react";
@@ -304,8 +303,8 @@ function TabButton({ tab, isActive, onClick }: TabButtonProps) {
       aria-controls={`agent-grid-${tab.id}`}
       onClick={onClick}
       className={`flex items-center gap-3 py-2 px-4 transition-all duration-500 relative ${isActive
-          ? "text-foreground font-semibold"
-          : "text-muted-foreground hover:text-foreground"
+        ? "text-foreground font-semibold"
+        : "text-muted-foreground hover:text-foreground"
         }`}
       data-testid={`tab-button-${tab.id}`}
     >

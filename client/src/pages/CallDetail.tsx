@@ -7,7 +7,6 @@
  *
  * You are NOT permitted to redistribute, resell, sublicense,
  * or share this source code, in whole or in part.
- * Respect the author's rights and Envato licensing terms.
  * ============================================================
  */
 import { useQuery } from "@tanstack/react-query";
@@ -696,8 +695,8 @@ export default function CallDetail() {
                         data-testid={`transcript-entry-${index}`}
                       >
                         <div className={`flex-shrink-0 h-8 w-8 rounded-full flex items-center justify-center ${isAgent
-                            ? 'bg-blue-500/10 dark:bg-blue-500/20'
-                            : 'bg-emerald-500/10 dark:bg-emerald-500/20'
+                          ? 'bg-blue-500/10 dark:bg-blue-500/20'
+                          : 'bg-emerald-500/10 dark:bg-emerald-500/20'
                           }`}>
                           {isAgent ? (
                             <Bot className="h-4 w-4 text-blue-600 dark:text-blue-400" />
@@ -707,8 +706,8 @@ export default function CallDetail() {
                         </div>
                         <div className={`flex-1 max-w-[80%] ${isAgent ? '' : 'flex flex-col items-end'}`}>
                           <div className={`rounded-2xl px-4 py-3 ${isAgent
-                              ? 'bg-slate-100 dark:bg-slate-800/80 rounded-tl-md'
-                              : 'bg-blue-500/10 dark:bg-blue-600/20 rounded-tr-md'
+                            ? 'bg-slate-100 dark:bg-slate-800/80 rounded-tl-md'
+                            : 'bg-blue-500/10 dark:bg-blue-600/20 rounded-tr-md'
                             }`}>
                             <div className="flex items-center gap-2 mb-1">
                               <span className={`text-xs font-medium ${isAgent ? 'text-blue-600 dark:text-blue-400' : 'text-emerald-600 dark:text-emerald-400'

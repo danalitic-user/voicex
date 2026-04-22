@@ -7,7 +7,6 @@
  *
  * You are NOT permitted to redistribute, resell, sublicense,
  * or share this source code, in whole or in part.
- * Respect the author's rights and Envato licensing terms.
  * ============================================================
  */
 import { Card } from "@/components/ui/card";
@@ -691,8 +690,8 @@ export default function Billing() {
                         <div
                           key={pkg.id}
                           className={`relative bg-white dark:bg-slate-800/80 rounded-xl border overflow-hidden transition-all duration-200 hover:shadow-lg ${isPopular
-                              ? "ring-2 ring-indigo-500 dark:ring-indigo-400 border-indigo-200 dark:border-indigo-800"
-                              : "border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600"
+                            ? "ring-2 ring-indigo-500 dark:ring-indigo-400 border-indigo-200 dark:border-indigo-800"
+                            : "border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600"
                             }`}
                           data-testid={`card-package-${pkg.name.toLowerCase().replace(/\s+/g, "-")}`}
                         >
@@ -711,12 +710,12 @@ export default function Billing() {
                                 )}
                               </div>
                               <div className={`h-10 w-10 rounded-xl flex items-center justify-center ${isPopular
-                                  ? 'bg-indigo-100 dark:bg-indigo-900/50'
-                                  : 'bg-slate-100 dark:bg-slate-700/50'
+                                ? 'bg-indigo-100 dark:bg-indigo-900/50'
+                                : 'bg-slate-100 dark:bg-slate-700/50'
                                 }`}>
                                 <Coins className={`h-5 w-5 ${isPopular
-                                    ? 'text-indigo-600 dark:text-indigo-400'
-                                    : 'text-slate-600 dark:text-slate-400'
+                                  ? 'text-indigo-600 dark:text-indigo-400'
+                                  : 'text-slate-600 dark:text-slate-400'
                                   }`} />
                               </div>
                             </div>
@@ -740,8 +739,8 @@ export default function Billing() {
 
                             <Button
                               className={`w-full ${isPopular
-                                  ? "bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800"
-                                  : ""
+                                ? "bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800"
+                                : ""
                                 }`}
                               variant={isPopular ? "default" : "outline"}
                               onClick={() => handlePurchaseCredits(pkg.id)}
@@ -817,8 +816,8 @@ export default function Billing() {
                                 <Badge
                                   variant={transaction.type === "credit" ? "default" : "destructive"}
                                   className={`${transaction.type === "credit"
-                                      ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-900/50 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800"
-                                      : "bg-red-100 text-red-700 hover:bg-red-100 dark:bg-red-900/50 dark:text-red-400 border border-red-200 dark:border-red-800"
+                                    ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-900/50 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800"
+                                    : "bg-red-100 text-red-700 hover:bg-red-100 dark:bg-red-900/50 dark:text-red-400 border border-red-200 dark:border-red-800"
                                     }`}
                                 >
                                   {transaction.type === "credit" ? (
@@ -839,8 +838,8 @@ export default function Billing() {
                               </TableCell>
                               <TableCell className="py-4 text-right">
                                 <span className={`font-mono text-sm font-bold ${transaction.type === "credit"
-                                    ? "text-emerald-600 dark:text-emerald-400"
-                                    : "text-red-600 dark:text-red-400"
+                                  ? "text-emerald-600 dark:text-emerald-400"
+                                  : "text-red-600 dark:text-red-400"
                                   }`}>
                                   {transaction.type === "credit" ? "+" : "-"}{Math.abs(transaction.amount).toLocaleString()}
                                 </span>

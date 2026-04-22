@@ -7,7 +7,6 @@
  *
  * You are NOT permitted to redistribute, resell, sublicense,
  * or share this source code, in whole or in part.
- * Respect the author's rights and Envato licensing terms.
  * ============================================================
  * Use Cases Section
  * 
@@ -58,8 +57,8 @@ const UseCaseCard = ({
     whileHover={{ y: -5 }}
     onClick={onClick}
     className={`bg-gray-900/50 rounded-2xl border p-6 cursor-pointer transition-all duration-300 ${isActive
-        ? 'border-teal-500 shadow-lg shadow-teal-500/20'
-        : 'border-gray-800 hover:border-gray-700'
+      ? 'border-teal-500 shadow-lg shadow-teal-500/20'
+      : 'border-gray-800 hover:border-gray-700'
       }`}
     data-testid={`use-case-card-${title.toLowerCase().replace(/\s+/g, "-").slice(0, 20)}`}
   >

@@ -7,7 +7,6 @@
  *
  * You are NOT permitted to redistribute, resell, sublicense,
  * or share this source code, in whole or in part.
- * Respect the author's rights and Envato licensing terms.
  * ============================================================
  */
 import { useState, useMemo } from "react";
@@ -1034,16 +1033,16 @@ export default function Agents() {
                     <div className="grid grid-cols-2 gap-4">
                       <div
                         className={`relative p-4 rounded-xl cursor-pointer transition-all duration-200 ${formData.type === 'incoming'
-                            ? 'bg-gradient-to-br from-emerald-500/20 via-emerald-400/10 to-teal-500/20 dark:from-emerald-500/30 dark:via-emerald-400/15 dark:to-teal-500/25 border-2 border-emerald-500/50 shadow-lg shadow-emerald-500/10'
-                            : 'bg-muted/30 hover:bg-muted/50 border-2 border-transparent hover:border-border'
+                          ? 'bg-gradient-to-br from-emerald-500/20 via-emerald-400/10 to-teal-500/20 dark:from-emerald-500/30 dark:via-emerald-400/15 dark:to-teal-500/25 border-2 border-emerald-500/50 shadow-lg shadow-emerald-500/10'
+                          : 'bg-muted/30 hover:bg-muted/50 border-2 border-transparent hover:border-border'
                           }`}
                         onClick={() => setFormData({ ...formData, type: 'incoming' })}
                         data-testid="card-type-incoming"
                       >
                         <div className="flex items-start gap-3">
                           <div className={`h-10 w-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors ${formData.type === 'incoming'
-                              ? 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400'
-                              : 'bg-muted text-muted-foreground'
+                            ? 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400'
+                            : 'bg-muted text-muted-foreground'
                             }`}>
                             <Sparkles className="h-5 w-5" />
                           </div>
@@ -1063,16 +1062,16 @@ export default function Agents() {
 
                       <div
                         className={`relative p-4 rounded-xl cursor-pointer transition-all duration-200 ${formData.type === 'flow'
-                            ? 'bg-gradient-to-br from-violet-500/20 via-purple-400/10 to-indigo-500/20 dark:from-violet-500/30 dark:via-purple-400/15 dark:to-indigo-500/25 border-2 border-violet-500/50 shadow-lg shadow-violet-500/10'
-                            : 'bg-muted/30 hover:bg-muted/50 border-2 border-transparent hover:border-border'
+                          ? 'bg-gradient-to-br from-violet-500/20 via-purple-400/10 to-indigo-500/20 dark:from-violet-500/30 dark:via-purple-400/15 dark:to-indigo-500/25 border-2 border-violet-500/50 shadow-lg shadow-violet-500/10'
+                          : 'bg-muted/30 hover:bg-muted/50 border-2 border-transparent hover:border-border'
                           }`}
                         onClick={() => setFormData({ ...formData, type: 'flow' })}
                         data-testid="card-type-flow"
                       >
                         <div className="flex items-start gap-3">
                           <div className={`h-10 w-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors ${formData.type === 'flow'
-                              ? 'bg-violet-500/20 text-violet-600 dark:text-violet-400'
-                              : 'bg-muted text-muted-foreground'
+                            ? 'bg-violet-500/20 text-violet-600 dark:text-violet-400'
+                            : 'bg-muted text-muted-foreground'
                             }`}>
                             <GitBranch className="h-5 w-5" />
                           </div>
@@ -1324,8 +1323,8 @@ export default function Agents() {
                             {/* ElevenLabs + Twilio - Purple theme */}
                             <div
                               className={`p-3 rounded-lg border-2 cursor-pointer transition-all ${formData.telephonyProvider === "twilio"
-                                  ? "border-violet-500 bg-violet-500/10 dark:bg-violet-500/20"
-                                  : "border-border hover:border-violet-400/50 hover:bg-violet-500/5"
+                                ? "border-violet-500 bg-violet-500/10 dark:bg-violet-500/20"
+                                : "border-border hover:border-violet-400/50 hover:bg-violet-500/5"
                                 }`}
                               onClick={() => setFormData({
                                 ...formData,
@@ -1352,8 +1351,8 @@ export default function Agents() {
                             {(isTwilioOpenaiEnabled || formData.telephonyProvider === "twilio_openai") && (
                               <div
                                 className={`p-3 rounded-lg border-2 cursor-pointer transition-all ${formData.telephonyProvider === "twilio_openai"
-                                    ? "border-teal-500 bg-teal-500/10 dark:bg-teal-500/20"
-                                    : "border-border hover:border-teal-400/50 hover:bg-teal-500/5"
+                                  ? "border-teal-500 bg-teal-500/10 dark:bg-teal-500/20"
+                                  : "border-border hover:border-teal-400/50 hover:bg-teal-500/5"
                                   }`}
                                 onClick={() => setFormData({
                                   ...formData,
@@ -1381,8 +1380,8 @@ export default function Agents() {
                             {(isPlivoEnabled || formData.telephonyProvider === "plivo") && (
                               <div
                                 className={`p-3 rounded-lg border-2 cursor-pointer transition-all ${formData.telephonyProvider === "plivo"
-                                    ? "border-emerald-500 bg-emerald-500/10 dark:bg-emerald-500/20"
-                                    : "border-border hover:border-emerald-400/50 hover:bg-emerald-500/5"
+                                  ? "border-emerald-500 bg-emerald-500/10 dark:bg-emerald-500/20"
+                                  : "border-border hover:border-emerald-400/50 hover:bg-emerald-500/5"
                                   }`}
                                 onClick={() => setFormData({
                                   ...formData,
@@ -1410,8 +1409,8 @@ export default function Agents() {
                             {(isElevenLabsSipAllowed || formData.telephonyProvider === "elevenlabs-sip") && (
                               <div
                                 className={`p-3 rounded-lg border-2 cursor-pointer transition-all ${formData.telephonyProvider === "elevenlabs-sip"
-                                    ? "border-orange-500 bg-orange-500/10 dark:bg-orange-500/20"
-                                    : "border-border hover:border-orange-400/50 hover:bg-orange-500/5"
+                                  ? "border-orange-500 bg-orange-500/10 dark:bg-orange-500/20"
+                                  : "border-border hover:border-orange-400/50 hover:bg-orange-500/5"
                                   }`}
                                 onClick={() => setFormData({
                                   ...formData,
@@ -1440,8 +1439,8 @@ export default function Agents() {
                             {(isOpenAISipAllowed || formData.telephonyProvider === "openai-sip") && (
                               <div
                                 className={`p-3 rounded-lg border-2 cursor-pointer transition-all ${formData.telephonyProvider === "openai-sip"
-                                    ? "border-pink-500 bg-pink-500/10 dark:bg-pink-500/20"
-                                    : "border-border hover:border-pink-400/50 hover:bg-pink-500/5"
+                                  ? "border-pink-500 bg-pink-500/10 dark:bg-pink-500/20"
+                                  : "border-border hover:border-pink-400/50 hover:bg-pink-500/5"
                                   }`}
                                 onClick={() => setFormData({
                                   ...formData,
@@ -1780,8 +1779,8 @@ export default function Agents() {
                         {/* ElevenLabs + Twilio - Purple theme */}
                         <div
                           className={`p-3 rounded-lg border-2 cursor-pointer transition-all ${formData.telephonyProvider === "twilio"
-                              ? "border-violet-500 bg-violet-500/10 dark:bg-violet-500/20"
-                              : "border-border hover:border-violet-400/50 hover:bg-violet-500/5"
+                            ? "border-violet-500 bg-violet-500/10 dark:bg-violet-500/20"
+                            : "border-border hover:border-violet-400/50 hover:bg-violet-500/5"
                             }`}
                           onClick={() => setFormData({
                             ...formData,
@@ -1808,8 +1807,8 @@ export default function Agents() {
                         {(isTwilioOpenaiEnabled || formData.telephonyProvider === "twilio_openai") && (
                           <div
                             className={`p-3 rounded-lg border-2 cursor-pointer transition-all ${formData.telephonyProvider === "twilio_openai"
-                                ? "border-teal-500 bg-teal-500/10 dark:bg-teal-500/20"
-                                : "border-border hover:border-teal-400/50 hover:bg-teal-500/5"
+                              ? "border-teal-500 bg-teal-500/10 dark:bg-teal-500/20"
+                              : "border-border hover:border-teal-400/50 hover:bg-teal-500/5"
                               }`}
                             onClick={() => setFormData({
                               ...formData,
@@ -1837,8 +1836,8 @@ export default function Agents() {
                         {(isPlivoEnabled || formData.telephonyProvider === "plivo") && (
                           <div
                             className={`p-3 rounded-lg border-2 cursor-pointer transition-all ${formData.telephonyProvider === "plivo"
-                                ? "border-emerald-500 bg-emerald-500/10 dark:bg-emerald-500/20"
-                                : "border-border hover:border-emerald-400/50 hover:bg-emerald-500/5"
+                              ? "border-emerald-500 bg-emerald-500/10 dark:bg-emerald-500/20"
+                              : "border-border hover:border-emerald-400/50 hover:bg-emerald-500/5"
                               }`}
                             onClick={() => setFormData({
                               ...formData,
@@ -1866,8 +1865,8 @@ export default function Agents() {
                         {(isElevenLabsSipAllowed || formData.telephonyProvider === "elevenlabs-sip") && (
                           <div
                             className={`p-3 rounded-lg border-2 cursor-pointer transition-all ${formData.telephonyProvider === "elevenlabs-sip"
-                                ? "border-orange-500 bg-orange-500/10 dark:bg-orange-500/20"
-                                : "border-border hover:border-orange-400/50 hover:bg-orange-500/5"
+                              ? "border-orange-500 bg-orange-500/10 dark:bg-orange-500/20"
+                              : "border-border hover:border-orange-400/50 hover:bg-orange-500/5"
                               }`}
                             onClick={() => setFormData({
                               ...formData,
@@ -1896,8 +1895,8 @@ export default function Agents() {
                         {(isOpenAISipAllowed || formData.telephonyProvider === "openai-sip") && (
                           <div
                             className={`p-3 rounded-lg border-2 cursor-pointer transition-all ${formData.telephonyProvider === "openai-sip"
-                                ? "border-pink-500 bg-pink-500/10 dark:bg-pink-500/20"
-                                : "border-border hover:border-pink-400/50 hover:bg-pink-500/5"
+                              ? "border-pink-500 bg-pink-500/10 dark:bg-pink-500/20"
+                              : "border-border hover:border-pink-400/50 hover:bg-pink-500/5"
                               }`}
                             onClick={() => setFormData({
                               ...formData,

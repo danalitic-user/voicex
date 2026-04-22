@@ -7,7 +7,6 @@
  *
  * You are NOT permitted to redistribute, resell, sublicense,
  * or share this source code, in whole or in part.
- * Respect the author's rights and Envato licensing terms.
  * ============================================================
  */
 import { useState, useEffect } from "react";
@@ -527,8 +526,8 @@ export default function AppointmentsPage() {
                       <div className="flex items-center gap-2">
                         <div
                           className={`h-4 w-4 rounded border ${settingsData.workingDays?.includes(day)
-                              ? "bg-primary border-primary"
-                              : "border-muted-foreground"
+                            ? "bg-primary border-primary"
+                            : "border-muted-foreground"
                             }`}
                         />
                         <span className="text-sm font-medium capitalize">{t(`appointments.settings.days.${day}`)}</span>

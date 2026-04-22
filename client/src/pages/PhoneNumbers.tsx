@@ -7,7 +7,6 @@
  *
  * You are NOT permitted to redistribute, resell, sublicense,
  * or share this source code, in whole or in part.
- * Respect the author's rights and Envato licensing terms.
  * ============================================================
  */
 import { useState, useEffect, useRef, Suspense } from "react";
@@ -680,8 +679,8 @@ export default function PhoneNumbers() {
                           <Badge
                             variant="outline"
                             className={`cursor-pointer transition-colors ${currentUser?.kycStatus === 'approved'
-                                ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/20'
-                                : 'bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/30 hover:bg-red-500/20'
+                              ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/20'
+                              : 'bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/30 hover:bg-red-500/20'
                               }`}
                             onClick={() => setLocation('/app/settings')}
                             data-testid={`badge-kyc-status-twilio-${number.id}`}
@@ -834,8 +833,8 @@ export default function PhoneNumbers() {
                               <Badge
                                 variant="outline"
                                 className={`cursor-pointer transition-colors ${currentUser?.kycStatus === 'approved'
-                                    ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/20'
-                                    : 'bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/30 hover:bg-red-500/20'
+                                  ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/20'
+                                  : 'bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/30 hover:bg-red-500/20'
                                   }`}
                                 onClick={() => setLocation('/app/settings')}
                                 data-testid={`badge-kyc-status-plivo-${number.id}`}
@@ -1292,8 +1291,8 @@ export default function PhoneNumbers() {
                     <div
                       key={number.phoneNumber}
                       className={`p-3 rounded-lg border-2 cursor-pointer transition-all ${selectedPlivoNumber?.phoneNumber === number.phoneNumber
-                          ? "border-primary bg-primary/5"
-                          : "border-border hover:border-primary/50 hover:bg-muted/50"
+                        ? "border-primary bg-primary/5"
+                        : "border-border hover:border-primary/50 hover:bg-muted/50"
                         }`}
                       onClick={() => setSelectedPlivoNumber(number)}
                       data-testid={`plivo-number-${number.phoneNumber.replace(/\+/g, '')}`}

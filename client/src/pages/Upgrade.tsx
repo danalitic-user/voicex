@@ -7,7 +7,6 @@
  *
  * You are NOT permitted to redistribute, resell, sublicense,
  * or share this source code, in whole or in part.
- * Respect the author's rights and Envato licensing terms.
  * ============================================================
  */
 import { useState, useEffect } from "react";
@@ -662,10 +661,10 @@ export default function Upgrade() {
             <Card
               key={plan.id}
               className={`relative overflow-hidden transition-all duration-200 ${isCurrentPlan
-                  ? "ring-2 ring-indigo-500 dark:ring-indigo-400 bg-indigo-50/50 dark:bg-indigo-950/20"
-                  : isRecommended && !isCurrentPlan
-                    ? "ring-2 ring-slate-300 dark:ring-slate-600"
-                    : "hover:border-slate-300 dark:hover:border-slate-600"
+                ? "ring-2 ring-indigo-500 dark:ring-indigo-400 bg-indigo-50/50 dark:bg-indigo-950/20"
+                : isRecommended && !isCurrentPlan
+                  ? "ring-2 ring-slate-300 dark:ring-slate-600"
+                  : "hover:border-slate-300 dark:hover:border-slate-600"
                 }`}
               data-testid={`card-plan-${plan.name}`}
             >
@@ -996,10 +995,10 @@ export default function Upgrade() {
                         return (
                           <>
                             <div className={`rounded p-1 ${selectedGateway === 'stripe' ? 'bg-[#635bff]' :
-                                selectedGateway === 'razorpay' ? 'bg-[#072654]' :
-                                  selectedGateway === 'paypal' ? 'bg-[#003087]' :
-                                    selectedGateway === 'paystack' ? 'bg-[#00C3F7]' :
-                                      'bg-slate-600'
+                              selectedGateway === 'razorpay' ? 'bg-[#072654]' :
+                                selectedGateway === 'paypal' ? 'bg-[#003087]' :
+                                  selectedGateway === 'paystack' ? 'bg-[#00C3F7]' :
+                                    'bg-slate-600'
                               }`}>
                               <Icon className="h-3 w-3 text-white" />
                             </div>

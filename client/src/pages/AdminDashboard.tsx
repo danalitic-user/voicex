@@ -7,7 +7,6 @@
  *
  * You are NOT permitted to redistribute, resell, sublicense,
  * or share this source code, in whole or in part.
- * Respect the author's rights and Envato licensing terms.
  * ============================================================
  */
 import { useQuery, useMutation } from "@tanstack/react-query";
@@ -266,28 +265,28 @@ export default function AdminDashboard() {
         <div className="flex items-center gap-2 md:gap-3 flex-wrap">
           <div
             className={`flex items-center gap-2 px-3 py-2 rounded-lg border transition-colors ${twilioStatus?.connected
-                ? 'bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-800'
-                : 'bg-slate-50 dark:bg-slate-900/30 border-slate-200 dark:border-slate-700'
+              ? 'bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-800'
+              : 'bg-slate-50 dark:bg-slate-900/30 border-slate-200 dark:border-slate-700'
               }`}
             data-testid={twilioStatus?.connected ? "status-twilio-connected" : "status-twilio-disconnected"}
             title={twilioStatus?.error || undefined}
           >
             <div className={`p-1 rounded-full ${twilioStatus?.connected
-                ? 'bg-emerald-500'
-                : 'bg-slate-400'
+              ? 'bg-emerald-500'
+              : 'bg-slate-400'
               }`}>
               <Phone className="h-3 w-3 text-white" />
             </div>
             <div className="flex flex-col">
               <span className={`text-xs font-medium ${twilioStatus?.connected
-                  ? 'text-emerald-700 dark:text-emerald-400'
-                  : 'text-slate-600 dark:text-slate-400'
+                ? 'text-emerald-700 dark:text-emerald-400'
+                : 'text-slate-600 dark:text-slate-400'
                 }`}>
                 Twilio
               </span>
               <span className={`text-[10px] ${twilioStatus?.connected
-                  ? 'text-emerald-600/70 dark:text-emerald-500/70'
-                  : 'text-slate-500 dark:text-slate-500'
+                ? 'text-emerald-600/70 dark:text-emerald-500/70'
+                : 'text-slate-500 dark:text-slate-500'
                 }`}>
                 {twilioStatus?.connected ? 'Connected' : 'Not Connected'}
               </span>
@@ -296,28 +295,28 @@ export default function AdminDashboard() {
 
           <div
             className={`flex items-center gap-2 px-3 py-2 rounded-lg border transition-colors ${elevenLabsStatus?.connected
-                ? 'bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-800'
-                : 'bg-slate-50 dark:bg-slate-900/30 border-slate-200 dark:border-slate-700'
+              ? 'bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-800'
+              : 'bg-slate-50 dark:bg-slate-900/30 border-slate-200 dark:border-slate-700'
               }`}
             data-testid={elevenLabsStatus?.connected ? "status-elevenlabs-connected" : "status-elevenlabs-disconnected"}
             title={elevenLabsStatus?.error || undefined}
           >
             <div className={`p-1 rounded-full ${elevenLabsStatus?.connected
-                ? 'bg-emerald-500'
-                : 'bg-slate-400'
+              ? 'bg-emerald-500'
+              : 'bg-slate-400'
               }`}>
               <Server className="h-3 w-3 text-white" />
             </div>
             <div className="flex flex-col">
               <span className={`text-xs font-medium ${elevenLabsStatus?.connected
-                  ? 'text-emerald-700 dark:text-emerald-400'
-                  : 'text-slate-600 dark:text-slate-400'
+                ? 'text-emerald-700 dark:text-emerald-400'
+                : 'text-slate-600 dark:text-slate-400'
                 }`}>
                 ElevenLabs
               </span>
               <span className={`text-[10px] ${elevenLabsStatus?.connected
-                  ? 'text-emerald-600/70 dark:text-emerald-500/70'
-                  : 'text-slate-500 dark:text-slate-500'
+                ? 'text-emerald-600/70 dark:text-emerald-500/70'
+                : 'text-slate-500 dark:text-slate-500'
                 }`}>
                 {elevenLabsStatus?.connected
                   ? elevenLabsStatus.voiceCount !== undefined
@@ -331,28 +330,28 @@ export default function AdminDashboard() {
           {/* OpenAI Status Indicator */}
           <div
             className={`flex items-center gap-2 px-3 py-2 rounded-lg border transition-colors ${openaiStatus?.connected
-                ? 'bg-purple-50 dark:bg-purple-950/30 border-purple-200 dark:border-purple-800'
-                : 'bg-slate-50 dark:bg-slate-900/30 border-slate-200 dark:border-slate-700'
+              ? 'bg-purple-50 dark:bg-purple-950/30 border-purple-200 dark:border-purple-800'
+              : 'bg-slate-50 dark:bg-slate-900/30 border-slate-200 dark:border-slate-700'
               }`}
             data-testid={openaiStatus?.connected ? "status-openai-connected" : "status-openai-disconnected"}
             title={openaiStatus?.error || undefined}
           >
             <div className={`p-1 rounded-full ${openaiStatus?.connected
-                ? 'bg-purple-500'
-                : 'bg-slate-400'
+              ? 'bg-purple-500'
+              : 'bg-slate-400'
               }`}>
               <Sparkles className="h-3 w-3 text-white" />
             </div>
             <div className="flex flex-col">
               <span className={`text-xs font-medium ${openaiStatus?.connected
-                  ? 'text-purple-700 dark:text-purple-400'
-                  : 'text-slate-600 dark:text-slate-400'
+                ? 'text-purple-700 dark:text-purple-400'
+                : 'text-slate-600 dark:text-slate-400'
                 }`}>
                 OpenAI
               </span>
               <span className={`text-[10px] ${openaiStatus?.connected
-                  ? 'text-purple-600/70 dark:text-purple-500/70'
-                  : 'text-slate-500 dark:text-slate-500'
+                ? 'text-purple-600/70 dark:text-purple-500/70'
+                : 'text-slate-500 dark:text-slate-500'
                 }`}>
                 {openaiStatus?.connected
                   ? (openaiStatus as any).modelCount !== undefined
@@ -366,28 +365,28 @@ export default function AdminDashboard() {
           {/* OpenAI Realtime Voice API Status Indicator */}
           <div
             className={`flex items-center gap-2 px-3 py-2 rounded-lg border transition-colors ${openaiRealtimeStatus?.connected
-                ? 'bg-orange-50 dark:bg-orange-950/30 border-orange-200 dark:border-orange-800'
-                : 'bg-slate-50 dark:bg-slate-900/30 border-slate-200 dark:border-slate-700'
+              ? 'bg-orange-50 dark:bg-orange-950/30 border-orange-200 dark:border-orange-800'
+              : 'bg-slate-50 dark:bg-slate-900/30 border-slate-200 dark:border-slate-700'
               }`}
             data-testid={openaiRealtimeStatus?.connected ? "status-openai-voice-connected" : "status-openai-voice-disconnected"}
             title={openaiRealtimeStatus?.error || undefined}
           >
             <div className={`p-1 rounded-full ${openaiRealtimeStatus?.connected
-                ? 'bg-orange-500'
-                : 'bg-slate-400'
+              ? 'bg-orange-500'
+              : 'bg-slate-400'
               }`}>
               <Mic className="h-3 w-3 text-white" />
             </div>
             <div className="flex flex-col">
               <span className={`text-xs font-medium ${openaiRealtimeStatus?.connected
-                  ? 'text-orange-700 dark:text-orange-400'
-                  : 'text-slate-600 dark:text-slate-400'
+                ? 'text-orange-700 dark:text-orange-400'
+                : 'text-slate-600 dark:text-slate-400'
                 }`}>
                 OpenAI Voice
               </span>
               <span className={`text-[10px] ${openaiRealtimeStatus?.connected
-                  ? 'text-orange-600/70 dark:text-orange-500/70'
-                  : 'text-slate-500 dark:text-slate-500'
+                ? 'text-orange-600/70 dark:text-orange-500/70'
+                : 'text-slate-500 dark:text-slate-500'
                 }`}>
                 {openaiRealtimeStatus?.connected
                   ? (openaiRealtimeStatus as any).keyCount !== undefined

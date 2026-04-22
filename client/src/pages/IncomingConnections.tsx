@@ -7,7 +7,6 @@
  *
  * You are NOT permitted to redistribute, resell, sublicense,
  * or share this source code, in whole or in part.
- * Respect the author's rights and Envato licensing terms.
  * ============================================================
  */
 import { useState, useMemo, useEffect } from "react";
@@ -472,8 +471,8 @@ export default function IncomingConnectionsPage() {
           {/* Twilio + ElevenLabs Summary - Always shown */}
           <div
             className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${activeTab === 'twilio-elevenlabs'
-                ? 'border-violet-500 bg-violet-500/10 dark:bg-violet-500/20'
-                : 'border-border bg-background/50 hover:border-violet-300'
+              ? 'border-violet-500 bg-violet-500/10 dark:bg-violet-500/20'
+              : 'border-border bg-background/50 hover:border-violet-300'
               }`}
             onClick={() => setActiveTab('twilio-elevenlabs')}
             data-testid="engine-card-twilio-elevenlabs"
@@ -495,8 +494,8 @@ export default function IncomingConnectionsPage() {
           {plivoEnabled && (
             <div
               className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${activeTab === 'plivo-openai'
-                  ? 'border-emerald-500 bg-emerald-500/10 dark:bg-emerald-500/20'
-                  : 'border-border bg-background/50 hover:border-emerald-300'
+                ? 'border-emerald-500 bg-emerald-500/10 dark:bg-emerald-500/20'
+                : 'border-border bg-background/50 hover:border-emerald-300'
                 }`}
               onClick={() => setActiveTab('plivo-openai')}
               data-testid="engine-card-plivo-openai"
@@ -519,8 +518,8 @@ export default function IncomingConnectionsPage() {
           {twilioOpenaiEnabled && (
             <div
               className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${activeTab === 'twilio-openai'
-                  ? 'border-teal-500 bg-teal-500/10 dark:bg-teal-500/20'
-                  : 'border-border bg-background/50 hover:border-teal-300'
+                ? 'border-teal-500 bg-teal-500/10 dark:bg-teal-500/20'
+                : 'border-border bg-background/50 hover:border-teal-300'
                 }`}
               onClick={() => setActiveTab('twilio-openai')}
               data-testid="engine-card-twilio-openai"
