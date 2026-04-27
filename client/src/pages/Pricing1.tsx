@@ -44,7 +44,7 @@ const pricingTiers = [
             "2 Website Widget",
             "Priority Support"
         ],
-        buttonText: "Upgrade to Pro",
+        buttonText: "Contact Sales",
         buttonStyle: "bg-gradient-to-r from-[#FF0066] to-[#FF6633] text-white hover:opacity-90 shadow-lg shadow-[#FF0066]/25 border-none",
         popular: true,
     },
@@ -154,7 +154,7 @@ export default function Pricing1() {
                                 </div>
 
                                 <button
-                                    onClick={tier.name === "Enterprise" ? () => setLocation("/contact") : handleAuthRedirect}
+                                    onClick={tier.name === "Pro" || tier.name === "Enterprise" ? () => setLocation("/contact") : handleAuthRedirect}
                                     className={`w-full py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all duration-300 ${tier.buttonStyle}`}
                                 >
                                     {tier.buttonText}
